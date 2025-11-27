@@ -7,12 +7,47 @@ commentable = true
 
 <!-- omit in toc -->
 ## Acesso rápido
+- [Pets RS](#pets-rs)
 - [Pets Vale do Taquari](#pets-vale-do-taquari)
 - [Prefa](#prefa)
 - [Universidade Brasileira Livre](#universidade-brasileira-livre)
 - [municipios.dev](#municipiosdev)
 - [ROVEEb](#roveeb)
 - [Sorteador](#sorteador)
+
+## [Pets Vale do Taquari](petsvaledotaquari.com.br/)
+
+O [Pets RS](petsrs.com.br) é um projeto criado em 6h em parceria com o Zeno Sbardellotto Júnior e o Fabrício Pretto. Esse projeto foi pensado para ajudar a os animaizinhos atingidos pelas enchentes de setembro que o Vale do Taquari (RS) sofreu e é totalmente voluntário. O projeto é a evolução do Pets Vale do Taquari e foi expandido para o estado do Rio Grande do Sul em virtude das enchentes de Maio/2024.
+
+![petsrs.com.br](/images/uploads/petsrs.png)
+
+O projeto foi reconhecido pelo Estado do RS como plataforma oficial de reencontro de tutores e animais perdidos. Além disso, contou com mais de 100 voluntários, seja cadastrando, automatizando, trabalhando com IA, respondendo pessoas em busca de seus animais, apoiando nos abrigos ou buscando tutores.
+
+
+<!-- omit in toc -->
+### Infraestrutura
+- **Strapi CMS**: gerenciar os dados
+- **PostgreSQL**: banco de dados
+- **Amazon SES**: envio de e-mails
+- **Amazon S3**: armazenamento de imagens
+- **Amazon Cloudfront**: CDN para entrega das imagens
+- **PM2**: executar o Strapi CMS
+- **NGINX**: proxy reverso
+- **Cloudflare**: DNS e SSL
+- **Github Actions**: pipeline de deploy
+- **IA própria**: modelos usando ML para busca de animais similares
+
+<!-- omit in toc -->
+### Mídia
+Materias e entrevistas sobre o projeto
+- [PetsRS Dataset : a benchmark and baseline for pet recognition in a climate disaster scenario](https://lume.ufrgs.br/handle/10183/279189)
+- [GRAD - Grupo de Respostas a Animais em Desastres](https://gradbrasil.org.br/reencontro-de-animais-resgatados-com-seus-tutores-no-rio-grande-do-sul/)
+- [Governo do RS](https://www.facebook.com/GovernoDoRS/videos/a-primeira-feira-de-ado%C3%A7%C3%A3o-respons%C3%A1vel-de-c%C3%A3es-e-gatos-resgatados-nas-enchentes-/444386955067301/)
+- [Band News](https://www.youtube.com/watch?v=z1pkWx9tACQ)
+- [Terra - Site ajuda a reencontrar animais desaparecidos em todo o RS](terra.com.br/noticias/site-ajuda-a-reencontrar-animais-desaparecidos-em-todo-o-rs,71cd94c90bb3a50f098ce8a2ce7194e3a7qksbns.html)
+- [Canaltech - Redes sociais ajudam a encontrar animais perdidos](https://canaltech.com.br/redes-sociais/chuvas-no-rs-redes-sociais-ajudam-a-encontrar-animais-perdidos-288373/)
+- [Veja - Tutores vivem reencontros emocionantes com seus pets no RS](https://veja.abril.com.br/comportamento/tutores-vivem-reencontros-emocionantes-com-seus-pets-no-rs/)
+E várias outras não mapeadas..
 
 ## [Pets Vale do Taquari](petsvaledotaquari.com.br/)
 
