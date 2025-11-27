@@ -1,5 +1,5 @@
 a {
-    color: #345CA2;
+    color: #015BFB;
 }
 
 footer {
@@ -7,7 +7,7 @@ footer {
 }
 
 footer a:hover {
-    color: #345CA2;
+    color: #015BFB;
 }
 
 .sr-only-focusable:active,
@@ -83,7 +83,7 @@ ul.related-posts li:before {
     top: 1.2em;
     left: -30px;
     margin-top: -.9em;
-    background: #345CA2;
+    background: #015BFB;
     height: 12px;
     width: 12px;
     border-radius: 50%;
