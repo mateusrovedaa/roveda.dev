@@ -38,6 +38,7 @@ Materias e entrevistas sobre o projeto
 - [Terra - Site ajuda a reencontrar animais desaparecidos em todo o RS](terra.com.br/noticias/site-ajuda-a-reencontrar-animais-desaparecidos-em-todo-o-rs,71cd94c90bb3a50f098ce8a2ce7194e3a7qksbns.html)
 - [Canaltech - Redes sociais ajudam a encontrar animais perdidos](https://canaltech.com.br/redes-sociais/chuvas-no-rs-redes-sociais-ajudam-a-encontrar-animais-perdidos-288373/)
 - [Veja - Tutores vivem reencontros emocionantes com seus pets no RS](https://veja.abril.com.br/comportamento/tutores-vivem-reencontros-emocionantes-com-seus-pets-no-rs/)
+
 E várias outras não mapeadas..
 
 ## [Pets Vale do Taquari](petsvaledotaquari.com.br/)
