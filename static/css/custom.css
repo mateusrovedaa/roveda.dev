@@ -1,15 +1,546 @@
-a {
-    color: #015BFB;
+/* ========== Cores e Transições ========== */
+:root {
+    --primary-color: #015BFB;
+    --primary-hover: #0147c4;
+    --shadow-light: rgba(0, 0, 0, 0.08);
+    --shadow-medium: rgba(0, 0, 0, 0.12);
+    --border-radius: 8px;
+    --bg-color: #f5f5f5 !important;
 }
 
+html {
+    background-color: var(--bg-color) !important;
+}
+
+body {
+    background-color: var(--bg-color) !important;
+}
+
+a {
+    color: var(--primary-color);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+/* ========== Layout Geral ========== */
+body {
+    max-width: 900px !important;
+    padding: 0 20px;
+}
+
+/* ========== Header e Navegação ========== */
+header {
+    padding: 20px 0;
+    margin-bottom: 40px;
+}
+
+#titletext h1,
+#titletext h2 {
+    text-align: left;
+}
+
+#title-description,
+#title-social {
+    text-align: left;
+}
+
+#mainmenu nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+#mainmenu nav li {
+    list-style: none;
+}
+
+#mainmenu nav a {
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+#mainmenu nav a:hover {
+    background-color: rgba(1, 91, 251, 0.08);
+    transform: translateY(-2px);
+}
+
+/* ========== Footer ========== */
 footer {
     color: #000000;
+    padding: 20px 0;
+    margin-top: 60px;
 }
 
 footer a:hover {
-    color: #015BFB;
+    color: var(--primary-color);
 }
 
+/* ========== Posts e Cards ========== */
+.post {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    transition: box-shadow 0.3s ease;
+}
+
+.post:hover {
+    box-shadow: 0 4px 16px var(--shadow-medium);
+}
+
+.post-header {
+    margin-bottom: 30px;
+}
+
+.post-header .title {
+    margin-top: 10px;
+    line-height: 1.3;
+    color: #1a1a1a;
+}
+
+.post-header .meta .date {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: white;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    display: inline-block;
+    box-shadow: 0 2px 4px var(--shadow-light);
+}
+
+.post-header .meta .date .day {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.mobile-date {
+    display: none;
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 8px;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* ========== Lista de Posts ========== */
+.item {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: white;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 2px 6px var(--shadow-light);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.item .title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.item .title a {
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.item .title a:hover {
+    color: var(--primary-color);
+}
+
+/* List page posts */
+.posts.flat .post {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: white;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 2px 6px var(--shadow-light);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.posts.flat .post:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.posts.flat .post .post-header {
+    display: flex !important;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.posts.flat .post .post-header .meta {
+    flex-shrink: 0;
+    display: block !important;
+}
+
+.posts.flat .post .post-header .meta .date {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover)) !important;
+    color: white !important;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    display: block !important;
+    box-shadow: 0 2px 4px var(--shadow-light);
+    width: auto !important;
+    margin-right: 0 !important;
+}
+
+.posts.flat .post .post-header .meta .date .day {
+    font-size: 1.4em !important;
+    font-weight: bold;
+    margin-right: 5px;
+    display: inline !important;
+}
+
+.posts.flat .post .post-header .meta .date .rest {
+    display: inline !important;
+}
+
+.posts.flat .post .matter {
+    flex: 1;
+}
+
+/* ========== Markdown Content ========== */
+.markdown {
+    line-height: 1.8;
+}
+
+.markdown h1, 
+.markdown h2, 
+.markdown h3, 
+.markdown h4, 
+.markdown h5, 
+.markdown h6 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.markdown h2 {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+.markdown p {
+    margin-bottom: 20px;
+}
+
+.markdown code {
+    background: #000000 !important;
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'Courier New', Consolas, monospace;
+    border: none;
+    margin: 0 2px;
+}
+
+.markdown pre {
+    background: #000000 !important;
+    color: #ffffff;
+    padding: 40px 20px 20px 20px;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    margin: 20px 0;
+}
+
+.markdown pre::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 12px;
+    height: 12px;
+    background: #ff6b6b;
+    border-radius: 50%;
+    box-shadow: -20px 0 0 #ddd, -40px 0 0 #ddd;
+}
+
+.markdown pre::after {
+    content: '$ ';
+    color: #7ec699;
+    font-weight: bold;
+    font-family: 'Courier New', Consolas, monospace;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+
+.highlight::before {
+    content: '';
+    display: none;
+}
+
+.highlight {
+    position: relative;
+}
+
+.markdown pre code {
+    background: none !important;
+    padding: 0;
+    border: none;
+    color: #ffffff;
+    font-family: 'Courier New', Consolas, monospace;
+    display: block;
+}
+
+.markdown pre code::before {
+    content: '';
+    display: none;
+}
+
+.highlight {
+    background-color: #000000 !important;
+}
+
+.highlight pre {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+/* Override all syntax highlighting colors and backgrounds */
+.highlight .hll { background-color: #000000 !important; color: #ffffff !important; }
+.highlight .c,
+.highlight .ch,
+.highlight .cm,
+.highlight .cp,
+.highlight .cpf,
+.highlight .c1,
+.highlight .cs { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .err { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .l { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .il,
+.highlight .mo { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .n,
+.highlight .na,
+.highlight .nb,
+.highlight .bp,
+.highlight .nc,
+.highlight .no,
+.highlight .nd,
+.highlight .ni,
+.highlight .ne,
+.highlight .nf,
+.highlight .fm,
+.highlight .nl,
+.highlight .nn,
+.highlight .nx,
+.highlight .py,
+.highlight .nt,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .vm { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .o,
+.highlight .ow { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .p { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .s,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s2,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sx,
+.highlight .sr,
+.highlight .s1,
+.highlight .ss { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .w { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .x { color: #ffffff !important; background-color: #000000 !important; }
+.highlight .g,
+.highlight .gd,
+.highlight .ge,
+.highlight .gr,
+.highlight .gh,
+.highlight .gi,
+.highlight .go,
+.highlight .gp,
+.highlight .gs,
+.highlight .gu,
+.highlight .gt { color: #ffffff !important; background-color: #000000 !important; }
+
+/* Catch-all for any highlighted span */
+.highlight span { color: #ffffff !important; background-color: transparent !important; }
+
+.markdown blockquote {
+    background: #f9f9f9;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    margin: 20px 0;
+}
+
+.markdown img {
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+/* ========== Tags e Taxonomias ========== */
+.tags {
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.tags a {
+    display: inline-block;
+    background: #f0f4ff;
+    color: var(--primary-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.tags a:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px var(--shadow-medium);
+}
+
+/* ========== Botões e Links ========== */
+.button, 
+button, 
+input[type="submit"] {
+    background: var(--primary-color);
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px var(--shadow-light);
+}
+
+.button:hover, 
+button:hover, 
+input[type="submit"]:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+/* ========== Paginação ========== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 40px 0;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    background: white;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.pagination a:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.pagination .active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* ========== Responsividade ========== */
+@media (max-width: 768px) {
+    body {
+        max-width: 100% !important;
+        padding: 0 15px;
+    }
+    
+    .post, .item {
+        padding: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    
+    #mainmenu nav ul {
+        gap: 15px;
+    }
+    
+    #mainmenu nav a {
+        padding: 6px 12px;
+        font-size: 0.95em;
+    }
+    
+    /* Hide large date display on mobile only in single post page */
+    .post > .post-header .meta .date {
+        display: none !important;
+    }
+    
+    /* Force date to be visible in list page on mobile */
+    .posts.flat .post .post-header {
+        display: flex !important;
+    }
+    
+    .posts.flat .post .post-header .meta {
+        display: block !important;
+    }
+    
+    .posts.flat .post .post-header .meta .date {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Show small date below title on mobile in single post */
+    .mobile-date {
+        display: block !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    body {
+        max-width: 1100px !important;
+    }
+}
+
+/* ========== Acessibilidade ========== */
 .sr-only-focusable:active,
 .sr-only-focusable:focus {
     clip: auto;
@@ -20,6 +551,12 @@ footer a:hover {
     width: auto;
 }
 
+*:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ========== Font Awesome ========== */
 @font-face {
     font-family: 'Font Awesome 5 Brands';
     font-style: normal;
@@ -57,7 +594,7 @@ footer a:hover {
     src: url("../webfonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../webfonts/fa-solid-900.woff") format("woff"), url("../webfonts/fa-solid-900.ttf") format("truetype"), url("../webfonts/fa-solid-900.svg#fontawesome") format("svg");
 }
 
-/* Related Posts    */
+/* ========== Related Posts ========== */
 #related-posts>a:nth-of-type(n+3),
 #related-posts>h3:nth-of-type(n+1) {
     display: none;
@@ -66,25 +603,63 @@ footer a:hover {
 ul.related-posts {
     display: block;
     margin-left: -10px;
+    padding: 20px 0;
 }
 
 ul.related-posts li {
     display: block;
     position: relative;
+    padding: 12px 16px 12px 40px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 4px var(--shadow-light);
+    transition: all 0.2s ease;
+}
+
+ul.related-posts li:hover {
+    transform: translateX(6px);
+    box-shadow: 0 2px 8px var(--shadow-medium);
 }
 
 ul.related-posts li:not(:last-child) {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 ul.related-posts li:before {
     content: "";
     position: absolute;
-    top: 1.2em;
-    left: -30px;
-    margin-top: -.9em;
-    background: #015BFB;
+    top: 50%;
+    left: 16px;
+    margin-top: -6px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
     height: 12px;
     width: 12px;
     border-radius: 50%;
+    box-shadow: 0 2px 4px var(--shadow-light);
+}
+
+ul.related-posts li a {
+    color: #333;
+    font-weight: 500;
+}
+
+ul.related-posts li a:hover {
+    color: var(--primary-color);
+}
+
+/* ========== Smooth Scrolling ========== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ========== Selection ========== */
+::selection {
+    background: var(--primary-color);
+    color: white;
+}
+
+::-moz-selection {
+    background: var(--primary-color);
+    color: white;
 }

@@ -39,7 +39,7 @@ df -h
 
 Uma saída parecida com essa será mostrada:
 
-![saída comando df no terminal](../../static/img/docs/df.png)
+![saída comando df no terminal](/images/uploads/df.png)
 
 No exemplo, o caminho para o meu pendrive é `/dev/sda1`.
 
