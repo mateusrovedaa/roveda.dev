@@ -26,13 +26,13 @@ pygmentscodefencesguesssyntax = true
 	keywords = ["roveeb","Mateus Roveda","roveda","tecnologia", "tutoriais", "software livre"]
 
 	# Add meta description in head part
-	description = "Um mundo de conhecimento"
+	description = "Liberdade de conhecimentos"
 
 	# Add pagetitle to homepage <title> tag
-	pagetitle = "Um mundo de conhecimento"
+	pagetitle = "Liberdade de conhecimentos"
 
 	# Add a subtitle to your website
-	subtitle = "Um mundo de conhecimento"
+	subtitle = "Liberdade de conhecimentos"
 
 	# Activate to show authors on pages if available
 	listAuthor = true
