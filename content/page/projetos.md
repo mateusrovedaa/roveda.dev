@@ -15,7 +15,7 @@ commentable = true
 - [ROVEEb](#roveeb)
 - [Sorteador](#sorteador)
 
-## [Pets Vale do Taquari](petsvaledotaquari.com.br/)
+## [Pets RS](petsrs.com.br/)
 
 O [Pets RS](petsrs.com.br) é um projeto criado em 6h em parceria com o Zeno Sbardellotto Júnior e o Fabrício Pretto. Esse projeto foi pensado para ajudar a os animaizinhos atingidos pelas enchentes de setembro que o Vale do Taquari (RS) sofreu e é totalmente voluntário. O projeto é a evolução do Pets Vale do Taquari e foi expandido para o estado do Rio Grande do Sul em virtude das enchentes de Maio/2024.
 
@@ -26,16 +26,7 @@ O projeto foi reconhecido pelo Estado do RS como plataforma oficial de reencontr
 
 <!-- omit in toc -->
 ### Infraestrutura
-- **Strapi CMS**: gerenciar os dados
-- **PostgreSQL**: banco de dados
-- **Amazon SES**: envio de e-mails
-- **Amazon S3**: armazenamento de imagens
-- **Amazon Cloudfront**: CDN para entrega das imagens
-- **PM2**: executar o Strapi CMS
-- **NGINX**: proxy reverso
-- **Cloudflare**: DNS e SSL
-- **Github Actions**: pipeline de deploy
-- **IA própria**: modelos usando ML para busca de animais similares
+A mesma já proposta na [Pets Vale do Taquari](#pets-vale-do-taquari), porém agora com IA própria para sugestão de animais similares, buscando facilitar o reencontro. Também, a plataforma agora conta com contas de usuário e funcionalidades de match, para facilitar a tentativa de comparação entre animais desaparecidos e encontrados.
 
 <!-- omit in toc -->
 ### Mídia
