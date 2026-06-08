@@ -1,4 +1,18 @@
-resources
-public
+# Astro build output
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Hugo (legacy)
+resources/
 .hugo_build.lock
-.github
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
