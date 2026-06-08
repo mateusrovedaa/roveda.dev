@@ -1,8 +1,109 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 5);
 ---
 
 <BaseLayout title="Home">
-  <h1>Liberdade de conhecimentos</h1>
-  <p>Em breve: lista de posts mais recentes.</p>
+  <section class="hero">
+    <h1>Liberdade de conhecimentos</h1>
+    <p class="tagline">Tecnologia, software livre e tutoriais por <a href="/sobre">Mateus Roveda</a>.</p>
+  </section>
+
+  <section class="recent-posts">
+    <h2>Posts recentes</h2>
+    <ul class="post-list">
+      {recentPosts.map((post) => (
+        <li class="post-item">
+          <a href={`/post/${post.id}`} class="post-link">
+            <time datetime={post.data.date.toISOString()}>
+              {new Date(post.data.date).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            <h3>{post.data.title}</h3>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a href="/posts" class="see-all">Ver todos os posts →</a>
+  </section>
 </BaseLayout>
+
+<style>
+  .hero {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-dark);
+    margin-bottom: var(--space-sm);
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+    line-height: 1.6;
+  }
+
+  .recent-posts h2 {
+    font-size: 0.85rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-teal-dark);
+    margin-bottom: var(--space-lg);
+  }
+
+  .post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .post-item {
+    border-bottom: 1px solid var(--color-blue-light);
+    padding-bottom: var(--space-md);
+  }
+
+  .post-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .post-link:hover h3 {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  time {
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+    display: block;
+    margin-bottom: var(--space-xs);
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-dark);
+    transition: color 0.2s;
+  }
+
+  .see-all {
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+  }
+</style>

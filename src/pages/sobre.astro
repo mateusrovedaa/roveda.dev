@@ -1,0 +1,361 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const quickLinks = [
+  { label: 'GitHub', href: 'https://github.com/mateusrovedaa', icon: 'gh' },
+  { label: 'GitLab', href: 'https://gitlab.com/mateusrovedaa', icon: 'gl' },
+  { label: 'YouTube', href: 'https://youtube.com/ROVEEb', icon: 'yt' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mateusrovedaa/', icon: 'li' },
+  { label: 'Instagram', href: 'https://www.instagram.com/mateusrovedaa/', icon: 'ig' },
+  { label: 'Telegram', href: 'https://t.me/mateusrovedaa', icon: 'tg' },
+  { label: 'WhatsApp', href: 'https://api.whatsapp.com/send?phone=5551995558131', icon: 'wa' },
+  { label: 'E-mail', href: 'mailto:contato@roveeb.com', icon: 'em' },
+];
+
+const experience = [
+  {
+    role: 'Engenheiro DevOps',
+    company: 'Instituto Todos pela Saúde (ITpS)',
+    period: 'Em exercício',
+    description: 'Engenharia de infraestrutura e DevOps para soluções de saúde pública.',
+  },
+  {
+    role: 'Professor',
+    company: 'Univates',
+    period: 'Em exercício',
+    description: 'Professor nos cursos Técnicos e Jovem Aprendiz TI.',
+  },
+  {
+    role: 'Co-fundador',
+    company: 'Prefa Digital',
+    period: 'Em exercício',
+    description: 'Empresa com foco em soluções inteligentes para governo.',
+  },
+  {
+    role: 'Líder de Comunidade',
+    company: 'Universidade Brasileira Livre (UBL)',
+    period: 'Em exercício',
+    description: 'Organização sem fins lucrativos que democratiza a educação em TI no Brasil.',
+  },
+];
+
+const education = [
+  {
+    degree: 'Mestre em Computação Aplicada',
+    area: 'Edge AI',
+    institution: 'Unisinos',
+    year: '',
+  },
+  {
+    degree: 'Bacharel em Engenharia de Software',
+    area: '',
+    institution: 'Univates',
+    year: '',
+  },
+];
+
+const highlightedProjects = [
+  { name: 'Pets RS', url: 'https://petsrs.com.br/', description: 'Plataforma oficial do RS para reencontro de animais nas enchentes de 2024.' },
+  { name: 'Prefa Digital', url: 'https://prefa.digital', description: 'Soluções tecnológicas para prefeituras.' },
+  { name: 'Universidade Brasileira Livre', url: 'https://ulivre.dev', description: 'Educação em TI em português, +10k estrelas no GitHub.' },
+];
+---
+
+<BaseLayout
+  title="Sobre"
+  description="Mateus Roveda — engenheiro DevOps, professor, youtuber e entusiasta de software livre."
+>
+  <!-- Hero -->
+  <section id="hero" class="hero">
+    <img
+      src="https://avatars.githubusercontent.com/u/22747307?s=200"
+      alt="Foto de perfil de Mateus Roveda"
+      class="avatar"
+      loading="eager"
+    />
+    <div class="hero-text">
+      <h1>Mateus Roveda</h1>
+      <p class="tagline">Engenheiro DevOps · Professor · Youtuber · Software Livre</p>
+      <nav class="quick-links" aria-label="Links de contato">
+        {quickLinks.map(({ label, href }) => (
+          <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" class="quick-link">
+            {label}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <!-- Sobre -->
+  <section id="sobre" class="section">
+    <h2>Sobre</h2>
+    <p>
+      Professor nos cursos Técnicos e Jovem Aprendiz TI pela Univates.
+      Youtuber no canal ROVEEb e líder de comunidade na UBL.
+      Engenheiro DevOps no Instituto Todos pela Saúde.
+      Mestre em Computação Aplicada (Edge AI) pela Unisinos.
+      Bacharel em Engenharia de Software pela Univates.
+    </p>
+    <p>
+      Tem paixão por ensinar, compartilhar, aprender coisas novas, Software Livre e pelo espaço.
+    </p>
+  </section>
+
+  <!-- Experiência -->
+  <section id="experiencia" class="section">
+    <h2>Experiência</h2>
+    <div class="timeline">
+      {experience.map(({ role, company, period, description }) => (
+        <div class="timeline-item">
+          <div class="timeline-header">
+            <strong>{role}</strong>
+            <span class="company">{company}</span>
+            <span class="period">{period}</span>
+          </div>
+          <p>{description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Formação -->
+  <section id="formacao" class="section">
+    <h2>Formação</h2>
+    <div class="timeline">
+      {education.map(({ degree, area, institution, year }) => (
+        <div class="timeline-item">
+          <div class="timeline-header">
+            <strong>{degree}{area ? ` — ${area}` : ''}</strong>
+            <span class="company">{institution}</span>
+            {year && <span class="period">{year}</span>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Artigos Publicados -->
+  <section id="artigos" class="section">
+    <h2>Artigos Publicados</h2>
+    <p>
+      Publicações acadêmicas disponíveis no Google Acadêmico.
+    </p>
+    <a
+      href="https://scholar.google.com/citations?user=mateusrovedaa"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-outline"
+    >
+      Ver no Google Acadêmico →
+    </a>
+  </section>
+
+  <!-- Projetos em destaque -->
+  <section id="projetos" class="section">
+    <h2>Projetos em destaque</h2>
+    <div class="project-cards">
+      {highlightedProjects.map(({ name, url, description }) => (
+        <a href={url} target="_blank" rel="noopener noreferrer" class="project-card">
+          <strong>{name}</strong>
+          <p>{description}</p>
+        </a>
+      ))}
+    </div>
+    <a href="/projetos" class="btn-outline" style="margin-top: var(--space-md); display: inline-block;">
+      Ver todos os projetos →
+    </a>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-dark);
+    margin-bottom: var(--space-xs);
+  }
+
+  .tagline {
+    font-size: 0.95rem;
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+    margin-bottom: var(--space-md);
+  }
+
+  .quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .quick-link {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .quick-link:hover {
+    background-color: var(--color-primary);
+    color: var(--color-dark);
+    text-decoration: none;
+  }
+
+  @media (max-width: 500px) {
+    .hero {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .quick-links {
+      justify-content: center;
+    }
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-blue-light);
+  }
+
+  .section:last-child {
+    border-bottom: none;
+  }
+
+  .section h2 {
+    font-size: 1.4rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-teal-dark);
+    margin-bottom: var(--space-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+  }
+
+  .section p {
+    line-height: 1.75;
+    margin-bottom: var(--space-md);
+  }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .timeline-item {
+    border-left: 3px solid var(--color-primary);
+    padding-left: var(--space-md);
+  }
+
+  .timeline-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    align-items: baseline;
+    margin-bottom: var(--space-xs);
+  }
+
+  .timeline-header strong {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-dark);
+  }
+
+  .company {
+    color: var(--color-teal-mid);
+    font-size: 0.9rem;
+  }
+
+  .period {
+    color: var(--color-gray);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-light);
+  }
+
+  .timeline-item p {
+    font-size: 0.9rem;
+    color: var(--color-gray);
+    margin-bottom: 0;
+  }
+
+  /* Button */
+  .btn-outline {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-primary);
+    color: var(--color-dark);
+    text-decoration: none;
+  }
+
+  /* Project cards */
+  .project-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .project-card {
+    display: block;
+    padding: var(--space-md);
+    border: 1px solid var(--color-blue-light);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .project-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(65, 186, 255, 0.2);
+    text-decoration: none;
+  }
+
+  .project-card strong {
+    display: block;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-dark);
+    margin-bottom: var(--space-xs);
+  }
+
+  .project-card p {
+    font-size: 0.85rem;
+    color: var(--color-gray);
+    margin: 0;
+    line-height: 1.5;
+  }
+</style>
