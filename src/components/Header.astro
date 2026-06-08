@@ -1,0 +1,92 @@
+---
+const navLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Posts', href: '/posts' },
+  { label: 'Tutoriais', href: '/tutoriais' },
+  { label: 'Projetos', href: '/projetos' },
+  { label: 'Sobre', href: '/sobre' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">ROVEEb</a>
+    <nav aria-label="Navegação principal">
+      <ul>
+        {navLinks.map(({ label, href }) => (
+          <li>
+            <a
+              href={href}
+              class:list={['nav-link', { active: currentPath === href || (href !== '/' && currentPath.startsWith(href)) }]}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background-color: var(--color-dark);
+    padding: var(--space-md) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+
+  .logo {
+    font-weight: var(--font-weight-bold);
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    color: var(--color-blue-light);
+    font-weight: var(--font-weight-light);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    nav ul {
+      gap: var(--space-sm);
+    }
+  }
+</style>
