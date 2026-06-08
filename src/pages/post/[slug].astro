@@ -1,0 +1,200 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="post">
+    <header class="post-header">
+      <div class="post-meta">
+        <time datetime={post.data.date.toISOString()}>{dateFormatted}</time>
+        {post.data.categorias && post.data.categorias.length > 0 && (
+          <div class="post-categories">
+            {post.data.categorias.map((cat) => (
+              <span class="category">{cat}</span>
+            ))}
+          </div>
+        )}
+      </div>
+      <h1>{post.data.title}</h1>
+      {post.data.author && <p class="author">por {post.data.author}</p>}
+    </header>
+
+    <div class="post-content">
+      <Content />
+    </div>
+
+    {post.data.tags && post.data.tags.length > 0 && (
+      <footer class="post-tags">
+        {post.data.tags.map((tag) => (
+          <span class="tag">#{tag}</span>
+        ))}
+      </footer>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    max-width: 100%;
+  }
+
+  .post-header {
+    margin-bottom: var(--space-xl);
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: var(--space-lg);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md);
+  }
+
+  time {
+    font-size: 0.85rem;
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+  }
+
+  .post-categories {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+  }
+
+  .category {
+    background-color: var(--color-blue-light);
+    color: var(--color-dark);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-sm);
+    text-transform: lowercase;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    color: var(--color-dark);
+    margin-bottom: var(--space-sm);
+  }
+
+  .author {
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+  }
+
+  .post-content :global(h1),
+  .post-content :global(h2),
+  .post-content :global(h3),
+  .post-content :global(h4) {
+    font-weight: var(--font-weight-bold);
+    margin: var(--space-xl) 0 var(--space-md);
+    color: var(--color-dark);
+  }
+
+  .post-content :global(h1) { font-size: 1.75rem; }
+  .post-content :global(h2) { font-size: 1.4rem; }
+  .post-content :global(h3) { font-size: 1.15rem; }
+
+  .post-content :global(p) {
+    margin-bottom: var(--space-md);
+    line-height: 1.75;
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin: var(--space-md) 0 var(--space-md) var(--space-lg);
+    line-height: 1.75;
+  }
+
+  .post-content :global(li) {
+    margin-bottom: var(--space-xs);
+  }
+
+  .post-content :global(pre) {
+    background-color: var(--color-dark);
+    color: var(--color-teal-light);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin: var(--space-md) 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .post-content :global(code) {
+    background-color: var(--color-blue-light);
+    color: var(--color-teal-dark);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875em;
+  }
+
+  .post-content :global(pre code) {
+    background: none;
+    color: inherit;
+    padding: 0;
+  }
+
+  .post-content :global(blockquote) {
+    border-left: 3px solid var(--color-primary);
+    padding-left: var(--space-md);
+    margin: var(--space-md) 0;
+    color: var(--color-gray);
+    font-style: italic;
+  }
+
+  .post-content :global(img) {
+    border-radius: var(--radius-md);
+    margin: var(--space-md) 0;
+  }
+
+  .post-content :global(a) {
+    color: var(--color-blue-deep);
+    text-decoration: underline;
+  }
+
+  .post-content :global(iframe) {
+    border-radius: var(--radius-md);
+    margin: var(--space-lg) 0;
+    max-width: 100%;
+  }
+
+  .post-tags {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-blue-light);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-light);
+    color: var(--color-gray);
+  }
+</style>
