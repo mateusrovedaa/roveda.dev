@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    id: 'pets-rs',
+    name: 'Pets RS',
+    url: 'https://petsrs.com.br/',
+    image: '/images/uploads/petsrs.png',
+    description: 'Plataforma criada em parceria com Zeno Sbardellotto Júnior e Fabrício Pretto para ajudar animais atingidos pelas enchentes de maio/2024 no RS. Reconhecida pelo Estado como plataforma oficial de reencontro de tutores e animais perdidos. Mais de 100 voluntários envolvidos.',
+    media: [
+      { label: 'PetsRS Dataset', url: 'https://lume.ufrgs.br/handle/10183/279189' },
+      { label: 'GRAD', url: 'https://gradbrasil.org.br/reencontro-de-animais-resgatados-com-seus-tutores-no-rio-grande-do-sul/' },
+      { label: 'Band News', url: 'https://www.youtube.com/watch?v=z1pkWx9tACQ' },
+      { label: 'Canaltech', url: 'https://canaltech.com.br/redes-sociais/chuvas-no-rs-redes-sociais-ajudam-a-encontrar-animais-perdidos-288373/' },
+    ],
+  },
+  {
+    id: 'pets-vale-do-taquari',
+    name: 'Pets Vale do Taquari',
+    url: 'https://petsvaledotaquari.com.br/',
+    image: '/images/uploads/petsvaledotaquari.png',
+    description: 'Plataforma criada em 6h para ajudar animais atingidos pelas enchentes de setembro/2023 no Vale do Taquari. Mais de 1000 seguidores no Instagram e 6000 visitantes únicos.',
+    media: [
+      { label: 'G1', url: 'https://g1.globo.com/rs/rio-grande-do-sul/noticia/2023/09/19/ciclone-no-rs-ong-ajuda-a-reunir-tutores-e-animais-perdidos-durante-enchentes.ghtml' },
+      { label: 'Univates', url: 'https://www.univates.br/noticia/34253-professor-estudante-e-diplomado-da-univates-criam-portal-para-ajudar-na-localizacao-de-animais-perdidos-durante-enchente' },
+      { label: 'Record RS TV', url: 'https://www.youtube.com/watch?v=s00s_EJ2pm4' },
+    ],
+  },
+  {
+    id: 'prefa',
+    name: 'Prefa Digital',
+    url: 'https://prefa.digital',
+    image: '/images/uploads/prefadigital.png',
+    description: 'Empresa com foco em soluções inteligentes para governo. Originada do TCC dos alunos Zeno Sbardellotto Júnior e Mateus Roveda, com orientação do Fabrício Pretto. Produtos: Prefa 156 e LOGI.',
+    media: [
+      { label: 'Univates', url: 'https://www.univates.br/noticia/33390-estudantes-criam-solucao-tecnologica-para-prefeituras' },
+      { label: 'Acelera X POA', url: 'https://prefeitura.poa.br/gi/noticias/anunciadas-15-startups-selecionadas-para-o-acelera-x-poa-inovadora' },
+    ],
+  },
+  {
+    id: 'universidade-brasileira-livre',
+    name: 'Universidade Brasileira Livre',
+    url: 'https://ulivre.dev',
+    image: '/images/uploads/ulivre.png',
+    description: 'Organização sem fins lucrativos fundada em 2021 que organiza conteúdo online em português para aumentar o acesso de brasileiros à educação. Mais de 10.000 estrelas no GitHub.',
+    media: [],
+  },
+  {
+    id: 'municipiosdev',
+    name: 'municipios.dev',
+    url: 'https://github.com/mateusrovedaa/municipios.dev',
+    image: '/images/uploads/municipiosdev.png',
+    description: 'API para retornar informações do portal do IBGE e pesquisar websites de prefeituras.',
+    media: [],
+  },
+  {
+    id: 'roveeb',
+    name: 'ROVEEb',
+    url: 'https://youtube.com/ROVEEb',
+    image: '/images/uploads/roveeb.png',
+    description: 'Canal no YouTube criado em 07/03/2020, com mais de 8.000 inscritos. Conteúdo sobre tecnologia, software livre, DevOps e automação.',
+    media: [],
+  },
+  {
+    id: 'sorteador',
+    name: 'Sorteador',
+    url: 'https://github.com/mateusrovedaa/sorteador',
+    image: '/images/uploads/sorteador.png',
+    description: 'Sistema de sorteio criado para o Tech Talks Day (Univates). API + frontend em TypeScript com Sequelize.',
+    media: [],
+  },
+];
+---
+
+<BaseLayout title="Projetos" description="Projetos criados e mantidos por Mateus Roveda">
+  <h1>Projetos</h1>
+
+  <nav class="quick-links" aria-label="Acesso rápido">
+    {projects.map(({ id, name }) => (
+      <a href={`#${id}`}>{name}</a>
+    ))}
+  </nav>
+
+  <div class="projects">
+    {projects.map(({ id, name, url, image, description, media }) => (
+      <section id={id} class="project">
+        <h2>
+          <a href={url} target="_blank" rel="noopener noreferrer">{name}</a>
+        </h2>
+        <img src={image} alt={name} loading="lazy" />
+        <p>{description}</p>
+        {media.length > 0 && (
+          <div class="media">
+            <p class="media-title">Cobertura:</p>
+            <ul>
+              {media.map(({ label, url: mediaUrl }) => (
+                <li><a href={mediaUrl} target="_blank" rel="noopener noreferrer">{label}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-lg);
+  }
+
+  .quick-links {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-xl);
+    padding: var(--space-md);
+    background-color: var(--color-blue-light);
+    border-radius: var(--radius-md);
+  }
+
+  .quick-links a {
+    font-size: 0.85rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-teal-dark);
+  }
+
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .project {
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-blue-light);
+  }
+
+  .project:last-child {
+    border-bottom: none;
+  }
+
+  .project h2 {
+    font-size: 1.4rem;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-md);
+  }
+
+  .project h2 a {
+    color: var(--color-dark);
+    text-decoration: none;
+  }
+
+  .project h2 a:hover {
+    color: var(--color-primary);
+  }
+
+  .project img {
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    max-height: 300px;
+    width: auto;
+  }
+
+  .project p {
+    line-height: 1.75;
+    margin-bottom: var(--space-md);
+  }
+
+  .media-title {
+    font-weight: var(--font-weight-bold);
+    font-size: 0.85rem;
+    color: var(--color-gray);
+    margin-bottom: var(--space-xs);
+  }
+
+  .media ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .media a {
+    font-size: 0.85rem;
+    color: var(--color-blue-deep);
+  }
+</style>
