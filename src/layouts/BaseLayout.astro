@@ -57,4 +57,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     margin: 0 auto;
     padding: var(--space-xl) var(--space-lg);
   }
+
+  @media (max-width: 640px) {
+    main {
+      padding: var(--space-lg) var(--space-md);
+    }
+  }
 </style>

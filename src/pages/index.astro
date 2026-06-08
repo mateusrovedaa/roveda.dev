@@ -5,60 +5,356 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const recentPosts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 5);
+  .slice(0, 6);
+
+const focusTags = ['DevOps', 'SRE', 'Edge AI', 'Software Livre', 'Linux', 'Automação'];
 ---
 
 <BaseLayout title="Home">
+  <!-- Hero -->
   <section class="hero">
-    <h1>Liberdade de conhecimentos</h1>
-    <p class="tagline">Tecnologia, software livre e tutoriais por <a href="/sobre">Mateus Roveda</a>.</p>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-tag">
+          <span class="hero-tag-text">$ whoami</span>
+        </div>
+        <h1>
+          Liberdade de<br />
+          <span class="highlight">conhecimentos</span>
+        </h1>
+        <p class="hero-desc">
+          Blog de tecnologia por <a href="/sobre">Mateus Roveda</a> — engenheiro DevOps, professor e entusiasta de software livre.
+        </p>
+        <div class="focus-tags">
+          {focusTags.map((tag) => (
+            <span class="focus-tag">{tag}</span>
+          ))}
+        </div>
+        <div class="hero-cta">
+          <a href="/posts" class="btn-primary">Ver posts</a>
+          <a href="/sobre" class="btn-ghost">Sobre mim →</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="terminal-card">
+          <div class="terminal-bar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="terminal-title">mateus@roveeb:~</span>
+          </div>
+          <div class="terminal-body">
+            <p><span class="prompt">$</span> cat about.txt</p>
+            <p class="out">Engenheiro DevOps · ITpS</p>
+            <p class="out">Professor · Univates</p>
+            <p class="out">Mestre em Edge AI · Unisinos</p>
+            <p class="out">Youtuber · youtube.com/ROVEEb</p>
+            <p class="out">Lider · Universidade Brasileira Livre</p>
+            <br />
+            <p><span class="prompt">$</span> ls projetos/</p>
+            <p class="out comment"># PetsRS · Prefa Digital · UBL</p>
+            <br />
+            <p><span class="prompt">$</span> <span class="cursor">▋</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section class="recent-posts">
-    <h2>Posts recentes</h2>
-    <ul class="post-list">
-      {recentPosts.map((post) => (
-        <li class="post-item">
-          <a href={`/post/${post.id}`} class="post-link">
-            <time datetime={post.data.date.toISOString()}>
-              {new Date(post.data.date).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-            <h3>{post.data.title}</h3>
+  <!-- Grid principal -->
+  <div class="main-grid">
+    <!-- Posts recentes -->
+    <section class="posts-section">
+      <h2 class="section-heading">Posts recentes</h2>
+      <ul class="post-list">
+        {recentPosts.map((post) => (
+          <li class="post-item">
+            <a href={`/post/${post.id}`} class="post-link">
+              <div class="post-meta-row">
+                <time datetime={post.data.date.toISOString()}>
+                  {new Date(post.data.date).toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </time>
+                {post.data.categorias?.[0] && (
+                  <span class="post-cat">{post.data.categorias[0]}</span>
+                )}
+              </div>
+              <h3>{post.data.title}</h3>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/posts" class="see-all">Ver todos os posts →</a>
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Stack card -->
+      <div class="sidebar-card stack-card">
+        <h3 class="section-heading">Stack</h3>
+        <div class="stack-list">
+          {[
+            { label: 'DevOps', color: 'teal' },
+            { label: 'Kubernetes', color: 'blue' },
+            { label: 'Docker', color: 'blue' },
+            { label: 'Terraform', color: 'teal' },
+            { label: 'GitLab CI', color: 'orange' },
+            { label: 'Python', color: 'blue' },
+            { label: 'Edge AI', color: 'teal' },
+            { label: 'NGINX', color: 'green' },
+            { label: 'Linux', color: 'orange' },
+          ].map(({ label, color }) => (
+            <span class={`stack-tag stack-tag--${color}`}>{label}</span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Comunidade card -->
+      <div class="sidebar-card community-card">
+        <h3 class="section-heading">Comunidade</h3>
+        <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="community-item youtube-item">
+          <div class="community-icon">▶</div>
+          <div>
+            <strong>YouTube</strong>
+            <span>ROVEEb · 8k+ inscritos</span>
+          </div>
+        </a>
+        <a href="https://t.me/mateusrovedaa" target="_blank" rel="noopener noreferrer" class="community-item telegram-item">
+          <div class="community-icon">✈</div>
+          <div>
+            <strong>Telegram</strong>
+            <span>@mateusrovedaa</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Projetos destaque -->
+      <div class="sidebar-card">
+        <h3 class="section-heading">Projetos</h3>
+        <div class="sidebar-projects">
+          <a href="https://petsrs.com.br/" target="_blank" rel="noopener noreferrer" class="sidebar-project">
+            <span class="project-dot"></span>
+            <div>
+              <strong>Pets RS</strong>
+              <span>Plataforma oficial RS · Enchentes 2024</span>
+            </div>
           </a>
-        </li>
-      ))}
-    </ul>
-    <a href="/posts" class="see-all">Ver todos os posts →</a>
-  </section>
+          <a href="https://prefa.digital" target="_blank" rel="noopener noreferrer" class="sidebar-project">
+            <span class="project-dot"></span>
+            <div>
+              <strong>Prefa Digital</strong>
+              <span>GovTech · Smart Cities</span>
+            </div>
+          </a>
+          <a href="https://ulivre.dev" target="_blank" rel="noopener noreferrer" class="sidebar-project">
+            <span class="project-dot"></span>
+            <div>
+              <strong>UBL</strong>
+              <span>Educação open source · 10k⭐</span>
+            </div>
+          </a>
+        </div>
+        <a href="/projetos" class="see-all" style="margin-top: 1rem; display: block;">Ver todos →</a>
+      </div>
+    </aside>
+  </div>
 </BaseLayout>
 
 <style>
+  /* ─── Hero ─── */
   .hero {
+    background: var(--gradient-hero);
+    border-radius: var(--radius-lg);
     margin-bottom: var(--space-xl);
-    padding-bottom: var(--space-xl);
-    border-bottom: 2px solid var(--color-primary);
+    padding: var(--space-xl) var(--space-xl);
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-tag-text {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-teal-light);
+    background: rgba(7, 126, 125, 0.2);
+    border: 1px solid var(--color-teal-mid);
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
   }
 
   .hero h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: var(--font-weight-bold);
-    color: var(--color-dark);
-    margin-bottom: var(--space-sm);
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
   }
 
-  .tagline {
-    font-size: 1.1rem;
+  .highlight {
+    color: var(--color-primary);
+  }
+
+  .hero-desc {
+    color: var(--color-blue-light);
     font-weight: var(--font-weight-light);
-    color: var(--color-gray);
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
   }
 
-  .recent-posts h2 {
-    font-size: 0.85rem;
+  .hero-desc a {
+    color: var(--color-primary);
     font-weight: var(--font-weight-bold);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-teal-dark);
+  }
+
+  .focus-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .focus-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    background: rgba(65, 186, 255, 0.1);
+    color: var(--color-primary);
+    border: 1px solid rgba(65, 186, 255, 0.3);
+    letter-spacing: 0.05em;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    background: var(--color-primary);
+    color: var(--color-dark);
+    font-weight: var(--font-weight-bold);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.88;
+    text-decoration: none;
+  }
+
+  .btn-ghost {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    font-weight: var(--font-weight-light);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  /* ─── Terminal card ─── */
+  .terminal-card {
+    background: #0a1929;
+    border: 1px solid rgba(65, 186, 255, 0.2);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .terminal-bar {
+    background: #162032;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-bottom: 1px solid rgba(65,186,255,0.1);
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot.red    { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green  { background: #28c840; }
+
+  .terminal-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(178,228,255,0.5);
+    margin-left: auto;
+  }
+
+  .terminal-body {
+    padding: 1rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--color-blue-light);
+  }
+
+  .terminal-body .prompt {
+    color: var(--color-teal-light);
+    margin-right: 0.5rem;
+    font-weight: 700;
+  }
+
+  .terminal-body .out {
+    color: rgba(178,228,255,0.7);
+    padding-left: 1.2rem;
+  }
+
+  .terminal-body .comment {
+    color: var(--color-teal-mid);
+  }
+
+  .cursor {
+    color: var(--color-primary);
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* ─── Main grid ─── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  /* ─── Posts ─── */
+  .posts-section h2 {
     margin-bottom: var(--space-lg);
   }
 
@@ -66,44 +362,264 @@ const recentPosts = allPosts
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
-    margin-bottom: var(--space-lg);
   }
 
   .post-item {
-    border-bottom: 1px solid var(--color-blue-light);
-    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-surface);
   }
 
   .post-link {
     display: block;
+    padding: var(--space-md) 0;
     text-decoration: none;
     color: inherit;
+    transition: padding-left 0.2s;
+  }
+
+  .post-link:hover {
+    padding-left: var(--space-sm);
+    text-decoration: none;
   }
 
   .post-link:hover h3 {
     color: var(--color-primary);
-    text-decoration: none;
+  }
+
+  .post-meta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: 4px;
   }
 
   time {
-    font-size: 0.8rem;
-    font-weight: var(--font-weight-light);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     color: var(--color-gray);
-    display: block;
-    margin-bottom: var(--space-xs);
   }
 
-  h3 {
-    font-size: 1.05rem;
+  .post-cat {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-teal-mid);
+    background: rgba(7,126,125,0.08);
+    border: 1px solid rgba(7,126,125,0.2);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .post-link h3 {
+    font-size: 1rem;
     font-weight: var(--font-weight-bold);
     color: var(--color-dark);
     transition: color 0.2s;
+    line-height: 1.4;
   }
 
   .see-all {
+    display: inline-block;
+    margin-top: var(--space-lg);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Sidebar ─── */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .sidebar-card {
+    background: #ffffff;
+    border: 1px solid var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: 0 2px 12px rgba(6, 23, 54, 0.06);
+  }
+
+  /* Stack tags */
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .stack-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.04em;
+  }
+
+  .stack-tag--teal {
+    background: rgba(7,126,125,0.1);
+    color: var(--color-teal-dark);
+    border: 1px solid rgba(7,126,125,0.25);
+  }
+
+  .stack-tag--blue {
+    background: rgba(0,92,254,0.08);
+    color: var(--color-blue-deep);
+    border: 1px solid rgba(0,92,254,0.2);
+  }
+
+  .stack-tag--orange {
+    background: rgba(255,150,50,0.1);
+    color: #c06000;
+    border: 1px solid rgba(255,150,50,0.3);
+  }
+
+  .stack-tag--green {
+    background: rgba(40,200,64,0.08);
+    color: #1a7a20;
+    border: 1px solid rgba(40,200,64,0.2);
+  }
+
+  /* Community */
+  .community-card {
+    background: var(--gradient-hero);
+    border-color: rgba(65,186,255,0.15);
+  }
+
+  .community-card .section-heading {
+    color: var(--color-teal-light);
+  }
+
+  .community-card .section-heading::before {
+    color: var(--color-primary);
+  }
+
+  .community-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-sm);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-bottom: var(--space-sm);
+    color: #fff;
+  }
+
+  .community-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .community-item:hover {
+    text-decoration: none;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .community-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .youtube-item .community-icon {
+    background: #ff0000;
+  }
+
+  .telegram-item .community-icon {
+    background: var(--color-primary);
+    color: var(--color-dark);
+  }
+
+  .community-item strong {
+    display: block;
     font-size: 0.9rem;
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+  }
+
+  .community-item span {
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-light);
+    color: rgba(255,255,255,0.6);
+    font-family: var(--font-mono);
+  }
+
+  /* Sidebar projects */
+  .sidebar-projects {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .sidebar-project {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    text-decoration: none;
+    color: inherit;
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+  }
+
+  .sidebar-project:hover {
+    background: var(--color-surface);
+    text-decoration: none;
+  }
+
+  .project-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-project strong {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-dark);
+  }
+
+  .sidebar-project span {
+    font-size: 0.75rem;
+    color: var(--color-gray);
+    font-family: var(--font-mono);
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+    }
+    .hero-right {
+      display: none;
+    }
+    .main-grid {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      padding: var(--space-lg);
+    }
+    .sidebar {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
