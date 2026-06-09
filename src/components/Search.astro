@@ -149,21 +149,19 @@
     --pagefind-ui-font: var(--font-sans);
   }
 
-  /* Botão "Limpar" alinhado verticalmente dentro do input */
+  /* Botão "Limpar" — só aparência; mantém a geometria default do Pagefind
+     (top/height fixos), pois o form envolve input + resultados e esticar
+     com bottom:0 viraria uma faixa vertical. */
   #pagefind-ui .pagefind-ui__search-clear {
-    top: 0;
-    bottom: 0;
-    height: auto;
-    margin: auto 0;
-    padding: 0 12px;
     display: inline-flex;
     align-items: center;
     background: transparent;
+    border: none;
     color: var(--color-blue-deep);
     font-family: var(--font-mono);
     font-size: 0.78rem;
     border-radius: var(--radius-sm);
-    transition: color 0.15s;
+    transition: color 0.15s, background 0.15s;
   }
 
   #pagefind-ui .pagefind-ui__search-clear:hover {
