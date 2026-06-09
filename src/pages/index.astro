@@ -281,7 +281,8 @@ const projects = [
 
   .terminal-body .prompt { color: var(--color-teal-light); margin-right: 0.5rem; font-weight: 700; }
   .terminal-body .out    { color: rgba(178, 228, 255, 0.7); padding-left: 1.2rem; }
-  .terminal-body .comment { color: var(--color-teal-mid); }
+  /* teal claro próprio — teal-mid é escuro p/ fundos claros e falha contraste sobre o terminal */
+  .terminal-body .comment { color: #5CC9B8; }
 
   .cursor { color: var(--color-primary); animation: blink 1s step-end infinite; }
   @keyframes blink { 50% { opacity: 0; } }
