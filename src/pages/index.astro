@@ -1,476 +1,96 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
+import PostList from '../components/PostList.astro';
 
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-const recentPosts = allPosts
+const posts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 6);
-
-const projects = [
-  {
-    iconSvg: '<svg viewBox="0 0 512 512" width="1em" height="1em" fill="#ff7c79" aria-hidden="true"><path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5.3-86.2 32.6-96.8 70.1 15.6 84.4 58.5zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7 .9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29.1-51.7-10.2-84.1s54-47.3 78.5-33.3 29.1 51.7 10.2 84.1-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5 46.9 53.9 32.6 96.8-52.1 69.1-84.4 58.5z"/></svg>',
-    name: 'Pets RS',
-    desc: 'Plataforma oficial RS para resgate de animais nas enchentes de 2024',
-    tags: ['Social', 'Open Source'],
-    url: 'https://petsrs.com.br/',
-  },
-  {
-    icon: '🏙️',
-    name: 'Prefa Digital',
-    desc: 'Plataforma de GovTech para cidades inteligentes e gestão pública',
-    tags: ['Smart Cities', 'SaaS'],
-    url: 'https://prefa.digital',
-  },
-  {
-    icon: '📚',
-    name: 'UBL',
-    desc: 'Universidade Brasileira Livre — educação open source com 10k+ estrelas',
-    tags: ['Educação', 'Open Source'],
-    url: 'https://ulivre.dev',
-  },
-];
 ---
 
 <BaseLayout
   title="Liberdade de conhecimentos"
   fullTitleOverride="ROVEEb - Liberdade de conhecimentos"
-  description="Engenheiro DevOps, professor e mestre em Edge AI. Escrevo sobre infraestrutura, automação, Linux e software livre no blog ROVEEb."
+  description="Blog & canal sobre IA, DevOps, GNU/Linux e software livre. Tutoriais, ideias e ferramentas — em português, abertos a todos. Por Mateus Roveda."
 >
-
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <p class="hero-eyebrow">// ROVEEb</p>
-        <h1>Liberdade de <span class="accent">conhecimentos</span></h1>
-        <p class="hero-bio">
-          Blog e canal sobre infraestrutura, DevOps,<br />
-          automação e software livre.
-        </p>
-        <a href="/sobre" class="hero-byline">
-          <span><strong>Mateus Roveda</strong> é quem faz acontecer</span><span class="arrow" aria-hidden="true">→</span>
-        </a>
-        <nav class="hero-links">
-          <a href="/posts">Posts</a>
-          <a href="/projetos">Projetos</a>
-          <a href="/sobre">Sobre</a>
-          <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer">YouTube ↗</a>
-        </nav>
-      </div>
-
-      <div class="hero-right">
-        <div class="terminal-card">
-          <div class="terminal-bar">
-            <span class="terminal-title">roveeb:~</span>
-            <div class="terminal-controls">
-              <span class="wm-btn">−</span>
-              <span class="wm-btn">×</span>
-            </div>
-          </div>
-          <div class="terminal-body">
-            <p><span class="prompt">$</span> cat roveeb.md</p>
-            <p class="out">ROVEEb · Liberdade de conhecimentos</p>
-            <p class="out">Blog & canal de tecnologia desde 2020</p>
-            <br />
-            <p><span class="prompt">$</span> ls temas/</p>
-            <p class="out comment">DevOps  Linux  Automação  Self-hosting</p>
-            <p class="out comment">Infra  Software-Livre  AI</p>
-            <br />
-            <p><span class="prompt">$</span> roveeb --canais</p>
-            <p class="out">YouTube · youtube.com/ROVEEb</p>
-            <p class="out">Telegram · @roveeb</p>
-            <br />
-            <p><span class="prompt">$</span> <span class="cursor">▋</span></p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <p class="eyebrow"><span class="d">//</span> ROVEEb — Comunidade</p>
+    <h1>IA, DevOps, GNU/Linux e <span class="accent">Software livre.</span></h1>
+    <p class="sub"><b>Tutoriais</b>, ideias e ferramentas — em português, abertos a todos.</p>
   </section>
 
-  <!-- Posts recentes -->
-  <section class="section">
-    <header class="section-header">
-      <h2 class="section-heading">Posts recentes</h2>
-      <a href="/posts" class="section-more">Ver todos →</a>
-    </header>
-    <div class="posts-grid">
-      {recentPosts.map((post) => <PostCard post={post} />)}
+  <!-- Posts -->
+  <section class="posts">
+    <div class="sec-h">
+      <h2 class="sec-t"><span class="d">//</span> últimos posts</h2>
+      <a class="sec-all" href="/posts">ver todos →</a>
     </div>
+    <PostList posts={posts} featured />
   </section>
-
-  <!-- Comunidade -->
-  <section class="section community-section">
-    <h2 class="section-heading">Comunidade</h2>
-    <div class="community-row">
-      <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="community-card youtube">
-        <span class="community-icon">
-          <svg viewBox="0 0 24 24" width="1.1em" height="1.1em" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        </span>
-        <div>
-          <strong>YouTube</strong>
-          <span>ROVEEb · 10k+ inscritos</span>
-        </div>
-      </a>
-      <a href="https://t.me/roveeb" target="_blank" rel="noopener noreferrer" class="community-card telegram">
-        <span class="community-icon">
-          <svg viewBox="0 0 24 24" width="1.1em" height="1.1em" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-        </span>
-        <div>
-          <strong>Telegram</strong>
-          <span>@roveeb</span>
-        </div>
-      </a>
-      <a href="mailto:contato@roveeb.com" class="community-card email">
-        <span class="community-icon">
-          <svg viewBox="0 0 24 24" width="1.1em" height="1.1em" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        </span>
-        <div>
-          <strong>E-mail</strong>
-          <span>contato@roveeb.com</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Projetos -->
-  <section class="section">
-    <header class="section-header">
-      <h2 class="section-heading">Projetos</h2>
-      <a href="/projetos" class="section-more">Ver todos →</a>
-    </header>
-    <div class="projects-grid">
-      {projects.map((p) => (
-        <a href={p.url} target="_blank" rel="noopener noreferrer" class="card project-card">
-          <span class="project-icon">{p.iconSvg ? <Fragment set:html={p.iconSvg} /> : p.icon}</span>
-          <div class="project-body">
-            <p class="project-name">{p.name}</p>
-            <p class="project-desc">{p.desc}</p>
-            <div class="project-tags">
-              {p.tags.map((t) => <span class="project-tag">{t}</span>)}
-            </div>
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
-
 </BaseLayout>
 
 <style>
-  /* ─── Hero ─── */
-  .hero {
-    background: var(--gradient-hero);
-    border-radius: var(--radius-lg);
-    padding: 3rem var(--space-xl);
-    margin-bottom: 3.5rem;
-    overflow: hidden;
-  }
+  /* ─── Hero enxuto, tipografia grossa ─── */
+  .hero { padding: 3.5rem 0 5.5rem; }
 
-  .hero-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-xl);
-    align-items: center;
-    max-width: var(--max-width);
-    margin: 0 auto;
-  }
-
-  .hero-eyebrow {
+  .eyebrow {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-teal-light);
-    letter-spacing: 0.06em;
-    margin-bottom: 0.75rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.6rem;
   }
+  .eyebrow .d { color: var(--accent); }
 
   .hero h1 {
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
-    font-weight: var(--font-weight-bold);
-    color: #ffffff;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-  }
-
-  .accent { color: var(--color-primary); }
-
-  .hero-bio {
-    color: rgba(255, 255, 255, 0.75);
-    font-weight: var(--font-weight-light);
-    font-size: 0.95rem;
-    line-height: 1.7;
-    margin-bottom: 1.1rem;
-  }
-
-  /* assinatura: quem executa a marca (link p/ /sobre) */
-  .hero-byline {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: rgba(178, 228, 255, 0.7);
-    text-decoration: none;
-    margin-bottom: 1.75rem;
-    transition: color 0.15s;
-  }
-
-  .hero-byline strong {
-    color: var(--color-primary);
-    font-weight: var(--font-weight-bold);
-  }
-
-  .hero-byline .arrow {
-    transition: transform 0.15s;
-  }
-
-  .hero-byline:hover {
-    color: var(--color-teal-light);
-    text-decoration: none;
-  }
-
-  .hero-byline:hover .arrow {
-    transform: translateX(3px);
-  }
-
-  .hero-links {
-    display: flex;
-    gap: 1.75rem;
-    flex-wrap: wrap;
-  }
-
-  .hero-links a {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    opacity: 0.7;
-    transition: opacity 0.15s, color 0.15s;
-  }
-
-  .hero-links a:hover {
-    opacity: 1;
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-
-  /* ─── Terminal ─── */
-  .terminal-card {
-    background: #0a1929;
-    border: 1px solid rgba(65, 186, 255, 0.2);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  }
-
-  .terminal-bar {
-    background: #162032;
-    padding: 0.6rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    border-bottom: 1px solid rgba(65, 186, 255, 0.1);
-  }
-
-  .terminal-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .terminal-title {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: rgba(178, 228, 255, 0.6);
-  }
-
-  .terminal-controls {
-    display: flex;
-    gap: 0.35rem;
-  }
-
-  .wm-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    border: 1px solid rgba(178, 228, 255, 0.2);
-    border-radius: 3px;
-    font-size: 0.7rem;
-    line-height: 1;
-    color: rgba(178, 228, 255, 0.4);
-    cursor: default;
-    user-select: none;
-  }
-
-  .terminal-body {
-    padding: 1rem 1.25rem;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    line-height: 1.8;
-    color: var(--color-blue-light);
-  }
-
-  .terminal-body .prompt { color: var(--color-teal-light); margin-right: 0.5rem; font-weight: 700; }
-  .terminal-body .out    { color: rgba(178, 228, 255, 0.7); padding-left: 1.2rem; }
-  /* teal claro próprio — teal-mid é escuro p/ fundos claros e falha contraste sobre o terminal */
-  .terminal-body .comment { color: #5CC9B8; }
-
-  .cursor { color: var(--color-primary); animation: blink 1s step-end infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-
-  /* ─── Sections ─── */
-  .section { margin-bottom: 3rem; }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-lg);
-  }
-
-  .section-header .section-heading { margin-bottom: 0; }
-
-  .section-more {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--color-blue-deep);
-    letter-spacing: 0.04em;
-    text-decoration: none;
-  }
-
-  .section-more:hover { text-decoration: underline; }
-
-  /* ─── Projetos ─── */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-  }
-
-  .project-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
-    padding: 1.25rem;
-  }
-
-  .project-icon {
-    font-size: 1.6rem;
-    line-height: 1;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .project-icon svg {
-    display: block;
-  }
-
-  .project-body {
-    min-width: 0;
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .project-name {
-    font-size: 0.95rem;
-    font-weight: var(--font-weight-bold);
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 7vw, 5.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    max-width: 18ch;
     color: var(--text-strong);
-    margin-bottom: 0.3rem;
   }
+  .hero h1 .accent { color: var(--accent); }
 
-  .project-desc {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 0.65rem;
-  }
-
-  .project-tags {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-    margin-top: auto;
-  }
-
-  .project-tag {
+  .hero .sub {
     font-family: var(--font-mono);
-    font-size: 0.6rem;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    margin-top: 1.75rem;
+  }
+  .hero .sub b { color: var(--color-teal-mid); font-weight: 500; }
+
+  /* ─── Posts ─── */
+  .posts { padding-bottom: 3rem; }
+
+  .sec-h {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 1.1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid var(--text-strong);
+  }
+  .sec-t {
+    font-family: var(--font-mono);
     font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-blue-deep);
-    background: rgba(65, 186, 255, 0.08);
-    border: 1px solid rgba(65, 186, 255, 0.35);
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
+    color: var(--text-strong);
   }
-
-  /* ─── Comunidade ─── */
-  .community-section { margin-bottom: 4rem; }
-
-  .community-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: var(--space-md);
-    margin-top: var(--space-lg);
-  }
-
-  .community-card {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: 1.25rem;
-    border-radius: var(--radius-md);
+  .sec-t .d { color: var(--accent); }
+  .sec-all {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
     text-decoration: none;
-    color: #ffffff;
-    background: var(--gradient-hero);
-    transition: opacity 0.15s;
   }
-
-  .community-card.youtube  { border: 1px solid rgba(255, 0, 0, 0.25); }
-  .community-card.telegram { border: 1px solid rgba(65, 186, 255, 0.25); }
-  .community-card.email    { border: 1px solid rgba(255, 124, 121, 0.25); }
-
-  .community-card:hover { opacity: 0.88; text-decoration: none; }
-
-  .community-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    flex-shrink: 0;
-  }
-
-  .youtube  .community-icon { background: #ff0000; }
-  .telegram .community-icon { background: var(--color-primary); color: var(--color-dark); }
-  .email    .community-icon { background: var(--color-primary-warm, #ff7c79); color: #fff; }
-
-  .community-card strong { display: block; font-size: 0.9rem; font-weight: var(--font-weight-bold); }
-  .community-card span   { font-size: 0.75rem; font-weight: var(--font-weight-light); color: rgba(255,255,255,0.55); font-family: var(--font-mono); }
-
-  /* ─── Responsive ─── */
-  @media (max-width: 900px) {
-    .hero-inner    { grid-template-columns: 1fr; }
-    .hero-right    { display: none; }
-    .projects-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  @media (max-width: 750px) {
-    .community-row { grid-template-columns: 1fr; }
-  }
-
-  @media (max-width: 600px) {
-    .hero { padding: var(--space-lg); }
-    .projects-grid { grid-template-columns: 1fr; }
-  }
+  .sec-all:hover { text-decoration: underline; }
 </style>

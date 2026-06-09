@@ -97,11 +97,14 @@ const projects = [
   </nav>
 
   <div class="projects">
-    {projects.map(({ id, name, url, image, description, media }) => (
+    {projects.map(({ id, name, url, image, description, media }, i) => (
       <section id={id} class="project">
-        <h2>
-          <a href={url} target="_blank" rel="noopener noreferrer">{name} ↗</a>
-        </h2>
+        <div class="pj-head">
+          <span class="pj-num">[{String(i + 1).padStart(2, '0')}]</span>
+          <h2>
+            <a href={url} target="_blank" rel="noopener noreferrer">{name} ↗</a>
+          </h2>
+        </div>
         <img src={image} alt={name} loading="lazy" />
         <p>{description}</p>
         {media.length > 0 && (
@@ -163,10 +166,26 @@ const projects = [
     border-bottom: none;
   }
 
-  .project h2 {
-    font-size: 1.4rem;
-    font-weight: var(--font-weight-bold);
+  .pj-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
     margin-bottom: var(--space-md);
+  }
+
+  .pj-num {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .project h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0;
   }
 
   .project h2 a {
@@ -176,7 +195,7 @@ const projects = [
   }
 
   .project h2 a:hover {
-    color: var(--color-primary);
+    color: var(--accent);
   }
 
   .project img {
@@ -206,6 +225,7 @@ const projects = [
     color: var(--color-teal-mid);
     margin-bottom: var(--space-sm);
   }
+  .media-title::before { content: '// '; color: var(--accent); }
 
   .media ul {
     list-style: none;

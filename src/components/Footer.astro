@@ -1,176 +1,86 @@
 ---
-const socialLinks = [
-  { label: 'GitHub', href: 'https://github.com/mateusrovedaa' },
-  { label: 'GitLab', href: 'https://gitlab.com/mateusrovedaa' },
-  { label: 'YouTube', href: 'https://youtube.com/ROVEEb' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mateusrovedaa/' },
-  { label: 'Twitter', href: 'https://twitter.com/mateusrovedaa' },
-];
+const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="community">
-      <p class="community-title">Faça parte da comunidade</p>
-      <div class="community-links">
-        <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="community-link youtube">
-          YouTube · ROVEEb
-        </a>
-        <a href="https://t.me/roveeb" target="_blank" rel="noopener noreferrer" class="community-link telegram">
-          Telegram · @roveeb
-        </a>
-      </div>
-    </div>
-
-    <div class="bottom">
-      <a href="/" class="footer-logo" aria-label="ROVEEb — blog de Mateus Roveda, página inicial">
-        <img src="/logo.png" alt="ROVEEb" class="footer-logo-img" width="1152" height="418" />
-        <span class="footer-byline">por <strong>Mateus Roveda</strong></span>
-      </a>
-      <nav aria-label="Redes sociais">
-        <ul>
-          {socialLinks.map(({ label, href }) => (
-            <li>
-              <a href={href} target="_blank" rel="noopener noreferrer">{label}</a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <p class="copyright">
-        © {new Date().getFullYear()} Mateus Roveda
-      </p>
-    </div>
+<footer class="botbar" aria-label="Rodapé">
+  <div class="bb-in">
+    <span class="bb-copy">© {year} · <a href="/sobre">Mateus Roveda</a></span>
+    <span class="bb-comm">
+      <b>comunidade</b>
+      <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer">YouTube ↗</a>
+      <a href="https://t.me/roveeb" target="_blank" rel="noopener noreferrer">Telegram ↗</a>
+      <a href="https://github.com/mateusrovedaa" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </span>
   </div>
 </footer>
 
 <style>
-  .site-footer {
-    background-color: var(--color-dark);
-    color: var(--color-blue-light);
-    margin-top: auto;
-    padding: var(--space-xl) 0 var(--space-lg);
+  .botbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    height: var(--footerbar-h, 32px);
+    background: var(--chrome-bg);
+    border-top: 1px solid var(--chrome-line);
+    display: flex;
+    align-items: center;
   }
 
-  .container {
+  .bb-in {
     max-width: var(--max-width);
+    width: 100%;
     margin: 0 auto;
     padding: 0 var(--space-lg);
     display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
-  }
-
-  .community {
-    border-top: 1px solid var(--color-teal-dark);
-    padding-top: var(--space-lg);
-  }
-
-  .community-title {
-    font-weight: var(--font-weight-bold);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-gray-light);
-    margin-bottom: var(--space-md);
-  }
-
-  .community-links {
-    display: flex;
-    gap: var(--space-md);
-    flex-wrap: wrap;
-  }
-
-  .community-link {
-    display: inline-block;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-weight: var(--font-weight-bold);
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-
-  .community-link:hover {
-    opacity: 0.85;
-    text-decoration: none;
-  }
-
-  .community-link.youtube {
-    background-color: #dc0000;
-    color: #fff;
-  }
-
-  .community-link.telegram {
-    background-color: var(--color-primary);
-    color: var(--color-dark);
-  }
-
-  .footer-logo {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-  }
-
-  .footer-byline {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    line-height: 1.15;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-gray-light);
-    border-left: 1px solid var(--color-teal-dark);
-    padding-left: var(--space-sm);
-  }
-
-  .footer-byline strong {
-    display: block;
-    color: var(--color-primary);
-    font-weight: var(--font-weight-bold);
-  }
-
-  .footer-logo-img {
-    height: 32px;
-    width: auto;
-    display: block;
-    opacity: 0.85;
-    transition: opacity 0.2s;
-  }
-
-  .footer-logo:hover .footer-logo-img {
-    opacity: 1;
-  }
-
-  .bottom {
-    display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: var(--space-md);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
   }
 
-  nav ul {
-    list-style: none;
+  .bb-copy {
+    color: rgba(178, 228, 255, 0.5);
+    white-space: nowrap;
+  }
+  .bb-copy a {
+    color: rgba(178, 228, 255, 0.7);
+    text-decoration: none;
+  }
+  .bb-copy a:hover { color: var(--color-primary); }
+
+  .bb-comm {
     display: flex;
+    align-items: center;
     gap: var(--space-md);
-    flex-wrap: wrap;
+    white-space: nowrap;
   }
-
-  nav a {
-    color: var(--color-gray-light);
-    font-size: 0.85rem;
-    font-weight: var(--font-weight-light);
+  .bb-comm b {
+    color: rgba(178, 228, 255, 0.42);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.62rem;
+  }
+  .bb-comm a {
+    color: rgba(178, 228, 255, 0.85);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.15s;
   }
+  .bb-comm a:hover { color: var(--color-primary); }
 
-  nav a:hover {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-
-  .copyright {
-    font-size: 0.8rem;
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-light);
+  @media (max-width: 560px) {
+    .bb-in {
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      font-size: 0.66rem;
+      text-align: center;
+    }
+    .bb-comm { gap: var(--space-sm); }
+    .bb-comm b { display: none; }
   }
 </style>

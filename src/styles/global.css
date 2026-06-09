@@ -21,6 +21,12 @@
   --text-strong: var(--color-dark);
   --text-muted: var(--color-gray);
   --border-subtle: var(--color-surface);
+  /* acento cyan legível: tom mais forte no claro, brilhante no escuro */
+  --accent: #0a8fd6;
+  /* barras de chrome (header/footer) — navy fixo em ambos os temas */
+  --chrome-bg: #04101e;
+  --chrome-fg: rgba(178, 228, 255, 0.72);
+  --chrome-line: rgba(65, 186, 255, 0.14);
 
   --font-sans: 'Poppins', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -58,6 +64,7 @@
   /* Acentos: clarear os tons escuros p/ manter contraste AA sobre fundo escuro */
   --color-teal-mid: #5fd1c4;
   --color-blue-deep: #5aa6ff;
+  --accent: #41BAFF;
   --gradient-hero: linear-gradient(160deg, #0d2036 0%, #0a2850 55%, #08323a 100%);
 }
 
@@ -82,6 +89,13 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* espaço para a status bar fixa de comunidade (footer) */
+  --footerbar-h: 32px;
+  padding-bottom: var(--footerbar-h);
+}
+
+@media (max-width: 560px) {
+  body { --footerbar-h: 56px; }
 }
 
 a {
@@ -139,24 +153,26 @@ img {
 
 .page-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-teal-mid);
-  margin-bottom: var(--space-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
 }
 
 .page-eyebrow::before {
   content: '// ';
-  color: var(--color-primary);
+  color: var(--accent);
 }
 
 .page-header h1 {
-  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
-  font-weight: var(--font-weight-bold);
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
   color: var(--text-strong);
-  line-height: 1.15;
+  line-height: 1.06;
 }
 
 .page-subtitle {
@@ -258,19 +274,20 @@ a.card:hover {
 .btn-outline {
   display: inline-block;
   padding: var(--space-sm) var(--space-md);
-  border: 1px solid var(--color-primary);
+  border: 1px solid var(--accent);
   border-radius: var(--radius-md);
-  color: var(--color-primary);
+  color: var(--accent);
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.03em;
   text-decoration: none;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .btn-outline:hover {
-  background-color: var(--color-primary);
+  background-color: var(--accent);
+  border-color: var(--accent);
   color: var(--color-dark);
   text-decoration: none;
 }
