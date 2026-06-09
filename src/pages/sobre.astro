@@ -75,6 +75,7 @@ const highlightedProjects = [
       loading="eager"
     />
     <div class="hero-text">
+      <p class="page-eyebrow">Quem faz acontecer</p>
       <h1>Mateus Roveda</h1>
       <p class="tagline">Engenheiro DevOps · Professor · Youtuber · Software Livre</p>
       <nav class="quick-links" aria-label="Links de contato">
@@ -206,14 +207,14 @@ const highlightedProjects = [
   .hero-text h1 {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     font-weight: var(--font-weight-bold);
-    color: var(--color-dark);
+    color: var(--text-strong);
     margin-bottom: var(--space-xs);
   }
 
   .tagline {
     font-size: 0.95rem;
     font-weight: var(--font-weight-light);
-    color: var(--color-gray);
+    color: var(--text-muted);
     margin-bottom: var(--space-md);
   }
 
@@ -256,7 +257,7 @@ const highlightedProjects = [
   .section {
     margin-bottom: var(--space-xl);
     padding-bottom: var(--space-xl);
-    border-bottom: 1px solid var(--color-surface);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .section:last-child {
@@ -308,7 +309,7 @@ const highlightedProjects = [
 
   .timeline-header strong {
     font-weight: var(--font-weight-bold);
-    color: var(--color-dark);
+    color: var(--text-strong);
   }
 
   .company {
@@ -317,14 +318,14 @@ const highlightedProjects = [
   }
 
   .period {
-    color: var(--color-gray);
+    color: var(--text-muted);
     font-size: 0.8rem;
     font-weight: var(--font-weight-light);
   }
 
   .timeline-item p {
     font-size: 0.9rem;
-    color: var(--color-gray);
+    color: var(--text-muted);
     margin-bottom: 0;
   }
 
@@ -342,13 +343,13 @@ const highlightedProjects = [
   .project-card strong {
     display: block;
     font-weight: var(--font-weight-bold);
-    color: var(--color-dark);
+    color: var(--text-strong);
     margin-bottom: var(--space-xs);
   }
 
   .project-card p {
     font-size: 0.85rem;
-    color: var(--color-gray);
+    color: var(--text-muted);
     margin: 0;
     line-height: 1.5;
   }
