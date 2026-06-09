@@ -183,8 +183,12 @@ const projects = [
     border-radius: var(--radius-md);
     border: 1px solid var(--color-surface);
     margin-bottom: var(--space-md);
-    max-height: 300px;
-    width: auto;
+    width: 100%;
+    max-width: var(--content-width);
+    height: auto;
+    max-height: 360px;
+    object-fit: cover;
+    object-position: top;
   }
 
   .project p {
