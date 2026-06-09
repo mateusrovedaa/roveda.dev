@@ -23,6 +23,9 @@ const socialLinks = [
     </div>
 
     <div class="bottom">
+      <a href="/" class="footer-logo" aria-label="ROVEEb — página inicial">
+        <img src="/logo.png" alt="ROVEEb" class="footer-logo-img" />
+      </a>
       <nav aria-label="Redes sociais">
         <ul>
           {socialLinks.map(({ label, href }) => (
@@ -33,7 +36,7 @@ const socialLinks = [
         </ul>
       </nav>
       <p class="copyright">
-        © {new Date().getFullYear()} Mateus Roveda · ROVEEb
+        © {new Date().getFullYear()} Mateus Roveda
       </p>
     </div>
   </div>
@@ -99,6 +102,23 @@ const socialLinks = [
   .community-link.telegram {
     background-color: var(--color-primary);
     color: var(--color-dark);
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-logo-img {
+    height: 32px;
+    width: auto;
+    display: block;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+
+  .footer-logo:hover .footer-logo-img {
+    opacity: 1;
   }
 
   .bottom {

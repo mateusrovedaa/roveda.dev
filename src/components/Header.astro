@@ -14,7 +14,9 @@ const currentPath = Astro.url.pathname;
 
 <header class="site-header">
   <div class="container">
-    <a href="/" class="logo"><span class="logo-rovee">ROVEE</span><span class="logo-b">b</span></a>
+    <a href="/" class="logo" aria-label="ROVEEb — página inicial">
+      <img src="/logo.png" alt="ROVEEb" class="logo-img" width="120" height="40" />
+    </a>
     <div class="header-right">
       <nav aria-label="Navegação principal">
         <ul>
@@ -56,18 +58,16 @@ const currentPath = Astro.url.pathname;
   }
 
   .logo {
-    font-weight: var(--font-weight-bold);
-    font-size: 1.35rem;
-    letter-spacing: 0.08em;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
   }
 
-  .logo-rovee {
-    color: #ffffff;
-  }
-
-  .logo-b {
-    color: var(--color-primary);
+  .logo-img {
+    height: 44px;
+    width: auto;
+    display: block;
   }
 
   .header-right {
