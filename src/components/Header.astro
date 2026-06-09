@@ -17,23 +17,21 @@ const currentPath = Astro.url.pathname;
     <a href="/" class="logo" aria-label="ROVEEb — página inicial">
       <img src="/logo.png" alt="ROVEEb" class="logo-img" width="1152" height="418" />
     </a>
-    <div class="header-right">
-      <nav aria-label="Navegação principal">
-        <ul>
-          {navLinks.map(({ label, href }) => (
-            <li>
-              <a
-                href={href}
-                class:list={['nav-link', { active: currentPath === href || (href !== '/' && currentPath.startsWith(href)) }]}
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Search />
-    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        {navLinks.map(({ label, href }) => (
+          <li>
+            <a
+              href={href}
+              class:list={['nav-link', { active: currentPath === href || (href !== '/' && currentPath.startsWith(href)) }]}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <Search />
   </div>
 </header>
 
@@ -53,28 +51,23 @@ const currentPath = Astro.url.pathname;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-lg);
   }
 
+  /* logo à esquerda, nav + busca empurrados para a direita */
   .logo {
     text-decoration: none;
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    margin-right: auto;
   }
 
   .logo-img {
     height: 44px;
     width: auto;
     display: block;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-    flex-wrap: wrap;
   }
 
   nav ul {
@@ -99,20 +92,18 @@ const currentPath = Astro.url.pathname;
   }
 
   @media (max-width: 600px) {
+    /* linha 1: logo + busca · linha 2: menu (full width) */
     .container {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-sm);
+      gap: var(--space-sm) var(--space-md);
     }
 
-    .header-right {
-      width: 100%;
-      justify-content: space-between;
-      gap: var(--space-md);
+    nav {
+      order: 3;
+      flex-basis: 100%;
     }
 
     nav ul {
-      gap: var(--space-sm);
+      gap: var(--space-md);
     }
   }
 </style>

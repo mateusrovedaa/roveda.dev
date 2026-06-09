@@ -334,7 +334,12 @@ const projects = [
     display: block;
   }
 
-  .project-body { min-width: 0; }
+  .project-body {
+    min-width: 0;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
 
   .project-name {
     font-size: 0.95rem;
@@ -354,6 +359,7 @@ const projects = [
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
+    margin-top: auto;
   }
 
   .project-tag {
