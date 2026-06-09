@@ -1,76 +1,24 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PostCard from '../components/PostCard.astro';
 
 const allPosts = await getCollection('posts', ({ data }) => {
   if (data.draft) return false;
-  return data.categorias?.some(
-    (cat) => cat.toLowerCase() === 'tutoriais'
-  ) ?? false;
+  return data.categorias?.some((cat) => cat.toLowerCase() === 'tutoriais') ?? false;
 });
 
 const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <BaseLayout title="Tutoriais" description="Tutoriais de tecnologia, Linux e software livre">
-  <h1>Tutoriais</h1>
-  <ul class="post-list">
-    {posts.map((post) => (
-      <li class="post-item">
-        <a href={`/post/${post.id}`} class="post-link">
-          <time datetime={post.data.date.toISOString()}>
-            {new Date(post.data.date).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </time>
-          <h2>{post.data.title}</h2>
-        </a>
-      </li>
-    ))}
-  </ul>
+  <PageHeader
+    eyebrow="passo a passo"
+    title="Tutoriais"
+    subtitle="Guias práticos de Linux, redes, automação e ferramentas de DevOps."
+  />
+  <div class="posts-grid">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
 </BaseLayout>
-
-<style>
-  h1 {
-    font-size: 2rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-xl);
-    color: var(--color-dark);
-  }
-
-  .post-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .post-item {
-    border-bottom: 1px solid var(--color-blue-light);
-    padding-bottom: var(--space-md);
-  }
-
-  .post-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .post-link:hover h2 {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-
-  time {
-    font-size: 0.8rem;
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray);
-    display: block;
-    margin-bottom: var(--space-xs);
-  }
-
-  h2 {
-    font-size: 1.1rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-dark);
-    transition: color 0.2s;
-  }
-</style>

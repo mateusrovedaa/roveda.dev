@@ -21,14 +21,14 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="post">
+  <article class="post" data-pagefind-body>
     <header class="post-header">
       <div class="post-meta">
         <time datetime={post.data.date.toISOString()}>{dateFormatted}</time>
         {post.data.categorias && post.data.categorias.length > 0 && (
           <div class="post-categories">
             {post.data.categorias.map((cat) => (
-              <span class="category">{cat}</span>
+              <span class="cat-tag">{cat}</span>
             ))}
           </div>
         )}
@@ -80,16 +80,6 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
     display: flex;
     gap: var(--space-xs);
     flex-wrap: wrap;
-  }
-
-  .category {
-    background-color: var(--color-blue-light);
-    color: var(--color-dark);
-    font-size: 0.75rem;
-    font-weight: var(--font-weight-bold);
-    padding: 2px var(--space-sm);
-    border-radius: var(--radius-sm);
-    text-transform: lowercase;
   }
 
   h1 {
@@ -186,7 +176,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   .post-tags {
     margin-top: var(--space-xl);
     padding-top: var(--space-lg);
-    border-top: 1px solid var(--color-blue-light);
+    border-top: 1px solid var(--color-surface);
     display: flex;
     gap: var(--space-sm);
     flex-wrap: wrap;

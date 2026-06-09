@@ -1,4 +1,6 @@
 ---
+import Search from './Search.astro';
+
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Posts', href: '/posts' },
@@ -13,20 +15,23 @@ const currentPath = Astro.url.pathname;
 <header class="site-header">
   <div class="container">
     <a href="/" class="logo"><span class="logo-rovee">ROVEE</span><span class="logo-b">b</span></a>
-    <nav aria-label="Navegação principal">
-      <ul>
-        {navLinks.map(({ label, href }) => (
-          <li>
-            <a
-              href={href}
-              class:list={['nav-link', { active: currentPath === href || (href !== '/' && currentPath.startsWith(href)) }]}
-            >
-              {label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div class="header-right">
+      <nav aria-label="Navegação principal">
+        <ul>
+          {navLinks.map(({ label, href }) => (
+            <li>
+              <a
+                href={href}
+                class:list={['nav-link', { active: currentPath === href || (href !== '/' && currentPath.startsWith(href)) }]}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <Search />
+    </div>
   </div>
 </header>
 
@@ -65,6 +70,13 @@ const currentPath = Astro.url.pathname;
     color: var(--color-primary);
   }
 
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
   nav ul {
     list-style: none;
     display: flex;
@@ -91,6 +103,12 @@ const currentPath = Astro.url.pathname;
       flex-direction: column;
       align-items: flex-start;
       gap: var(--space-sm);
+    }
+
+    .header-right {
+      width: 100%;
+      justify-content: space-between;
+      gap: var(--space-md);
     }
 
     nav ul {

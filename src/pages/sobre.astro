@@ -14,43 +14,43 @@ const quickLinks = [
 
 const experience = [
   {
-    role: 'Engenheiro DevOps',
+    role: 'Analista DevOps',
     company: 'Instituto Todos pela Saúde (ITpS)',
-    period: 'Em exercício',
-    description: 'Engenharia de infraestrutura e DevOps para soluções de saúde pública.',
+    period: 'Abr 2024 – Presente',
+    description: 'Infraestrutura confiável, automação e pipelines de dados para projetos internos e de clientes. Redução de 80% nos custos de treinamento de IA local e aumento de 10x na frequência de deploys.',
   },
   {
     role: 'Professor',
     company: 'Univates',
-    period: 'Em exercício',
-    description: 'Professor nos cursos Técnicos e Jovem Aprendiz TI.',
+    period: 'Jan 2022 – Presente',
+    description: 'Docência nos cursos Técnicos (POO, Web, Mobile) e no programa Jovem Aprendiz TI.',
   },
   {
-    role: 'Co-fundador',
-    company: 'Prefa Digital',
-    period: 'Em exercício',
-    description: 'Empresa com foco em soluções inteligentes para governo.',
+    role: 'Engenheiro DevOps e Líder de Infraestrutura',
+    company: 'Criação .cc',
+    period: 'Mar 2024 – Abr 2024',
+    description: 'Infraestrutura para WordPress em escala: performance, alta disponibilidade e automação com Shell, Docker e CI/CD.',
   },
   {
-    role: 'Líder de Comunidade',
-    company: 'Universidade Brasileira Livre (UBL)',
-    period: 'Em exercício',
-    description: 'Organização sem fins lucrativos que democratiza a educação em TI no Brasil.',
+    role: 'Administrador de Sistemas (DevOps)',
+    company: 'Aztec Online Solutions',
+    period: 'Set 2020 – Jan 2022',
+    description: 'Administração de servidores GNU/Linux com foco em infraestrutura para WordPress: deploy, escalabilidade e automações com Shell e Docker.',
   },
 ];
 
 const education = [
   {
-    degree: 'Mestre em Computação Aplicada',
-    area: 'Edge AI',
+    degree: 'Mestrado em Computação Aplicada',
+    area: 'Simulação Computacional / Edge AI',
     institution: 'Unisinos',
-    year: '',
+    year: '2024 – Abr 2026',
   },
   {
-    degree: 'Bacharel em Engenharia de Software',
+    degree: 'Bacharelado em Engenharia de Software',
     area: '',
     institution: 'Univates',
-    year: '',
+    year: '2016 – 2023',
   },
 ];
 
@@ -65,6 +65,7 @@ const highlightedProjects = [
   title="Sobre"
   description="Mateus Roveda — engenheiro DevOps, professor, youtuber e entusiasta de software livre."
 >
+  <div data-pagefind-body>
   <!-- Hero -->
   <section id="hero" class="hero">
     <img
@@ -90,14 +91,15 @@ const highlightedProjects = [
   <section id="sobre" class="section">
     <h2>Sobre</h2>
     <p>
-      Professor nos cursos Técnicos e Jovem Aprendiz TI pela Univates.
-      Youtuber no canal ROVEEb e líder de comunidade na UBL.
-      Engenheiro DevOps no Instituto Todos pela Saúde.
-      Mestre em Computação Aplicada (Edge AI) pela Unisinos.
-      Bacharel em Engenharia de Software pela Univates.
+      Engenheiro DevOps, educador e pesquisador com mais de oito anos de experiência em
+      infraestrutura cloud, automação e desenvolvimento back-end. Especialista em containerização
+      e CI/CD — com resultados como 80% de redução de custos em infraestrutura de treino de IA
+      e aumento de 10x na frequência de deploys.
     </p>
     <p>
-      Tem paixão por ensinar, compartilhar, aprender coisas novas, Software Livre e pelo espaço.
+      Mestrando em Computação Aplicada (Edge AI) pela Unisinos. Professor nos cursos Técnicos
+      e Jovem Aprendiz TI pela Univates. Youtuber no canal ROVEEb e mantenedor da
+      Universidade Brasileira Livre. Apaixonado por ensinar, Software Livre e pelo espaço.
     </p>
   </section>
 
@@ -134,6 +136,20 @@ const highlightedProjects = [
     </div>
   </section>
 
+  <!-- Certificações -->
+  <section id="certificacoes" class="section">
+    <h2>Certificações</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-header">
+          <strong>LE 1 — Linux Essentials</strong>
+          <span class="company">LPI</span>
+          <span class="period">ID: LPI000432981</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Artigos Publicados -->
   <section id="artigos" class="section">
     <h2>Artigos Publicados</h2>
@@ -141,7 +157,7 @@ const highlightedProjects = [
       Publicações acadêmicas disponíveis no Google Acadêmico.
     </p>
     <a
-      href="https://scholar.google.com/citations?user=mateusrovedaa"
+      href="https://scholar.google.com/citations?user=4T74HC4AAAAJ&hl=pt-BR"
       target="_blank"
       rel="noopener noreferrer"
       class="btn-outline"
@@ -155,7 +171,7 @@ const highlightedProjects = [
     <h2>Projetos em destaque</h2>
     <div class="project-cards">
       {highlightedProjects.map(({ name, url, description }) => (
-        <a href={url} target="_blank" rel="noopener noreferrer" class="project-card">
+        <a href={url} target="_blank" rel="noopener noreferrer" class="card project-card">
           <strong>{name}</strong>
           <p>{description}</p>
         </a>
@@ -165,6 +181,7 @@ const highlightedProjects = [
       Ver todos os projetos →
     </a>
   </section>
+  </div>
 </BaseLayout>
 
 <style>
@@ -239,7 +256,7 @@ const highlightedProjects = [
   .section {
     margin-bottom: var(--space-xl);
     padding-bottom: var(--space-xl);
-    border-bottom: 1px solid var(--color-blue-light);
+    border-bottom: 1px solid var(--color-surface);
   }
 
   .section:last-child {
@@ -247,13 +264,21 @@ const highlightedProjects = [
   }
 
   .section h2 {
-    font-size: 1.4rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-teal-dark);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-teal-mid);
     margin-bottom: var(--space-lg);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .section h2::before {
+    content: '//';
+    color: var(--color-primary);
   }
 
   .section p {
@@ -303,25 +328,6 @@ const highlightedProjects = [
     margin-bottom: 0;
   }
 
-  /* Button */
-  .btn-outline {
-    display: inline-block;
-    padding: var(--space-sm) var(--space-md);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-md);
-    color: var(--color-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
-  }
-
-  .btn-outline:hover {
-    background-color: var(--color-primary);
-    color: var(--color-dark);
-    text-decoration: none;
-  }
-
   /* Project cards */
   .project-cards {
     display: grid;
@@ -330,19 +336,7 @@ const highlightedProjects = [
   }
 
   .project-card {
-    display: block;
     padding: var(--space-md);
-    border: 1px solid var(--color-blue-light);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .project-card:hover {
-    border-color: var(--color-primary);
-    box-shadow: 0 2px 8px rgba(65, 186, 255, 0.2);
-    text-decoration: none;
   }
 
   .project-card strong {

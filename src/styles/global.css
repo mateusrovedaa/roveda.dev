@@ -106,3 +106,146 @@ img {
   content: '//';
   color: var(--color-primary);
 }
+
+/* ─── Page header (inner pages) ─── */
+.page-header {
+  margin-bottom: var(--space-xl);
+}
+
+.page-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-teal-mid);
+  margin-bottom: var(--space-sm);
+}
+
+.page-eyebrow::before {
+  content: '// ';
+  color: var(--color-primary);
+}
+
+.page-header h1 {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
+  line-height: 1.15;
+}
+
+.page-subtitle {
+  margin-top: var(--space-sm);
+  color: var(--color-gray);
+  font-weight: var(--font-weight-light);
+  max-width: var(--content-width);
+}
+
+/* ─── Card (shared base) ─── */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px rgba(6, 23, 54, 0.05);
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 20px rgba(65, 186, 255, 0.13);
+  transform: translateY(-2px);
+}
+
+a.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+a.card:hover {
+  text-decoration: none;
+}
+
+/* ─── Category tag (monospace pill) ─── */
+.cat-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-teal-mid);
+  background: rgba(7, 126, 125, 0.08);
+  border: 1px solid rgba(7, 126, 125, 0.2);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* ─── Posts grid + card ─── */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.1rem 1.25rem;
+}
+
+.post-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.post-card time {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--color-gray);
+  white-space: nowrap;
+}
+
+.post-card .post-title {
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
+  line-height: 1.45;
+  transition: color 0.15s;
+}
+
+.post-card:hover .post-title {
+  color: var(--color-primary);
+}
+
+@media (max-width: 900px) {
+  .posts-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+  .posts-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Button (outline) ─── */
+.btn-outline {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary);
+  color: var(--color-dark);
+  text-decoration: none;
+}

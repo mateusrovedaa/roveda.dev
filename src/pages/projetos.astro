@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 
 const projects = [
   {
@@ -82,7 +83,12 @@ const projects = [
 ---
 
 <BaseLayout title="Projetos" description="Projetos criados e mantidos por Mateus Roveda">
-  <h1>Projetos</h1>
+  <div data-pagefind-body>
+  <PageHeader
+    eyebrow="portfólio"
+    title="Projetos"
+    subtitle="Plataformas, ferramentas e iniciativas que ajudei a criar e manter."
+  />
 
   <nav class="quick-links" aria-label="Acesso rápido">
     {projects.map(({ id, name }) => (
@@ -94,13 +100,13 @@ const projects = [
     {projects.map(({ id, name, url, image, description, media }) => (
       <section id={id} class="project">
         <h2>
-          <a href={url} target="_blank" rel="noopener noreferrer">{name}</a>
+          <a href={url} target="_blank" rel="noopener noreferrer">{name} ↗</a>
         </h2>
         <img src={image} alt={name} loading="lazy" />
         <p>{description}</p>
         {media.length > 0 && (
           <div class="media">
-            <p class="media-title">Cobertura:</p>
+            <p class="media-title">Cobertura na imprensa</p>
             <ul>
               {media.map(({ label, url: mediaUrl }) => (
                 <li><a href={mediaUrl} target="_blank" rel="noopener noreferrer">{label}</a></li>
@@ -111,29 +117,34 @@ const projects = [
       </section>
     ))}
   </div>
+  </div>
 </BaseLayout>
 
 <style>
-  h1 {
-    font-size: 2rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-lg);
-  }
-
   .quick-links {
     display: flex;
     gap: var(--space-sm);
     flex-wrap: wrap;
     margin-bottom: var(--space-xl);
-    padding: var(--space-md);
-    background-color: var(--color-blue-light);
-    border-radius: var(--radius-md);
   }
 
   .quick-links a {
-    font-size: 0.85rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-teal-dark);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-teal-mid);
+    background: rgba(7, 126, 125, 0.08);
+    border: 1px solid rgba(7, 126, 125, 0.2);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .quick-links a:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    text-decoration: none;
   }
 
   .projects {
@@ -144,7 +155,8 @@ const projects = [
 
   .project {
     padding-bottom: var(--space-xl);
-    border-bottom: 1px solid var(--color-blue-light);
+    border-bottom: 1px solid var(--color-surface);
+    scroll-margin-top: var(--space-xl);
   }
 
   .project:last-child {
@@ -160,6 +172,7 @@ const projects = [
   .project h2 a {
     color: var(--color-dark);
     text-decoration: none;
+    transition: color 0.15s;
   }
 
   .project h2 a:hover {
@@ -168,6 +181,7 @@ const projects = [
 
   .project img {
     border-radius: var(--radius-md);
+    border: 1px solid var(--color-surface);
     margin-bottom: var(--space-md);
     max-height: 300px;
     width: auto;
@@ -176,13 +190,17 @@ const projects = [
   .project p {
     line-height: 1.75;
     margin-bottom: var(--space-md);
+    max-width: var(--content-width);
   }
 
   .media-title {
-    font-weight: var(--font-weight-bold);
-    font-size: 0.85rem;
-    color: var(--color-gray);
-    margin-bottom: var(--space-xs);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-teal-mid);
+    margin-bottom: var(--space-sm);
   }
 
   .media ul {
@@ -193,7 +211,18 @@ const projects = [
   }
 
   .media a {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--color-blue-deep);
+    background: rgba(0, 92, 254, 0.05);
+    border: 1px solid rgba(0, 92, 254, 0.15);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+
+  .media a:hover {
+    border-color: var(--color-blue-deep);
+    text-decoration: none;
   }
 </style>
