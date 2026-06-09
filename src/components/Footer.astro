@@ -23,8 +23,9 @@ const socialLinks = [
     </div>
 
     <div class="bottom">
-      <a href="/" class="footer-logo" aria-label="ROVEEb — página inicial">
+      <a href="/" class="footer-logo" aria-label="ROVEEb — blog de Mateus Roveda, página inicial">
         <img src="/logo.png" alt="ROVEEb" class="footer-logo-img" width="1152" height="418" />
+        <span class="footer-byline">por <strong>Mateus Roveda</strong></span>
       </a>
       <nav aria-label="Redes sociais">
         <ul>
@@ -107,6 +108,24 @@ const socialLinks = [
   .footer-logo {
     display: flex;
     align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .footer-byline {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-gray-light);
+    border-left: 1px solid var(--color-teal-dark);
+    padding-left: var(--space-sm);
+  }
+
+  .footer-byline strong {
+    display: block;
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
   }
 
   .footer-logo-img {

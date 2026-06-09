@@ -73,7 +73,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   time {
     font-size: 0.85rem;
     font-weight: var(--font-weight-light);
-    color: var(--color-gray);
+    color: var(--text-muted);
   }
 
   .post-categories {
@@ -86,14 +86,14 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
     font-size: clamp(1.5rem, 4vw, 2.25rem);
     font-weight: var(--font-weight-bold);
     line-height: 1.2;
-    color: var(--color-dark);
+    color: var(--text-strong);
     margin-bottom: var(--space-sm);
   }
 
   .author {
     font-size: 0.9rem;
     font-weight: var(--font-weight-light);
-    color: var(--color-gray);
+    color: var(--text-muted);
   }
 
   .post-content :global(h1),
@@ -102,7 +102,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   .post-content :global(h4) {
     font-weight: var(--font-weight-bold);
     margin: var(--space-xl) 0 var(--space-md);
-    color: var(--color-dark);
+    color: var(--text-strong);
   }
 
   .post-content :global(h1) { font-size: 1.75rem; }
@@ -127,6 +127,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   .post-content :global(pre) {
     background-color: var(--color-dark);
     color: var(--color-teal-light);
+    border: 1px solid var(--border-subtle);
     padding: var(--space-md);
     border-radius: var(--radius-md);
     overflow-x: auto;
@@ -153,7 +154,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
     border-left: 3px solid var(--color-primary);
     padding-left: var(--space-md);
     margin: var(--space-md) 0;
-    color: var(--color-gray);
+    color: var(--text-muted);
     font-style: italic;
   }
 
@@ -176,7 +177,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   .post-tags {
     margin-top: var(--space-xl);
     padding-top: var(--space-lg);
-    border-top: 1px solid var(--color-surface);
+    border-top: 1px solid var(--border-subtle);
     display: flex;
     gap: var(--space-sm);
     flex-wrap: wrap;
@@ -185,6 +186,6 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   .tag {
     font-size: 0.8rem;
     font-weight: var(--font-weight-light);
-    color: var(--color-gray);
+    color: var(--text-muted);
   }
 </style>
