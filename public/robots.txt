@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://roveeb.com/sitemap-index.xml
