@@ -12,6 +12,16 @@
   --color-surface: #E8F9F6;
   --color-surface-dark: #0d2347;
 
+  /* Tokens semânticos de papel — remapeados no tema escuro ([data-theme="dark"]).
+     --color-dark é dual-uso (texto E fundos escuros), por isso conteúdo usa estes. */
+  color-scheme: light;
+  --surface-page: var(--color-bg);
+  --surface-card: #ffffff;
+  --surface-raised: var(--color-surface);
+  --text-strong: var(--color-dark);
+  --text-muted: var(--color-gray);
+  --border-subtle: var(--color-surface);
+
   --font-sans: 'Poppins', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-weight-light: 300;
@@ -35,6 +45,22 @@
   --gradient-hero: linear-gradient(160deg, var(--color-dark) 0%, #0a2850 60%, #083a3a 100%);
 }
 
+/* ─── Tema escuro ─── */
+[data-theme='dark'] {
+  color-scheme: dark;
+  --surface-page: #0a1622;
+  --surface-card: #11202f;
+  --surface-raised: #16283a;
+  --text-strong: #e8f3f1;
+  --text-muted: #9fb3c2;
+  --border-subtle: rgba(146, 253, 239, 0.12);
+
+  /* Acentos: clarear os tons escuros p/ manter contraste AA sobre fundo escuro */
+  --color-teal-mid: #5fd1c4;
+  --color-blue-deep: #5aa6ff;
+  --gradient-hero: linear-gradient(160deg, #0d2036 0%, #0a2850 55%, #08323a 100%);
+}
+
 *,
 *::before,
 *::after {
@@ -46,8 +72,8 @@
 html {
   font-family: var(--font-sans);
   font-weight: var(--font-weight-regular);
-  background-color: var(--color-bg);
-  color: var(--color-dark);
+  background-color: var(--surface-page);
+  color: var(--text-strong);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -129,21 +155,21 @@ img {
 .page-header h1 {
   font-size: clamp(1.8rem, 3.5vw, 2.4rem);
   font-weight: var(--font-weight-bold);
-  color: var(--color-dark);
+  color: var(--text-strong);
   line-height: 1.15;
 }
 
 .page-subtitle {
   margin-top: var(--space-sm);
-  color: var(--color-gray);
+  color: var(--text-muted);
   font-weight: var(--font-weight-light);
   max-width: var(--content-width);
 }
 
 /* ─── Card (shared base) ─── */
 .card {
-  background: #ffffff;
-  border: 1px solid var(--color-surface);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   box-shadow: 0 2px 8px rgba(6, 23, 54, 0.05);
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
@@ -204,14 +230,14 @@ a.card:hover {
 .post-card time {
   font-family: var(--font-mono);
   font-size: 0.65rem;
-  color: var(--color-gray);
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
 .post-card .post-title {
   font-size: 0.9rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-dark);
+  color: var(--text-strong);
   line-height: 1.45;
   transition: color 0.15s;
 }

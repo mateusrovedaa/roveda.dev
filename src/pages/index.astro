@@ -34,7 +34,8 @@ const projects = [
 ---
 
 <BaseLayout
-  title="Mateus Roveda · Engenheiro DevOps"
+  title="Liberdade de conhecimentos"
+  fullTitleOverride="ROVEEb - Liberdade de conhecimentos"
   description="Engenheiro DevOps, professor e mestre em Edge AI. Escrevo sobre infraestrutura, automação, Linux e software livre no blog ROVEEb."
 >
 
@@ -42,12 +43,15 @@ const projects = [
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-left">
-        <p class="hero-eyebrow">$ whoami</p>
-        <h1>Mateus <span class="accent">Roveda</span></h1>
+        <p class="hero-eyebrow">// ROVEEb</p>
+        <h1>Liberdade de <span class="accent">conhecimentos</span></h1>
         <p class="hero-bio">
-          Engenheiro DevOps · Professor · Mestre em Edge AI.<br />
-          Escrevo sobre infraestrutura, automação e software livre.
+          Blog e canal sobre infraestrutura, DevOps,<br />
+          automação e software livre.
         </p>
+        <a href="/sobre" class="hero-byline">
+          <span>por <strong>Mateus Roveda</strong></span><span class="arrow" aria-hidden="true">→</span>
+        </a>
         <nav class="hero-links">
           <a href="/posts">Posts</a>
           <a href="/projetos">Projetos</a>
@@ -66,7 +70,7 @@ const projects = [
             </div>
           </div>
           <div class="terminal-body">
-            <p><span class="prompt">$</span> cat about.txt</p>
+            <p><span class="prompt">$</span> cat about-mateus-roveda.txt</p>
             <p class="out">Engenheiro DevOps · ITpS</p>
             <p class="out">Professor · Univates</p>
             <p class="out">Mestre em Edge AI · Unisinos</p>
@@ -195,7 +199,38 @@ const projects = [
     font-weight: var(--font-weight-light);
     font-size: 0.95rem;
     line-height: 1.7;
+    margin-bottom: 1.1rem;
+  }
+
+  /* assinatura: quem executa a marca (link p/ /sobre) */
+  .hero-byline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: rgba(178, 228, 255, 0.7);
+    text-decoration: none;
     margin-bottom: 1.75rem;
+    transition: color 0.15s;
+  }
+
+  .hero-byline strong {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .hero-byline .arrow {
+    transition: transform 0.15s;
+  }
+
+  .hero-byline:hover {
+    color: var(--color-teal-light);
+    text-decoration: none;
+  }
+
+  .hero-byline:hover .arrow {
+    transform: translateX(3px);
   }
 
   .hero-links {
@@ -345,13 +380,13 @@ const projects = [
   .project-name {
     font-size: 0.95rem;
     font-weight: var(--font-weight-bold);
-    color: var(--color-dark);
+    color: var(--text-strong);
     margin-bottom: 0.3rem;
   }
 
   .project-desc {
     font-size: 0.78rem;
-    color: var(--color-gray);
+    color: var(--text-muted);
     line-height: 1.5;
     margin-bottom: 0.65rem;
   }
