@@ -1,0 +1,148 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  /** Destaca o primeiro post (bloco maior com excerpt). */
+  featured?: boolean;
+}
+
+const { posts, featured = false } = Astro.props;
+
+const fmt = (d: Date) =>
+  new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+const readMin = (entry: { body?: string }) =>
+  Math.max(1, Math.round((entry.body ?? '').trim().split(/\s+/).filter(Boolean).length / 200));
+
+const [first, ...others] = posts;
+const head = featured ? first : undefined;
+const rest = featured ? others : posts;
+const restStart = featured ? 2 : 1;
+---
+
+<div class="post-list">
+  {head && (
+    <a class="post feat" href={`/post/${head.id}`}>
+      <span class="badge">★ mais recente</span>
+      <div class="prow">
+        <span class="num">[01]</span>
+        <div class="pbody">
+          {head.data.categorias?.[0] && <span class="cat">{head.data.categorias[0]}</span>}
+          <h3 class="pti">{head.data.title}</h3>
+          {head.data.description && <p class="excerpt">{head.data.description}</p>}
+        </div>
+        <span class="meta">{fmt(head.data.date)}<br />~{readMin(head)} min</span>
+      </div>
+    </a>
+  )}
+
+  {rest.map((post, i) => (
+    <a class="post" href={`/post/${post.id}`}>
+      <div class="prow">
+        <span class="num">[{String(i + restStart).padStart(2, '0')}]</span>
+        <div class="pbody">
+          {post.data.categorias?.[0] && <span class="cat">{post.data.categorias[0]}</span>}
+          <h3 class="pti">{post.data.title}</h3>
+        </div>
+        <span class="meta">{fmt(post.data.date)}</span>
+      </div>
+    </a>
+  ))}
+</div>
+
+<style>
+  .post {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 2.2rem 0.5rem;
+    transition: background 0.18s, padding 0.18s;
+  }
+  .post:hover {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    padding-left: 1.1rem;
+  }
+
+  .prow {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 1.4rem;
+    align-items: baseline;
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .post:hover .num { color: var(--accent); }
+
+  .cat {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-teal-mid);
+    border: 1px solid var(--border-subtle);
+    padding: 3px 9px;
+    border-radius: 100px;
+    margin-bottom: 0.55rem;
+  }
+
+  .pti {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 2.3vw, 1.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--text-strong);
+    transition: transform 0.18s;
+  }
+  .post:hover .pti { transform: translateX(5px); }
+  .post:hover .pti::after { content: ' →'; color: var(--accent); }
+
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* featured */
+  .post.feat {
+    border-top: 3px solid var(--accent);
+    padding-top: 2.6rem;
+    padding-bottom: 2.8rem;
+    position: relative;
+  }
+  .post.feat .badge {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.7rem;
+    padding-left: 0.5rem;
+  }
+  .post.feat .pti { font-size: clamp(1.7rem, 3.6vw, 2.6rem); font-weight: 800; line-height: 1.04; }
+  .post.feat .excerpt {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 60ch;
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .prow { grid-template-columns: 38px 1fr; gap: 0.8rem; }
+    .meta { grid-column: 2; text-align: left; margin-top: 0.5rem; }
+    .post:hover .pti { transform: none; }
+  }
+</style>

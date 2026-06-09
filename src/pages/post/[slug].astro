@@ -18,11 +18,18 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   month: 'long',
   day: 'numeric',
 });
+
+const readMin = Math.max(
+  1,
+  Math.round((post.body ?? '').trim().split(/\s+/).filter(Boolean).length / 200)
+);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} type="article">
+  <div class="read-progress" id="read-progress"></div>
   <article class="post" data-pagefind-body>
     <header class="post-header">
+      <p class="stat-cmd"><span class="p">$</span> stat {post.id}.md</p>
       <div class="post-meta">
         <time datetime={post.data.date.toISOString()}>{dateFormatted}</time>
         {post.data.categorias && post.data.categorias.length > 0 && (
@@ -32,6 +39,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
             ))}
           </div>
         )}
+        <span class="readtime">~{readMin} min de leitura</span>
       </div>
       <h1>{post.data.title}</h1>
       {post.data.author && <p class="author">por {post.data.author}</p>}
@@ -49,6 +57,21 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
       </footer>
     )}
   </article>
+
+  <script is:inline>
+    (function () {
+      var bar = document.getElementById('read-progress');
+      if (!bar) return;
+      var doc = document.documentElement;
+      function upd() {
+        var max = doc.scrollHeight - doc.clientHeight;
+        bar.style.width = (max > 0 ? (doc.scrollTop / max) * 100 : 0) + '%';
+      }
+      addEventListener('scroll', upd, { passive: true });
+      addEventListener('resize', upd);
+      upd();
+    })();
+  </script>
 </BaseLayout>
 
 <style>
@@ -56,10 +79,37 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
     max-width: 100%;
   }
 
+  .read-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: var(--accent);
+    z-index: 101;
+    transition: width 0.05s linear;
+  }
+
   .post-header {
     margin-bottom: var(--space-xl);
     border-bottom: 2px solid var(--color-primary);
     padding-bottom: var(--space-lg);
+  }
+
+  .stat-cmd {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+  }
+  .stat-cmd .p { color: var(--color-teal-mid); font-weight: 700; }
+
+  .readtime {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 
   .post-meta {
@@ -83,9 +133,11 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   }
 
   h1 {
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-    font-weight: var(--font-weight-bold);
-    line-height: 1.2;
+    font-family: var(--font-sans);
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
     color: var(--text-strong);
     margin-bottom: var(--space-sm);
   }
@@ -109,6 +161,23 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   .post-content :global(h2) { font-size: 1.4rem; }
   .post-content :global(h3) { font-size: 1.15rem; }
 
+  /* prefixo markdown ## nas headings de conteúdo */
+  .post-content :global(h2),
+  .post-content :global(h3) {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+  }
+  .post-content :global(h2)::before { content: '##'; }
+  .post-content :global(h3)::before { content: '###'; }
+  .post-content :global(h2)::before,
+  .post-content :global(h3)::before {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.7em;
+  }
+
   .post-content :global(p) {
     margin-bottom: var(--space-md);
     line-height: 1.75;
@@ -125,15 +194,32 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
   }
 
   .post-content :global(pre) {
+    position: relative;
     background-color: var(--color-dark);
     color: var(--color-teal-light);
-    border: 1px solid var(--border-subtle);
-    padding: var(--space-md);
+    border: 1px solid rgba(65, 186, 255, 0.18);
+    padding: 2.7rem var(--space-md) var(--space-md);
     border-radius: var(--radius-md);
     overflow-x: auto;
-    margin: var(--space-md) 0;
+    margin: var(--space-lg) 0;
     font-size: 0.875rem;
     line-height: 1.6;
+  }
+
+  /* barra de "janela de terminal" no topo do bloco de código */
+  .post-content :global(pre)::before {
+    content: '\25CF \25CF \25CF';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.35em;
+    color: rgba(178, 228, 255, 0.42);
+    background: rgba(65, 186, 255, 0.06);
+    border-bottom: 1px solid rgba(65, 186, 255, 0.14);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
 
   .post-content :global(code) {

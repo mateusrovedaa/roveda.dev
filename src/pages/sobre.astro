@@ -205,8 +205,10 @@ const highlightedProjects = [
   }
 
   .hero-text h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: var(--font-weight-bold);
+    font-family: var(--font-sans);
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
     color: var(--text-strong);
     margin-bottom: var(--space-xs);
   }
@@ -279,7 +281,7 @@ const highlightedProjects = [
 
   .section h2::before {
     content: '//';
-    color: var(--color-primary);
+    color: var(--accent);
   }
 
   .section p {
