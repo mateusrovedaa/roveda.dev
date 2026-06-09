@@ -16,3 +16,7 @@ resources/
 
 # OS
 .DS_Store
+
+# Claude Code (skills/agentes pessoais) e specs do workflow — não versionar
+.claude/
+.specs/
