@@ -149,6 +149,28 @@
     --pagefind-ui-font: var(--font-sans);
   }
 
+  /* Botão "Limpar" alinhado verticalmente dentro do input */
+  #pagefind-ui .pagefind-ui__search-clear {
+    top: 0;
+    bottom: 0;
+    height: auto;
+    margin: auto 0;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    color: var(--color-blue-deep);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s;
+  }
+
+  #pagefind-ui .pagefind-ui__search-clear:hover {
+    color: var(--color-primary);
+    background: rgba(65, 186, 255, 0.08);
+  }
+
   @media (max-width: 600px) {
     .search-trigger-label,
     .search-trigger kbd {
