@@ -23,13 +23,15 @@
   --border-subtle: var(--color-surface);
   /* acento cyan legível: tom mais forte no claro, brilhante no escuro */
   --accent: #0a8fd6;
+  /* acento p/ TEXTO PEQUENO — contraste AA (4.5:1) em fundo claro */
+  --accent-ink: #0a72ad;
   /* barras de chrome (header/footer) — navy fixo em ambos os temas */
   --chrome-bg: #04101e;
   --chrome-fg: rgba(178, 228, 255, 0.72);
   --chrome-line: rgba(65, 186, 255, 0.14);
 
-  --font-sans: 'Poppins', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans: 'Poppins', 'Poppins-fallback', sans-serif;
+  --font-mono: 'JetBrains Mono', 'JBMono-fallback', 'Fira Code', monospace;
   --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-bold: 700;
@@ -65,7 +67,24 @@
   --color-teal-mid: #5fd1c4;
   --color-blue-deep: #5aa6ff;
   --accent: #41BAFF;
+  --accent-ink: #41BAFF;
   --gradient-hero: linear-gradient(160deg, #0d2036 0%, #0a2850 55%, #08323a 100%);
+}
+
+/* Fallbacks com métricas ajustadas — reduzem o reflow (CLS) quando as
+   webfonts trocam pela fonte real. O fallback ocupa ~o mesmo espaço. */
+@font-face {
+  font-family: 'Poppins-fallback';
+  src: local('Arial'), local('Liberation Sans'), local('Helvetica Neue'), local('Roboto');
+  size-adjust: 112%;
+  ascent-override: 94%;
+  descent-override: 31%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'JBMono-fallback';
+  src: local('Menlo'), local('Consolas'), local('Courier New');
+  size-adjust: 100%;
 }
 
 *,
@@ -163,7 +182,7 @@ img {
 
 .page-eyebrow::before {
   content: '// ';
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .page-header h1 {
