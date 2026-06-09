@@ -20,7 +20,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('pt-BR', {
 });
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} description={post.data.description} type="article">
   <article class="post" data-pagefind-body>
     <header class="post-header">
       <div class="post-meta">
