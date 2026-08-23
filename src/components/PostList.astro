@@ -3,7 +3,6 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   posts: CollectionEntry<'posts'>[];
-  /** Destaca o primeiro post (bloco maior com excerpt). */
   featured?: boolean;
 }
 
@@ -17,132 +16,123 @@ const readMin = (entry: { body?: string }) =>
 const [first, ...others] = posts;
 const head = featured ? first : undefined;
 const rest = featured ? others : posts;
-const restStart = featured ? 2 : 1;
 ---
 
 <div class="post-list">
   {head && (
-    <a class="post feat" href={`/post/${head.id}`}>
-      <span class="badge">★ mais recente</span>
-      <div class="prow">
-        <span class="num">[01]</span>
-        <div class="pbody">
-          {head.data.categorias?.[0] && <span class="cat">{head.data.categorias[0]}</span>}
-          <h3 class="pti">{head.data.title}</h3>
-          {head.data.description && <p class="excerpt">{head.data.description}</p>}
-        </div>
-        <span class="meta">{fmt(head.data.date)}<br />~{readMin(head)} min</span>
+    <a class="feat-card" href={`/post/${head.id}`}>
+      <div class="feat-meta">último artigo · {fmt(head.data.date)} · ~{readMin(head)} min</div>
+      <h3 class="feat-title">{head.data.title}</h3>
+      {head.data.description && <p class="feat-desc">{head.data.description}</p>}
+      <div class="feat-foot">
+        {head.data.categorias?.[0] && <span class="mini-tag">{head.data.categorias[0]}</span>}
+        <span class="feat-cta">ler →</span>
       </div>
     </a>
   )}
 
-  {rest.map((post, i) => (
-    <a class="post" href={`/post/${post.id}`}>
-      <div class="prow">
-        <span class="num">[{String(i + restStart).padStart(2, '0')}]</span>
-        <div class="pbody">
-          {post.data.categorias?.[0] && <span class="cat">{post.data.categorias[0]}</span>}
-          <h3 class="pti">{post.data.title}</h3>
-        </div>
-        <span class="meta">{fmt(post.data.date)}</span>
-      </div>
-    </a>
-  ))}
+  <div class="rows">
+    {rest.map((post) => (
+      <a class="row" href={`/post/${post.id}`}>
+        <span class="row-date">{fmt(post.data.date)}</span>
+        <span class="row-main">
+          <span class="row-title">{post.data.title}</span>
+          {post.data.categorias?.[0] && <span class="row-tag">{post.data.categorias[0]}</span>}
+        </span>
+        <span class="row-arrow">→</span>
+      </a>
+    ))}
+  </div>
 </div>
 
 <style>
-  .post {
+  .feat-card {
     display: block;
-    text-decoration: none;
-    color: inherit;
-    border-bottom: 1px solid var(--border-subtle);
-    padding: 2.2rem 0.5rem;
-    transition: background 0.18s, padding 0.18s;
-  }
-  .post:hover {
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
-    padding-left: 1.1rem;
-  }
-
-  .prow {
-    display: grid;
-    grid-template-columns: 64px 1fr auto;
-    gap: 1.4rem;
-    align-items: baseline;
-  }
-  .num {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--text-muted);
-  }
-  .post:hover .num { color: var(--accent); }
-
-  .cat {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-teal-mid);
-    border: 1px solid var(--border-subtle);
-    padding: 3px 9px;
-    border-radius: 100px;
-    margin-bottom: 0.55rem;
-  }
-
-  .pti {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: clamp(1.2rem, 2.3vw, 1.6rem);
-    line-height: 1.12;
-    letter-spacing: -0.02em;
+    background: var(--surface-highlight);
+    border: 1px solid var(--border-card);
+    border-radius: 14px;
+    padding: 30px 32px;
     color: var(--text-strong);
-    transition: transform 0.18s;
+    text-decoration: none;
+    margin-bottom: 34px;
+    transition: border-color 0.15s;
   }
-  .post:hover .pti { transform: translateX(5px); }
-  .post:hover .pti::after { content: ' →'; color: var(--accent); }
-
-  .meta {
+  .feat-card:hover { border-color: var(--text-strong); text-decoration: none; }
+  .feat-meta {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
+    font-size: 11px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .feat-title {
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    max-width: 720px;
+    text-wrap: pretty;
+    color: var(--text-strong);
+    margin-bottom: 10px;
+  }
+  .feat-desc {
+    font-size: 15px;
+    line-height: 1.65;
     color: var(--text-muted);
-    white-space: nowrap;
-    text-align: right;
+    max-width: 640px;
+    margin-bottom: 18px;
   }
-
-  /* featured */
-  .post.feat {
-    border-top: 3px solid var(--accent);
-    padding-top: 2.6rem;
-    padding-bottom: 2.8rem;
-    position: relative;
-  }
-  .post.feat .badge {
-    display: block;
+  .feat-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent-ink);
-    margin-bottom: 0.7rem;
-    padding-left: 0.5rem;
+    font-size: 12px;
   }
-  .post.feat .pti { font-size: clamp(1.7rem, 3.6vw, 2.6rem); font-weight: 800; line-height: 1.04; }
-  .post.feat .excerpt {
-    font-family: var(--font-sans);
-    font-weight: 300;
+  .mini-tag {
+    background: var(--surface-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
     color: var(--text-muted);
-    max-width: 60ch;
-    margin-top: 0.75rem;
   }
+  .feat-cta { margin-left: auto; color: var(--accent); font-weight: 700; }
+
+  .rows { display: flex; flex-direction: column; }
+  .row {
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    padding: 20px 6px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-strong);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .row:hover { background: var(--surface-highlight); text-decoration: none; }
+  .row-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .row-main { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .row-title {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+  .row-tag { font-family: var(--font-mono); font-size: 11px; color: var(--accent); }
+  .row-arrow { font-family: var(--font-mono); font-size: 14px; color: var(--accent); }
 
   @media (max-width: 640px) {
-    .prow { grid-template-columns: 38px 1fr; gap: 0.8rem; }
-    .meta { grid-column: 2; text-align: left; margin-top: 0.5rem; }
-    .post:hover .pti { transform: none; }
+    .row { grid-template-columns: 1fr auto; gap: 12px; }
+    .row-date { grid-column: 1 / -1; }
+    .feat-card { padding: 22px 20px; }
+    .feat-title { font-size: 22px; }
   }
 </style>

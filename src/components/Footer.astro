@@ -2,85 +2,79 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="botbar" aria-label="Rodapé">
-  <div class="bb-in">
-    <span class="bb-copy">© {year} · <a href="/sobre">Mateus Roveda</a></span>
-    <span class="bb-comm">
-      <b>comunidade</b>
-      <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer">YouTube ↗</a>
-      <a href="https://t.me/roveeb" target="_blank" rel="noopener noreferrer">Telegram ↗</a>
-      <a href="https://github.com/mateusrovedaa" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-    </span>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <!-- Light: R navio escuro -->
+      <svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true" class="footer-mark mark-light">
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#061736" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="8.5" fill="#061736"></circle>
+        <circle cx="32" cy="86" r="9" fill="#FCFFFE" stroke="#061736" stroke-width="6"></circle>
+        <circle cx="72" cy="86" r="9" fill="#FCFFFE" stroke="#077E7D" stroke-width="6"></circle>
+      </svg>
+      <!-- Dark: R mint -->
+      <svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true" class="footer-mark mark-dark">
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="8.5" fill="#92FDEF"></circle>
+        <circle cx="32" cy="86" r="9" fill="#061736" stroke="#92FDEF" stroke-width="6"></circle>
+        <circle cx="72" cy="86" r="9" fill="#061736" stroke="#EFFEFC" stroke-width="6"></circle>
+      </svg>
+      <span>© {year} Mateus Roveda · conteúdo sob CC BY-SA</span>
+    </div>
+    <span class="footer-right">feito com software livre</span>
   </div>
 </footer>
 
 <style>
-  .botbar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 90;
-    height: var(--footerbar-h, 32px);
-    background: var(--chrome-bg);
-    border-top: 1px solid var(--chrome-line);
-    display: flex;
-    align-items: center;
+  .site-footer {
+    border-top: 1px solid var(--border-subtle);
+    margin-top: auto;
+    background: var(--surface-page);
+  }
+  :global(html[data-theme='dark']) .site-footer {
+    background: #061736;
+    border-top-color: rgba(146, 253, 239, 0.12);
   }
 
-  .bb-in {
+  .footer-inner {
     max-width: var(--max-width);
-    width: 100%;
     margin: 0 auto;
-    padding: 0 var(--space-lg);
+    padding: 28px 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-md);
+    gap: 24px;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  :global(html[data-theme='dark']) .footer-inner {
+    color: rgba(239,254,252,0.62);
   }
 
-  .bb-copy {
-    color: rgba(178, 228, 255, 0.74);
-    white-space: nowrap;
-  }
-  .bb-copy a {
-    color: rgba(178, 228, 255, 0.88);
-    text-decoration: none;
-  }
-  .bb-copy a:hover { color: var(--color-primary); }
-
-  .bb-comm {
+  .footer-left {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: 10px;
+  }
+
+  .footer-mark {
+    flex: none;
+  }
+  .mark-dark { display: none; }
+  :global(html[data-theme='dark']) .mark-light { display: none; }
+  :global(html[data-theme='dark']) .mark-dark { display: block; }
+
+  .footer-right {
     white-space: nowrap;
   }
-  .bb-comm b {
-    color: rgba(178, 228, 255, 0.64);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.62rem;
-  }
-  .bb-comm a {
-    color: rgba(178, 228, 255, 0.85);
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-  .bb-comm a:hover { color: var(--color-primary); }
 
-  @media (max-width: 560px) {
-    .bb-in {
+  @media (max-width: 640px) {
+    .footer-inner {
       flex-direction: column;
-      justify-content: center;
-      gap: 2px;
-      font-size: 0.66rem;
       text-align: center;
+      padding: 24px 16px;
+      gap: 8px;
     }
-    .bb-comm { gap: var(--space-sm); }
-    .bb-comm b { display: none; }
   }
 </style>

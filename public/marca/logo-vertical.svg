@@ -1,0 +1,9 @@
+<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 128" width="200" height="128">
+  <rect x="71" y="0" width="58" height="58" rx="14" fill="#061736"></rect>
+  <g transform="translate(81,10) scale(0.38)"><path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+    <circle cx="71" cy="31" r="7.5" fill="#92FDEF"></circle>
+    <circle cx="32" cy="86" r="8" fill="#061736" stroke="#92FDEF" stroke-width="5"></circle>
+    <circle cx="72" cy="86" r="8" fill="#061736" stroke="#EFFEFC" stroke-width="5"></circle></g>
+  <text x="100" y="90" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="22" letter-spacing="-0.4" fill="#061736">Roveda</text>
+  <text x="100" y="112" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" letter-spacing="1.6" fill="#014144">liberdade de conhecimentos</text>
+</svg>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264 82" width="264" height="82">
+  <rect width="264" height="82" rx="14" fill="#061736"></rect>
+  <g transform="translate(18,16) scale(0.5)"><path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+    <circle cx="71" cy="31" r="7.5" fill="#92FDEF"></circle>
+    <circle cx="32" cy="86" r="8" fill="#061736" stroke="#92FDEF" stroke-width="5"></circle>
+    <circle cx="72" cy="86" r="8" fill="#061736" stroke="#EFFEFC" stroke-width="5"></circle></g>
+  <text x="86" y="55" font-family="Poppins, sans-serif" font-weight="700" font-size="38" letter-spacing="-0.8" fill="#EFFEFC">Roveda</text>
+</svg>

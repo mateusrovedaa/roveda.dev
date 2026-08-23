@@ -88,30 +88,31 @@
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
-    padding: 5px 10px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(65, 186, 255, 0.2);
-    border-radius: var(--radius-sm);
-    color: var(--color-blue-light);
+    padding: 6px 10px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: 7px;
+    color: var(--text-muted);
     font-family: var(--font-mono);
     font-size: 0.78rem;
     cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
 
   .search-trigger:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    border-color: #061736;
+    color: #061736;
+    background: #92FDEF;
   }
 
   .search-trigger kbd {
     font-family: var(--font-mono);
     font-size: 0.7rem;
-    background: rgba(65, 186, 255, 0.12);
-    border: 1px solid rgba(65, 186, 255, 0.25);
+    background: var(--surface-page);
+    border: 1px solid var(--border-subtle);
     border-radius: 3px;
     padding: 0 5px;
-    color: var(--color-primary);
+    color: var(--text-muted);
   }
 
   .search-dialog {
@@ -137,7 +138,7 @@
     overflow-y: auto;
   }
 
-  /* Pagefind Default UI — alinhamento com o design system */
+  /* Pagefind Default UI - alinhamento com o design system */
   #pagefind-ui {
     --pagefind-ui-primary: var(--color-blue-deep);
     --pagefind-ui-text: var(--text-strong);
@@ -149,7 +150,7 @@
     --pagefind-ui-font: var(--font-sans);
   }
 
-  /* Botão "Limpar" — só aparência; mantém a geometria default do Pagefind
+  /* Botão "Limpar" - só aparência; mantém a geometria default do Pagefind
      (top/height fixos), pois o form envolve input + resultados e esticar
      com bottom:0 viraria uma faixa vertical. */
   #pagefind-ui .pagefind-ui__search-clear {

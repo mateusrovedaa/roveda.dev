@@ -8,11 +8,11 @@ const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
-<BaseLayout title="Posts" description="Todos os posts do blog ROVEEb">
+<BaseLayout title="Artigos" description="Todos os artigos que escrevi sobre DevOps, GNU/Linux e software livre">
   <PageHeader
-    eyebrow="blog"
-    title="Posts"
-    subtitle={`${posts.length} artigos sobre infraestrutura, automação e software livre.`}
+    eyebrow="~/artigos"
+    title="Artigos"
+    subtitle={`${posts.length} textos que escrevi sobre infraestrutura, automação e software livre em português, sem paywall.`}
   />
   <PostList posts={posts} />
 </BaseLayout>

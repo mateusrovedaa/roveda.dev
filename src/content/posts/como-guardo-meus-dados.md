@@ -18,41 +18,42 @@ tags:
 
 ![Nextcloud logo](/images/uploads/nextcloud.png)
 
-Cada vez mais é difícil armazenar dados e confiar em serviços que prometem privacidade e segurança, além de disponibilidade. Vivemos em um mundo tecnológico onde alguns serviços oferecem planos gratuitos, mas, será que esses serviços são bons e confiáveis para armazenarmos nossos dados? Pensando nisso, estou escrevendo esse post para mostrar como é a estrutura e como guardo meus arquivos pessoais.
+É cada vez mais difícil confiar em quem promete privacidade, segurança e disponibilidade. Muitos serviços têm plano grátis, mas com termos confusos que abrem brecha para venda de dados. Aqui mostro como guardo meus arquivos e que estrutura uso.
 
-Eu, particularmente, sou muito apegado a privacidade e segurança, optando por buscar utilizar ferramentas e serviços que sejam livres (Software Livre). Isso não só me da total controle dos meus dados como também abre portas para personalização e adaptação conforme o meu uso diário.
+Uso ferramentas livres sempre que posso. Software livre me dá controle total dos dados e abre espaço para personalizar conforme meu uso.
 
-Dada essa introdução, vamos falar hoje, basicamente, sobre o [Nextcloud](https://nextcloud.com/), uma nuvem livre que permite uma expanção gigantesca que me atende muito bem nas minhas tarefas. É importante frizar que eu tenho um vídeo lá no canal [ROVEEb](https://www.youtube.com/roveeb) onde falo como montar um servidor próprio utilizando [Nextcloud](https://nextcloud.com/) + Docker + Let's Encrypt, tudo isso de maneira rápida e fácil. Lá também você poderá encontrar um vídeo falando sobre os principais aplicativos que sua nuvem precisa ter.
+Uso [Nextcloud](https://nextcloud.com/), uma nuvem livre bem expansível. Tenho um vídeo no canal [ROVEEb](https://www.youtube.com/roveeb) onde mostro como montar um servidor com Nextcloud + Docker + Let's Encrypt, rápido e direto. Lá também tem outro vídeo sobre os apps essenciais para a nuvem.
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/48rYcegMWgc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
 
-Falando um pouco de história, o [Nextcloud](https://nextcloud.com/) nasceu de um fork do ownCloud e criado por Frank Karlitschek, um dos fundadores do [ownCloud](https://owncloud.com/). Esse fork se deu pois o [ownCloud](https://owncloud.com/) alterou suas políticas, seu foco e sua visão sobre o software, dando foco para o comercial e deixando de lado a cultura do Software Livre. Nascia então, o [Nextcloud](https://nextcloud.com/) como conhecemos atualmente.
+O [Nextcloud](https://nextcloud.com/) nasceu de um fork do ownCloud, criado por Frank Karlitschek, um dos fundadores do ownCloud. O fork aconteceu quando o ownCloud mudou políticas e passou a focar no comercial, deixando a cultura do software livre de lado.
 
-Mas, por que usar o [Nextcloud](https://nextcloud.com/)? Vou ser bem sincero, eu não confio muito em serviços como o [Google](https://drive.google.com) ou [Dropbox](https://www.dropbox.com/pt_BR/), pois por mais que possuam uma grande fatia do mercado e se mostram um tanto quanto confiáveis perantes a ataques para roubo de informações, seus termos de serviço são confusos e complexos, deixando brechas abertas para venda de dados para empresas que eu não gostaria que tivessem minhas informações. Além disso, o [Nextcloud](https://nextcloud.com/) me permite personalizar utilizando aplicativos desenvolvidos pela comunidade, o que aumenta a sua gama de funcionalidades.
+Por que uso [Nextcloud](https://nextcloud.com/)? Não confio em [Google Drive](https://drive.google.com) ou [Dropbox](https://www.dropbox.com/pt_BR/) para dados pessoais. Mesmo com grande fatia de mercado e proteção contra ataques, os termos são confusos e deixam brecha para venda de dados. No Nextcloud, instalo só o que preciso, com apps da comunidade que ampliam as funções.
 
-Hoje em dia, meu servidor está rodando em uma VPS da [Contabo](https://contabo.com/), pois além de estar em um país razoável para privacidade, tem um preço acessível e atende muito bem as minhas necessidades. Por motivos de estudos, não estou rodando a aplicação utilizando Docker, mas utilizei e utilizo, em instalações para parceiros que realizei, esse repositório que foi citado no começo do post.
+Hoje rodo em uma VPS da [Contabo](https://contabo.com/) — jurisdição razoável para privacidade, preço acessível e boa para o que preciso. Por estudos, agora não uso Docker, mas já usei e ainda uso esse repositório em instalações para parceiros.
 
-O [Nextcloud](https://nextcloud.com/) não utiliza muitos recursos do meu servidor, a não ser quando utilizo um dos aplicativos, o OnlyOffice, para editar planilhas ou apresentações. No mais, seu uso não ultrapassa os 500MB de memória (monitoramento que realizei).
+O [Nextcloud](https://nextcloud.com/) consome pouco recurso. Só pesa quando uso o OnlyOffice para planilhas ou apresentações. Fora isso, fica abaixo de 500MB de RAM no meu monitoramento.
 
-Essa possibilidade de instalar aplicativos é maravilhosa, porém também é necessário ter cuidado com o que se está instalando a mais, pois pode causar problemas de segurança, privacidade ou até mesmo de desempenho. Existem alguns aplicativos que eu acho fundamentais de se ter instalados e que me ajudam a aumentar a minha produtividade e evolução em tarefas. Entre os aplicativos que eu não vivo sem posso citar:
-- [Two-Factor TOTP Provider](https://github.com/nextcloud/twofactor_totp#readme): Esse aplicativo me permite habilitar a autenticação em duplo fator na minha instância, o que do ponto de vista da segurança, é algo essencial e que SEMPRE deveria ser utilizado.
-- [OnlyOffice](https://www.onlyoffice.com/): É um aplicativo que me permite utilizar o Office de maneira online, ou seja, tenho um servidor (pode ser usando o Document Server) rodando e me conecto a ele utilizando o OnlyOffice, dessa forma, posso editar planilhas, apresentações e textos de forma 100% online. É um aplicativo que está evoluindo e possuí varias funcionalidades.
-- [Notes](https://github.com/nextcloud/notes): Troquei o Joplin por ele, mantenho instalado o aplicativo no meu celular e edito as notas pela Web, um excelente aplicativo para manter, classificar e criar notas. Tem suporte a Markdown, o que, basicamente, nos permite fazer qualquer tipo de nota.
-- [Deck](https://github.com/nextcloud/deck): Troquei o Trello a pouco tempo por essse aplicativo, principalmente para controlar meus fluxos de leitura e de tarefas pessoais a realizar. Tem alguns pontos a melhorar, como por exemplo data de término do cartão, capas e alguns bugs que fui encontrando. Fora isso, é um excelente aplicativo e está atendendo muito bem o que preciso fazer no meu dia a dia.
-- [News](https://github.com/nextcloud/news): Esse app pode não servir de serventia para algumas pessoas, mas eu não vivo sem. Com ele, coloco os feeds dos sites que são minhas fontes de informação e de um lugar, consigo ler todas as notícias de maneira simples.
-- [Keeweb](https://github.com/jhass/nextcloud-keeweb): Eu utilizo o KeePass para gerenciar minhas senhas. As vezes, preciso logar rapidinho em algum lugar na Web para pegar uma senha de um serviço ou algo parecido, então, com o Keeweb consigo abrir meu banco de dados, alterar minhas senhas e fazer praticamente tudo o que faço com os aplicativos KeePassXC e Keepass2Android.
-- [Contacts](https://github.com/nextcloud/contacts#readme): Meus contatos estão todos salvos nesse aplicativo, tem algumas questões a melhorar, mas no mais, cumpre com seu proprósito e não tenho mais medo de perder meus contatos após trocar de celular ou de chip.
-- [Calendar](https://github.com/nextcloud/calendar/): Como o próprio nome já diz, um calendário. Ele se integra com o Deck e o Tasks e tem algumas funcionalidades interessantes. A um bom tempo tornou-se meu calendário principal.
-- [Mail](https://github.com/nextcloud/mail#readme) e [RainLoop](https://github.com/pierre-alain-b/rainloop-nextcloud): Aplicativos para e-mail. O primeiro, Mail, é um dos aplicativos destaques do [Nextcloud](https://nextcloud.com/). Sua interface meio que se "integra" ao [Nextcloud](https://nextcloud.com/), ficando mais bonito em sua visualização. Tem alguns pontos que precisam melhorar e por isso estou testando o RainLoop, que é um Webmail já conhecido e essa integração com o [Nextcloud](https://nextcloud.com/) está me deixando bem satisfeito.
+Instalar apps é ótimo, mas exige cuidado. Um app mal escolhido pode criar brecha de segurança, privacidade ou desempenho. Os que uso no dia a dia e não abro mão:
 
-#### Caso você queira ver um pouco mais sobre aplicativos, tenho esse vídeo onde abordamos esse assunto
+- [Two-Factor TOTP Provider](https://github.com/nextcloud/twofactor_totp#readme): habilita 2FA na instância. Para mim, é essencial.
+- [OnlyOffice](https://www.onlyoffice.com/): edito planilhas, textos e apresentações 100% online via Document Server. Está em evolução e já tem bastante recurso.
+- [Notes](https://github.com/nextcloud/notes): troquei o Joplin por ele. Edito notas na web e no celular, com Markdown.
+- [Deck](https://github.com/nextcloud/deck): troquei o Trello por ele para fluxos de leitura e tarefas. Ainda falta data de término, capas e há alguns bugs, mas atende bem.
+- [News](https://github.com/nextcloud/news): centralizo feeds das minhas fontes de informação e leio tudo em um lugar.
+- [Keeweb](https://github.com/jhass/nextcloud-keeweb): uso KeePass para senhas. Quando preciso pegar uma senha rápido na web, abro o banco pelo Keeweb e edito direto.
+- [Contacts](https://github.com/nextcloud/contacts#readme): todos os contatos aqui. Ainda tem pontos a melhorar, mas não perco mais contatos ao trocar de chip ou celular.
+- [Calendar](https://github.com/nextcloud/calendar/): meu calendário principal. Integra com Deck e Tasks.
+- [Mail](https://github.com/nextcloud/mail#readme) e [RainLoop](https://github.com/pierre-alain-b/rainloop-nextcloud): Mail tem interface integrada ao Nextcloud, bonito de ver, mas ainda precisa melhorar. Por isso testo o RainLoop junto e estou satisfeito.
+
+#### Mais sobre aplicativos
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/ZbqiFASh6KM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
 
-Além da nuvem, mantenho meus dados em um HD Externo, como forma de backup caso ocorra algum tipo de problema com a minha nuvem (nunca se sabe quando isso irá acontecer). Alguns dos planos que tenho para o futuro é armazenar o backup em um bucket, porém, minhas condições financeiras ainda não permitem essa liberdade e esse gasto.
+Além da nuvem, mantenho cópia em HD externo para o caso de falha (nunca se sabe). Planejo levar o backup para um bucket, mas o custo ainda não cabe.
 
-Para finalizar, o [Nextcloud](https://nextcloud.com/) é uma excelente solução comercial, podendo fazer você ganhar um bom dinheiro com sua instalação e suporte. Além disso, para uso pessoal, pode ser divido com amigos, onde você pode cobrar por contas a fim de custear o servidor. O mais interessante disso, além da privacidade e do controle dos seus dados, é que você tem total controle sobre personalizações, podendo deixar do seu gosto e necessidades.
+O [Nextcloud](https://nextcloud.com/) também pode ser comercial: dá para hospedar para parceiros ou dividir com amigos e cobrar por conta para custear o servidor. Para uso pessoal, você já ganha privacidade e controle total para deixar do seu jeito.
 
-E ai, como você guarda suas informações?
+E você, como guarda suas informações?
 
 // see you later

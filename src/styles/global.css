@@ -1,34 +1,36 @@
 :root {
   --color-primary: #41BAFF;
-  --color-bg: #EFFEFC;
+  --color-bg: #FCFFFE;
   --color-dark: #061736;
   --color-blue-deep: #005CFE;
   --color-teal-dark: #014144;
-  --color-teal-mid: #066B6A;
+  --color-teal-mid: #077E7D;
   --color-teal-light: #92FDEF;
   --color-blue-light: #B2E4FF;
   --color-gray: #595959;
+  --color-gray-dark: #333F52;
   --color-gray-light: #8FA9BD;
-  --color-surface: #E8F9F6;
+  --color-surface: #EFFEFC;
   --color-surface-dark: #0d2347;
 
-  /* Tokens semânticos de papel — remapeados no tema escuro ([data-theme="dark"]).
-     --color-dark é dual-uso (texto E fundos escuros), por isso conteúdo usa estes. */
+  /* Tokens semânticos - marca pessoal Roveda (claro: fundo quase branco, cards mint) */
   color-scheme: light;
-  --surface-page: var(--color-bg);
+  --surface-page: #FCFFFE;
   --surface-card: #ffffff;
-  --surface-raised: var(--color-surface);
-  --text-strong: var(--color-dark);
-  --text-muted: var(--color-gray);
-  --border-subtle: var(--color-surface);
-  /* acento cyan legível: tom mais forte no claro, brilhante no escuro */
-  --accent: #0a8fd6;
-  /* acento p/ TEXTO PEQUENO — contraste AA (4.5:1) em fundo claro */
-  --accent-ink: #0a72ad;
-  /* barras de chrome (header/footer) — navy fixo em ambos os temas */
-  --chrome-bg: #04101e;
-  --chrome-fg: rgba(178, 228, 255, 0.72);
-  --chrome-line: rgba(65, 186, 255, 0.14);
+  --surface-raised: #EFFEFC;
+  --surface-highlight: #EFFEFC;
+  --text-strong: #061736;
+  --text-muted: #595959;
+  --text-body: #333F52;
+  --border-subtle: rgba(6, 23, 54, 0.1);
+  --border-card: rgba(6, 23, 54, 0.09);
+  --accent: #077E7D;
+  --accent-highlight: #92FDEF;
+  --accent-ink: #077E7D;
+  --accent-mint: #92FDEF;
+  --chrome-bg: #FCFFFE;
+  --chrome-fg: #061736;
+  --chrome-line: rgba(6, 23, 54, 0.1);
 
   --font-sans: 'Poppins', 'Poppins-fallback', sans-serif;
   --font-mono: 'JetBrains Mono', 'JBMono-fallback', 'Fira Code', monospace;
@@ -46,32 +48,39 @@
   --radius-md: 8px;
   --radius-lg: 16px;
 
-  --max-width: 1080px;
+  --max-width: 1200px;
   --content-width: 760px;
 
   --gradient-primary: linear-gradient(135deg, var(--color-blue-deep) 0%, var(--color-teal-mid) 100%);
   --gradient-hero: linear-gradient(160deg, var(--color-dark) 0%, #0a2850 60%, #083a3a 100%);
 }
 
-/* ─── Tema escuro ─── */
+/* ─── Tema escuro - marca: trilha mint em fundo navio ─── */
 [data-theme='dark'] {
   color-scheme: dark;
-  --surface-page: #0a1622;
-  --surface-card: #11202f;
-  --surface-raised: #16283a;
-  --text-strong: #e8f3f1;
-  --text-muted: #9fb3c2;
-  --border-subtle: rgba(146, 253, 239, 0.12);
+  --surface-page: #061736;
+  --surface-card: #0d2347;
+  --surface-raised: #0e2a4a;
+  --surface-highlight: #0e2a4a;
+  --text-strong: #EFFEFC;
+  --text-muted: #8fb3c2;
+  --text-body: #c8d6e0;
+  --border-subtle: rgba(146, 253, 239, 0.14);
+  --border-card: rgba(146, 253, 239, 0.14);
+  --chrome-bg: #061736;
+  --chrome-fg: #EFFEFC;
+  --chrome-line: rgba(146, 253, 239, 0.12);
 
-  /* Acentos: clarear os tons escuros p/ manter contraste AA sobre fundo escuro */
   --color-teal-mid: #5fd1c4;
   --color-blue-deep: #5aa6ff;
-  --accent: #41BAFF;
-  --accent-ink: #41BAFF;
+  --accent: #92FDEF;
+  --accent-highlight: #92FDEF;
+  --accent-ink: #92FDEF;
+  --accent-mint: #92FDEF;
   --gradient-hero: linear-gradient(160deg, #0d2036 0%, #0a2850 55%, #08323a 100%);
 }
 
-/* Fallbacks com métricas ajustadas — reduzem o reflow (CLS) quando as
+/* Fallbacks com métricas ajustadas - reduzem o reflow (CLS) quando as
    webfonts trocam pela fonte real. O fallback ocupa ~o mesmo espaço. */
 @font-face {
   font-family: 'Poppins-fallback';
@@ -108,13 +117,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* espaço para a status bar fixa de comunidade (footer) */
-  --footerbar-h: 32px;
-  padding-bottom: var(--footerbar-h);
-}
-
-@media (max-width: 560px) {
-  body { --footerbar-h: 56px; }
 }
 
 a {
@@ -132,7 +134,7 @@ img {
   display: block;
 }
 
-/* Tech label — monospace pill style */
+/* Tech label - monospace pill style */
 .tech-label {
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -211,9 +213,13 @@ img {
 }
 
 .card:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 6px 20px rgba(65, 186, 255, 0.13);
+  border-color: var(--accent);
+  box-shadow: 0 6px 20px rgba(6, 23, 54, 0.08);
   transform: translateY(-2px);
+}
+:global(html[data-theme='dark']) .card:hover {
+  border-color: var(--accent-highlight);
+  box-shadow: 0 6px 20px rgba(146, 253, 239, 0.12);
 }
 
 a.card {
@@ -305,8 +311,14 @@ a.card:hover {
 }
 
 .btn-outline:hover {
-  background-color: var(--accent);
-  border-color: var(--accent);
-  color: var(--color-dark);
+  background-color: #014144;
+  border-color: #014144;
+  color: #EFFEFC;
   text-decoration: none;
+}
+
+:global(html[data-theme='dark']) .btn-outline:hover {
+  background-color: #92FDEF;
+  border-color: #92FDEF;
+  color: #061736;
 }

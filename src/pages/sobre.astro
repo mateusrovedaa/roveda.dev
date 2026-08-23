@@ -23,7 +23,7 @@ const experience = [
     role: 'Professor',
     company: 'Univates',
     period: 'Jan 2022 – Presente',
-    description: 'Docência nos cursos Técnicos (POO, Web, Mobile) e no programa Jovem Aprendiz TI.',
+    description: 'Docência nos cursos Técnicos e na Graduação (POO, Web, Mobile).',
   },
   {
     role: 'Engenheiro DevOps e Líder de Infraestrutura',
@@ -63,21 +63,21 @@ const highlightedProjects = [
 
 <BaseLayout
   title="Sobre"
-  description="Mateus Roveda — engenheiro DevOps, professor, youtuber e entusiasta de software livre."
+  description="Sou Mateus Roveda, engenheiro DevOps, professor e criador de conteúdo sobre GNU/Linux e software livre."
 >
   <div data-pagefind-body>
-  <!-- Hero -->
+  <!-- Hero pessoal -->
   <section id="hero" class="hero">
     <img
-      src="https://avatars.githubusercontent.com/u/22747307?s=200"
+      src="https://avatars.githubusercontent.com/u/22747307?s=400"
       alt="Foto de perfil de Mateus Roveda"
       class="avatar"
       loading="eager"
     />
     <div class="hero-text">
-      <p class="page-eyebrow">Quem faz acontecer</p>
+      <p class="page-eyebrow">~/sobre</p>
       <h1>Mateus Roveda</h1>
-      <p class="tagline">Engenheiro DevOps · Professor · Youtuber · Software Livre</p>
+      <p class="tagline">Engenheiro DevOps · Professor · Software Livre</p>
       <nav class="quick-links" aria-label="Links de contato">
         {quickLinks.map(({ label, href }) => (
           <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" class="quick-link">
@@ -88,19 +88,20 @@ const highlightedProjects = [
     </div>
   </section>
 
-  <!-- Sobre -->
-  <section id="sobre" class="section">
-    <h2>Sobre</h2>
+  <!-- Sobre - primeira pessoa -->
+  <section id="sobre" class="section sobre-intro">
+    <h2>~/sobre</h2>
     <p>
-      Engenheiro DevOps, educador e pesquisador com mais de oito anos de experiência em
-      infraestrutura cloud, automação e desenvolvimento back-end. Especialista em containerização
-      e CI/CD — com resultados como 80% de redução de custos em infraestrutura de treino de IA
-      e aumento de 10x na frequência de deploys.
+      Sou engenheiro DevOps, educador e pesquisador, há mais de oito anos construindo
+      infraestrutura cloud, automação e back-end que precisa escalar de verdade. Especialista
+      em containerização e CI/CD, já liderei entregas que cortaram <strong>80% do custo de infra para treino de IA</strong> e
+      multiplicaram por <strong>10× a frequência de deploys</strong>.
     </p>
     <p>
-      Mestrando em Computação Aplicada (Edge AI) pela Unisinos. Professor nos cursos Técnicos
-      e Jovem Aprendiz TI pela Univates. Youtuber no canal ROVEEb e mantenedor da
-      Universidade Brasileira Livre. Apaixonado por ensinar, Software Livre e pelo espaço.
+      Mestre em Computação Aplicada (Edge&nbsp;AI) pela Unisinos, dou aula nos cursos Técnicos
+      e na Graduação da Univates. Criei o canal ROVEEb e mantenho a
+      Universidade Brasileira Livre. Acredito que conhecimento técnico bom é conhecimento
+      aberto: em português, sem paywall. Sou movido por ensinar, software livre e, claro, pelo espaço.
     </p>
   </section>
 
@@ -128,7 +129,7 @@ const highlightedProjects = [
       {education.map(({ degree, area, institution, year }) => (
         <div class="timeline-item">
           <div class="timeline-header">
-            <strong>{degree}{area ? ` — ${area}` : ''}</strong>
+            <strong>{degree}{area ? `, ${area}` : ''}</strong>
             <span class="company">{institution}</span>
             {year && <span class="period">{year}</span>}
           </div>
@@ -143,7 +144,7 @@ const highlightedProjects = [
     <div class="timeline">
       <div class="timeline-item">
         <div class="timeline-header">
-          <strong>LE 1 — Linux Essentials</strong>
+          <strong>LE 1: Linux Essentials</strong>
           <span class="company">LPI</span>
           <span class="period">ID: LPI000432981</span>
         </div>
@@ -193,14 +194,14 @@ const highlightedProjects = [
     gap: var(--space-xl);
     margin-bottom: var(--space-xl);
     padding-bottom: var(--space-xl);
-    border-bottom: 2px solid var(--color-primary);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .avatar {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 3px solid var(--color-primary);
+    border: 3px solid var(--border-subtle);
     flex-shrink: 0;
   }
 
@@ -229,18 +230,21 @@ const highlightedProjects = [
   .quick-link {
     display: inline-block;
     padding: var(--space-xs) var(--space-sm);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-raised);
+    border-radius: 6px;
     font-size: 0.8rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    font-weight: 700;
+    color: var(--text-strong);
     text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s;
+    font-family: var(--font-mono);
   }
 
   .quick-link:hover {
-    background-color: var(--color-primary);
-    color: var(--color-dark);
+    background-color: var(--accent-highlight);
+    border-color: #061736;
+    color: #061736;
     text-decoration: none;
   }
 
@@ -268,12 +272,12 @@ const highlightedProjects = [
 
   .section h2 {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    color: var(--color-teal-mid);
+    color: var(--text-strong);
     margin-bottom: var(--space-lg);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.16em;
     display: flex;
     align-items: center;
     gap: var(--space-sm);
@@ -281,7 +285,14 @@ const highlightedProjects = [
 
   .section h2::before {
     content: '//';
-    color: var(--accent-ink);
+    color: var(--accent);
+  }
+
+  .sobre-intro p {
+    color: var(--text-body);
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 60ch;
   }
 
   .section p {
@@ -297,7 +308,7 @@ const highlightedProjects = [
   }
 
   .timeline-item {
-    border-left: 3px solid var(--color-primary);
+    border-left: 3px solid var(--accent-highlight);
     padding-left: var(--space-md);
   }
 

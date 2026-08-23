@@ -11,40 +11,38 @@ tags:
   - proton
 ---
 
-A segurança e a privacidade está cada vez mais em foco nos dias atuais, principalmente por mudanças de leis e pela preoucupação das próprias pessoas usuárias da Internet.
+Segurança e privacidade estão cada vez mais em pauta, com mudanças de leis e mais gente se preocupando com dados na internet.
 
 ![Segurança em um smartphone](/images/uploads/device-5400442_640.jpg)
 
-Quando falamos de privacidade e segurança, já vem em mente o uso de uma VPN para cuidar de nossos dados pessoais. Porém, esse tipo de assunto é sempre delicado e vou tentar tratar hoje com muita transparência e mostrando o que eu utilizo quando necessário.
+Muita gente associa privacidade direto ao uso de VPN. O tema é delicado, então vou ser direto e mostrar como uso no dia a dia.
 
 ## O que é VPN?
 
-Para conseguirmos entender esse post, primeiro precisamos saber o que é uma VPN e como funciona esse serviço.
+VPN é uma rede privada para acessar dados. Empresas usam para liberar acesso de funcionários a sistemas internos. Virou popular também para acessar a internet: você entra numa rede privada e, dali, sai para a rede pública.
 
-Uma VPN nada mais é que uma rede privada para acesso a dados. Grandes empresas utilizam VPN's para, por exemplo, permitir o acesso de computadores de funcionários a seus sistemas. Mas também, se tornou muito popular as VPN's para usuários finais acessarem a Internet. O conceito é o mesmo, utilizamos uma rede privada para acessarmos uma rede pública e termos acesso a informação que queremos.
-
-Resumindo, acessamos uma rede privada segura, utilizando criptografia em muitos casos, e a partir dessa rede, acessamos a Internet. Por meio dessa conexão podemos garantir a nossa privacidade, pois podemos utilizar conexões criptografadas, acessar conteúdos bloqueados em determinadas regiões, manter o anonimato (em vários casos) e ainda, mas é muito difícil, aumentar a velocidade da conexão a determinados conteúdos.
+Na prática, você se conecta a uma rede privada segura, muitas vezes com criptografia, e dessa rede acessa a internet. Dá para usar conexão criptografada, acessar conteúdo bloqueado por região, manter anonimato em alguns casos e, às vezes, melhorar a rota até certo conteúdo.
 
 ## Ok, qual usar?
 
-Bom, agora que já sabemos, resumidamente, o que é uma VPN, qual devemos utilizar para uso pessoal?
+Já sabemos o básico. Qual escolher para uso pessoal?
 
-No mercado existem várias a disposição, mas o importante é sabermos onde os servidores dessa VPN estão hospedados. Ou seja, de nada adianta queremos manter nossos dados seguros, anônimos e privados e escolhermos uma VPN que tem a sua sede nos EUA ou no REINO UNIDO. ([Recomendo a leitura sobre as Alianças](https://pt.vpnmentor.com/blog/paises-dos-cinco-olhos-ou-novo-olhoscatorze-olhos-crucial-para-os-usuarios-de-vpn-entenderem/)).
+Tem várias no mercado. O que mais importa é onde ficam os servidores. Não adianta buscar privacidade e escolher uma VPN com sede nos EUA ou no Reino Unido. ([Leitura sobre as Alianças](https://pt.vpnmentor.com/blog/paises-dos-cinco-olhos-ou-novo-olhoscatorze-olhos-crucial-para-os-usuarios-de-vpn-entenderem/)).
 
-Outro ponto que pesa é a questão do preço, como vivemos no Brasil, o uso de uma VPN se torna bem pesado para o nosso bolso. Se formos comparar os planos de 3 anos, a NordVPN se torna a mais interessante de se utilizar, pois além de custar menos que as rivais, tem a sua localização no PANAMA.
+Outro fator é preço. No Brasil, o custo pesa. Comparando planos de 3 anos, a NordVPN costuma sair mais em conta que rivais e tem sede no Panamá.
 
-Nós temos também a opção de utilizar uma VPN gratuita, porém, TOME MUITO CUIDADO COM ISSO. Muitas VPN's gratuitas coletam seus dados e revendem, indo no caminho contrário do que muitas pessoas querem ao utilizar uma VPN. Mas, nem tudo está perdido. Recentemente, a [ProtonVPN](https://protonvpn.com/pt_br/) se tornou Open Source e disponibilizou o seu plano mais básica de forma gratuita. Esse movimento foi muito importante pois no mundo corporativo das VPN's, não temos serviços que nos entreguem já tudo pronto para utilizar e isso pode gerar uma boa mudança nos serviços disponibilizados.
+Tem a opção grátis, mas cuidado. Muitas VPNs grátis coletam e revendem dados, o oposto do que quem busca privacidade quer. Uma exceção recente é a [ProtonVPN](https://protonvpn.com/pt_br/): virou open source e liberou um plano gratuito limitado. Foi um passo relevante porque poucas VPNs entregam algo pronto para usar. A iniciativa pode pressionar o mercado.
 
 ![proton vpn produtos](/images/uploads/downloads-devices.jpg)
 
-Outro ponto interessante da ProtonVPN é ter seus servidores na Suiça, país esse que não faz parte das Alianças e não interfere na privacidade dos dados. O último ponto que me deixa tranquilo para utilizar essa VPN é a confiabilidade que a empresa Proton Technologies passou e criou ao longo dos anos. Para quem não conhece, a Proton é a empresa mantenedora do ProtonMail, reconhecido pela criptografia e confiabilidade quanto a privacidade e segurança.
+A ProtonVPN tem servidores na Suíça, país fora das Alianças e com tradição de proteção de dados. O que me deixa tranquilo para usar é o histórico da Proton Technologies, a mesma do ProtonMail, que construiu reputação em criptografia e privacidade.
 
-## Finalização
+## Para fechar
 
-Agora fica em suas mãos, no meu dia a dia eu acabo utilizando a ProtonVPN quando necessito de uma conexão com mais privacidade ou quando estou em um lugar que não confio na conexão disponibilizada.
+No meu dia a dia uso a ProtonVPN quando preciso de mais privacidade ou não confio na rede disponível.
 
-Creio que existam coisas mais importantes para quem quer se proteger do que somente usar uma VPN e continuar utilizando o Google para pesquisas, por exemplo.
+Existem cuidados mais importantes do que só ligar a VPN e continuar usando o Google para tudo, por exemplo.
 
-Uma VPN pode te proteger como também pode te causar dores de cabeça, então utilize com cuidado e tenha em mente qual o serviço que você está utilizando, além de ter ciência que seus dados não estarão 100% protegidos e seguros.
+VPN protege em alguns cenários e atrapalha em outros. Use com critério, saiba qual serviço está por trás e lembre que não existe proteção 100%.
 
 // see you later

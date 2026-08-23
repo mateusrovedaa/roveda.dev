@@ -12,11 +12,11 @@ const allPosts = await getCollection('posts', ({ data }) => {
 const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
-<BaseLayout title="Tutoriais" description="Tutoriais de tecnologia, Linux e software livre">
+<BaseLayout title="Tutoriais" description="Tutoriais práticos que escrevo sobre Linux, redes e DevOps">
   <PageHeader
-    eyebrow="passo a passo"
+    eyebrow="~/tutoriais"
     title="Tutoriais"
-    subtitle="Guias práticos de Linux, redes, automação e ferramentas de DevOps."
+    subtitle="Guias práticos que escrevo para resolver problemas reais: Linux, redes, automação e ferramentas que uso no dia a dia."
   />
   <PostList posts={posts} />
 </BaseLayout>

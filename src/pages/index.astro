@@ -1,96 +1,524 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostList from '../components/PostList.astro';
+import { getLatestVideos } from '../lib/youtube';
 
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-const posts = allPosts
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 6);
+const sorted = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const featured = sorted[0];
+const rest = sorted.slice(1, 5);
+
+const videos = await getLatestVideos(3);
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+const fmtShort = (d: Date) =>
+  d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }).replace(' de ', ' ').replace('.', '');
+const fmtVideoDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+const readMin = (body?: string) =>
+  Math.max(1, Math.round((body ?? '').trim().split(/\s+/).filter(Boolean).length / 200));
 ---
 
 <BaseLayout
-  title="Liberdade de conhecimentos"
-  fullTitleOverride="ROVEEb - Liberdade de conhecimentos"
-  description="Blog & canal sobre IA, DevOps, GNU/Linux e software livre. Tutoriais, ideias e ferramentas — em português, abertos a todos. Por Mateus Roveda."
+  title="Tutoriais, ideias e ferramentas"
+  fullTitleOverride="Roveda: Tutoriais, ideias e ferramentas"
+  description="Por Mateus Roveda, escrevo e gravo sobre DevOps, GNU/Linux e software livre. Tutoriais e ferramentas em português, abertos a todos."
 >
-  <!-- Hero -->
+  <!-- Hero editorial - marca pessoal em primeira pessoa -->
   <section class="hero">
-    <p class="eyebrow"><span class="d">//</span> ROVEEb — Comunidade</p>
-    <h1>IA, DevOps, GNU/Linux e <span class="accent">Software livre.</span></h1>
-    <p class="sub"><b>Tutoriais</b>, ideias e ferramentas — em português, abertos a todos.</p>
+    <div class="hero-watermark" aria-hidden="true">
+      <!-- light: watermark navio sutil -->
+      <svg viewBox="0 0 100 100" width="460" height="460" class="wm-light">
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="rgba(6,23,54,0.055)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="7.5" fill="rgba(6,23,54,0.055)"></circle>
+        <circle cx="32" cy="86" r="8" fill="none" stroke="rgba(6,23,54,0.055)" stroke-width="5"></circle>
+        <circle cx="72" cy="86" r="8" fill="none" stroke="rgba(6,23,54,0.055)" stroke-width="5"></circle>
+      </svg>
+      <!-- dark: watermark mint sutil sobre navio -->
+      <svg viewBox="0 0 100 100" width="460" height="460" class="wm-dark">
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="rgba(146,253,239,0.07)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="7.5" fill="rgba(146,253,239,0.07)"></circle>
+        <circle cx="32" cy="86" r="8" fill="none" stroke="rgba(146,253,239,0.07)" stroke-width="5"></circle>
+        <circle cx="72" cy="86" r="8" fill="none" stroke="rgba(146,253,239,0.07)" stroke-width="5"></circle>
+      </svg>
+    </div>
+    <div class="hero-inner">
+      <p class="hero-kicker">~/ blog &amp; canal · devops, gnu/linux, software livre</p>
+      <h1>Tutoriais, ideias e ferramentas em português, <span>abertos a todos</span>.</h1>
+      <p class="hero-sub">Por Mateus Roveda, engenheiro de software, professor e pesquisador. Escrevo aqui o que aprendo no dia a dia.</p>
+      <div class="hero-cta">
+        <a href="/posts" class="btn-primary">Ler os artigos</a>
+        <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="btn-ghost">Ver o canal ↗</a>
+      </div>
+    </div>
   </section>
 
-  <!-- Posts -->
-  <section class="posts">
-    <div class="sec-h">
-      <h2 class="sec-t"><span class="d">//</span> últimos posts</h2>
-      <a class="sec-all" href="/posts">ver todos →</a>
-    </div>
-    <PostList posts={posts} featured />
-  </section>
+  <div class="stack">
+    <!-- Artigos -->
+    <section id="artigos" class="sec-articles">
+      <div class="sec-head">
+        <h2>~/artigos</h2>
+        <a href="/posts" class="sec-link">todos →</a>
+      </div>
+
+      {featured && (
+        <a href={`/post/${featured.id}`} class="feat-card">
+          <div class="feat-meta">último artigo · {fmtDate(featured.data.date)} · ~{readMin(featured.body)} min</div>
+          <h3 class="feat-title">{featured.data.title}</h3>
+          {featured.data.description && <p class="feat-desc">{featured.data.description}</p>}
+          <div class="feat-foot">
+            <span class="feat-tags">
+              {(featured.data.categorias?.slice(0, 2) ?? ['geral']).map((c) => (
+                <span class="mini-tag">{c}</span>
+              ))}
+            </span>
+            <span class="feat-cta">ler →</span>
+          </div>
+        </a>
+      )}
+
+      <div class="post-rows">
+        {rest.map((post) => (
+          <a href={`/post/${post.id}`} class="row">
+            <span class="row-date">{fmtShort(post.data.date)}</span>
+            <span class="row-main">
+              <span class="row-title">{post.data.title}</span>
+              {post.data.categorias?.[0] && <span class="row-tag">{post.data.categorias[0]}</span>}
+            </span>
+            <span class="row-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Canal - dados reais via YouTube RSS (build-time) -->
+    <section id="canal" class="sec-canal">
+      <div class="sec-head">
+        <h2>~/canal</h2>
+        <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="sec-link">youtube.com/ROVEEb ↗</a>
+      </div>
+      <div class="canal-grid">
+        {videos.map((v) => (
+          <a href={v.link} target="_blank" rel="noopener noreferrer" class="video-card">
+            <div class="vc-thumb">
+              <img src={v.thumbnail} alt="" loading="lazy" class="vc-img" width="320" height="180" />
+              <div class="vc-overlay"></div>
+              <div class="vc-top">
+                <span>{fmtVideoDate(v.published)}</span>
+                <span class="vc-play"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="rgba(146,253,239,0.16)"></circle><path d="M10 8.5 L16 12 L10 15.5 Z" fill="#92FDEF"></path></svg></span>
+              </div>
+              <span class="vc-title">{v.title}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Sobre - primeira pessoa -->
+    <section id="sobre" class="sec-sobre">
+      <div class="sobre-text">
+        <h2>~/sobre</h2>
+        <p>Sou engenheiro DevOps, educador e pesquisador, há mais de oito anos entre infra cloud, automação e back-end. Especialista em containerização e CI/CD, já cortei 80% de custo de infra de IA e multipliquei deploys por 10×.</p>
+        <p>Mestre em Computação Aplicada (Edge&nbsp;AI) pela Unisinos, dou aula nos cursos Técnicos e na Graduação da Univates, criei o canal ROVEEb e mantenho a UBLivre. Acredito em conhecimento aberto: em português, sem paywall.</p>
+        <a href="/sobre" class="more-link">conheça minha trajetória →</a>
+      </div>
+      <div class="sobre-card">
+        <div class="sc-head">
+          <svg viewBox="0 0 100 100" width="40" height="40" aria-hidden="true">
+            <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="71" cy="31" r="7.5" fill="#92FDEF"></circle>
+            <circle cx="32" cy="86" r="8" fill="#061736" stroke="#92FDEF" stroke-width="5"></circle>
+            <circle cx="72" cy="86" r="8" fill="#061736" stroke="#EFFEFC" stroke-width="5"></circle>
+          </svg>
+          <div>
+            <strong>Mateus Roveda</strong>
+            <span>liberdade de conhecimentos</span>
+          </div>
+        </div>
+        <div class="sc-links">
+          <a href="https://github.com/mateusrovedaa" target="_blank" rel="noopener noreferrer"><span>github</span><span>mateusrovedaa ↗</span></a>
+          <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer"><span>youtube</span><span>ROVEEb ↗</span></a>
+          <a href="https://www.linkedin.com/in/mateusrovedaa/" target="_blank" rel="noopener noreferrer"><span>linkedin</span><span>mateusrovedaa ↗</span></a>
+          <a href="mailto:contato@roveeb.com"><span>email</span><span>contato@roveeb.com</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
-  /* ─── Hero enxuto, tipografia grossa ─── */
-  .hero { padding: 3.5rem 0 5.5rem; }
-
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 1.6rem;
+  /* Hero */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    margin: 0 calc(-1 * var(--space-lg));
+    padding: 0 var(--space-lg);
+    border-bottom: 1px solid transparent;
   }
-  .eyebrow .d { color: var(--accent-ink); }
-
+  .hero-watermark {
+    position: absolute;
+    right: -60px;
+    top: -30px;
+    width: 460px;
+    height: 460px;
+    pointer-events: none;
+    opacity: 1;
+  }
+  .hero-watermark svg { width: 100%; height: 100%; }
+  .wm-dark { display: none; }
+  :global(html[data-theme='dark']) .wm-light { display: none; }
+  :global(html[data-theme='dark']) .wm-dark { display: block; }
+  .hero-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 96px 0 72px;
+    position: relative;
+  }
+  .hero-kicker {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
   .hero h1 {
-    font-family: var(--font-sans);
-    font-weight: 800;
-    font-size: clamp(2.5rem, 7vw, 5.4rem);
-    line-height: 0.98;
-    letter-spacing: -0.04em;
-    max-width: 18ch;
+    margin: 0 0 22px;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 54px);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    max-width: 780px;
+    text-wrap: pretty;
     color: var(--text-strong);
   }
-  .hero h1 .accent { color: var(--accent); }
-
-  .hero .sub {
-    font-family: var(--font-mono);
-    font-size: 0.86rem;
+  .hero h1 span {
+    font-weight: 700;
+    box-shadow: inset 0 -14px 0 var(--accent-highlight);
+  }
+  :global(html[data-theme='dark']) .hero h1 span {
+    box-shadow: inset 0 -14px 0 rgba(146, 253, 239, 0.22);
+  }
+  .hero-sub {
+    margin: 0 0 34px;
+    font-size: 17px;
+    line-height: 1.65;
     color: var(--text-muted);
-    margin-top: 1.75rem;
+    max-width: 560px;
   }
-  .hero .sub b { color: var(--color-teal-mid); font-weight: 500; }
-
-  /* ─── Posts ─── */
-  .posts { padding-bottom: 3rem; }
-
-  .sec-h {
+  .hero-cta {
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding-bottom: 1.1rem;
-    margin-bottom: 0.5rem;
-    border-bottom: 2px solid var(--text-strong);
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
   }
-  .sec-t {
+  .btn-primary {
+    background: var(--text-strong);
+    color: var(--surface-page);
+    font-weight: 600;
+    font-size: 15px;
+    padding: 13px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-primary:hover { background: var(--color-teal-dark); color: var(--surface-page); text-decoration: none; }
+  :global(html[data-theme='dark']) .btn-primary { background: #EFFEFC; color: #061736; }
+  :global(html[data-theme='dark']) .btn-primary:hover { background: var(--accent-highlight); }
+  .btn-ghost {
+    font-weight: 600;
+    font-size: 15px;
+    padding: 13px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-strong);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .btn-ghost:hover { border-color: var(--text-strong); background: var(--surface-raised); text-decoration: none; }
+
+  /* Stack */
+  .stack {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 0 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 88px;
+  }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 26px;
+    gap: 16px;
+  }
+  .sec-head h2 {
+    margin: 0;
     font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 0.78rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-size: 15px;
+    letter-spacing: 0.16em;
     color: var(--text-strong);
   }
-  .sec-t .d { color: var(--accent-ink); }
-  .sec-all {
+  .sec-link {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .sec-link:hover { color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--accent-highlight); text-decoration-thickness: 2px; }
+
+  /* Featured */
+  .feat-card {
+    display: block;
+    background: var(--surface-highlight);
+    border: 1px solid var(--border-card);
+    border-radius: 14px;
+    padding: 30px 32px;
+    color: var(--text-strong);
+    text-decoration: none;
+    margin-bottom: 34px;
+    transition: border-color 0.15s;
+  }
+  .feat-card:hover { border-color: var(--text-strong); text-decoration: none; }
+  .feat-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--accent-ink);
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .feat-title {
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    max-width: 720px;
+    text-wrap: pretty;
+    color: var(--text-strong);
+    margin-bottom: 10px;
+  }
+  .feat-desc {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin-bottom: 18px;
+  }
+  .feat-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .mini-tag {
+    background: var(--surface-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .feat-cta { margin-left: auto; color: var(--accent); font-weight: 700; }
+  .feat-card:hover .feat-cta { color: var(--text-strong); }
+
+  /* Rows */
+  .post-rows { display: flex; flex-direction: column; }
+  .row {
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    padding: 20px 6px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-strong);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .row:hover { background: var(--surface-highlight); text-decoration: none; }
+  .row-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .row-main { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .row-title {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+  .row-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+  }
+  .row-arrow { font-family: var(--font-mono); font-size: 14px; color: var(--accent); }
+
+  /* Canal - compacto */
+  .canal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .video-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text-strong);
     text-decoration: none;
   }
-  .sec-all:hover { text-decoration: underline; }
+  .video-card:hover { color: var(--accent); text-decoration: none; }
+  .vc-thumb {
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    background: #061736;
+  }
+  .vc-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .vc-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(6,23,54,0.08) 0%, rgba(6,23,54,0.72) 100%);
+  }
+  .vc-top,
+  .vc-title {
+    position: relative;
+    z-index: 1;
+  }
+  .vc-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #92FDEF;
+  }
+  .vc-top span:first-child {
+    background: rgba(6, 23, 54, 0.62);
+    border: 1px solid rgba(146, 253, 239, 0.18);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 3px 7px;
+    border-radius: 999px;
+    line-height: 1;
+  }
+  .vc-play {
+    line-height: 0;
+    filter: drop-shadow(0 1px 6px rgba(0,0,0,0.45));
+  }
+  .vc-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #EFFEFC;
+    line-height: 1.3;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Sobre */
+  .sec-sobre {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .sobre-text h2 {
+    margin: 0 0 18px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.16em;
+    color: var(--text-strong);
+  }
+  .sobre-text p {
+    margin: 0 0 14px;
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--text-body);
+    max-width: 560px;
+    text-wrap: pretty;
+  }
+  .more-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .more-link:hover { color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--accent-highlight); text-decoration-thickness: 2px; }
+
+  .sobre-card {
+    background: #061736;
+    border-radius: 14px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .sc-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .sc-head strong { display: block; font-weight: 700; font-size: 17px; color: #EFFEFC; }
+  .sc-head span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--accent-highlight); text-transform: uppercase; }
+  .sobre-card > .sc-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid rgba(239,254,252,0.12);
+    padding-top: 12px;
+  }
+  .sc-links a {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #EFFEFC;
+    text-decoration: none;
+    padding: 6px 0;
+  }
+  .sc-links a span:last-child { color: var(--accent-highlight); }
+  .sc-links a:hover { color: var(--accent-highlight); }
+
+  @media (max-width: 900px) {
+    .canal-grid { grid-template-columns: 1fr; }
+    .sec-sobre { grid-template-columns: 1fr; gap: 32px; }
+  }
+  @media (max-width: 640px) {
+    .hero-inner { padding: 56px 0 48px; }
+    .hero-watermark { width: 300px; height: 300px; right: -40px; top: -20px; }
+    .stack { gap: 56px; padding-bottom: 48px; }
+    .row { grid-template-columns: 1fr auto; gap: 12px; }
+    .row-date { grid-column: 1 / -1; }
+    .feat-card { padding: 22px 20px; }
+    .feat-title { font-size: 22px; }
+  }
 </style>

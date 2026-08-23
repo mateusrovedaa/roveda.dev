@@ -1,7 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-// Fontes self-hosted (apenas os pesos usados) — elimina request render-blocking do Google Fonts
+// Fontes self-hosted (apenas os pesos usados) - elimina request render-blocking do Google Fonts
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/700.css';
@@ -14,13 +14,13 @@ interface Props {
   description?: string;
   image?: string;
   type?: 'website' | 'article';
-  /** Sobrescreve o título completo (padrão: `${title} · ROVEEb`). Usado na home p/ marca-primeiro. */
+  /** Sobrescreve o título completo (padrão: `${title} · Roveda`). */
   fullTitleOverride?: string;
 }
 
 const {
   title,
-  description = 'Liberdade de conhecimentos — blog de tecnologia, software livre e tutoriais por Mateus Roveda.',
+  description = 'Tutoriais, ideias e ferramentas em português, abertos a todos. Por Mateus Roveda.',
   image = '/og-image.png',
   type = 'website',
   fullTitleOverride,
@@ -28,7 +28,7 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
-const fullTitle = fullTitleOverride ?? `${title} · ROVEEb`;
+const fullTitle = fullTitleOverride ?? `${title} · Roveda`;
 ---
 
 <!doctype html>
@@ -49,12 +49,13 @@ const fullTitle = fullTitleOverride ?? `${title} · ROVEEb`;
         } catch (e) {}
       })();
     </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#0d1f2d" />
+    <meta name="theme-color" content="#FCFFFE" />
     <link rel="canonical" href={canonicalURL} />
 
     <title>{fullTitle}</title>
@@ -64,12 +65,12 @@ const fullTitle = fullTitleOverride ?? `${title} · ROVEEb`;
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:site_name" content="ROVEEb" />
+    <meta property="og:site_name" content="Roveda" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ROVEEb — IA, DevOps, GNU/Linux e Software livre" />
+    <meta property="og:image:alt" content="Roveda: Tutoriais, ideias e ferramentas" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@mateusrovedaa" />

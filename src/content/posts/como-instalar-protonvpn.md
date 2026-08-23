@@ -13,35 +13,35 @@ tags:
 
 # ProtonVPN
 
-A utilização de uma VPN ou até mesmo empresas que oferecem serviços de VPN são assuntos delicados para serem tratados e o intuito desse post é te mostrar uma VPN gratuita e OpenSource, além de dar um embasamento sobre o assunto.
+VPN é um assunto delicado. Aqui mostro uma opção gratuita e open source e dou base para você decidir com calma.
 
 ## Mas o que é uma VPN?
 
-Uma VPN é uma rede privada utilizada para proteger a privacidade e melhorar a segurança em uma conexão. Uma VPN não necessariamente é para baixar vídeos ou apenas alterar seu IP, mas também para garantir a segurança em acesso a servidores e/ou serviços.
+VPN é uma rede privada para proteger privacidade e segurança na conexão. Serve para baixar vídeo ou trocar IP em alguns casos, mas o principal é garantir segurança no acesso a servidores e serviços.
 
-Lembrando que esse texto expressa minha opinão e usabilidade de uma ferramenta que pode comprometer dados pessoais. Então o uso precisa ser com muito cuidado e responsabilidade e por sua conta e risco.
+Este texto reflete minha opinião e meu uso. VPN lida com dados pessoais, então use com cuidado, por sua conta e risco.
 
 ### Um pouco mais sobre a ProtonVPN
 
-A ProtonVPN é mantida pela Proton Technologies, a mesma empresa conhecida pelo ProtonMail e que está desenvolvendo o Proton Drive (que gerou algumas controversas). Além dos dados serem movimentados na Suiça, ou seja, sem leis de armazenamento e monitoramento de dados, a Proton é conhecida pela confiabilidade e segurança entregada aos seus usuários.
+A ProtonVPN é da Proton Technologies, a mesma do ProtonMail e que desenvolve o Proton Drive. Os dados trafegam pela Suíça, sem leis de retenção e monitoramento, e a empresa tem histórico de confiabilidade e segurança.
 
-A ProtonVPN passou a ser Open Source a pouco tempo (2020) e por conta disso também possui um plano gratuito que é limitado mas atende bem a um uso básico. O bacana é que o plano mais top da ProtonVPN também da acesso ao ProtonMail Pro, então pode valer muito apena o investimento se você deseja ter um e-mail privativo e criptografado.
+Virou open source em 2020 e por isso tem plano gratuito limitado que já atende uso básico. O plano topo dá acesso ao ProtonMail Pro, o que pode valer a pena se você quer e-mail privado e criptografado.
 
-Entre os pontos positivos estão o Secure Core, que prioriza os servidores em países amigos da privacidade. Outro ponto positivo é o Kill Switch, que protege seu IP caso a conexão cair ou oscilar e, o ponto fundamental, não logar os dados de navegação.
+Pontos positivos: Secure Core, que prioriza servidores em países que respeitam privacidade; Kill Switch, que protege seu IP se a conexão cair; e política de não registrar navegação.
 
-Entre os pontos negativos, podemos citar o alto preço e o suporte que pode não ser muito bom.
+Pontos negativos: preço alto e suporte que pode deixar a desejar.
 
 ## Como instalar no GNU/Linux
 
-A ProtonVPN possui uma [documentação](https://protonvpn.com/support/official-linux-client/) bem detalha para várias distribuições diferentes.
+A ProtonVPN tem [documentação](https://protonvpn.com/support/official-linux-client/) detalhada para várias distribuições.
 
-Além disso, criei um vídeo ensinando a como fazer essa instalação.
+Também gravei um vídeo com a instalação.
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/sgrPtWjuTzo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
 
 ### Ubuntu/Debian/Linux Mint/Kali Linux/ParrotOS
 
-Para distribuições baseadas no Debian precisamos rodar os seguintes comandos:
+Para distribuições baseadas no Debian:
 
 ```
 sudo apt-get update
@@ -61,7 +61,7 @@ sudo apt-get update && sudo apt-get install protonvpn
 
 ### Fedora 33
 
-Para a distribuição Fedora 33 utilizamos esses comandos:
+Para o Fedora 33:
 
 ```
 sudo dnf upgrade
@@ -91,30 +91,30 @@ Cole dentro desse arquivo
 sudo dnf update && sudo dnf install protonvpn
 ```
 
-## Como utilizar
+## Como usar
 
-O primeiro passo é realizar login com as suas informações, ou seja, com usuário e senha.
+Faça login com usuário e senha.
 
 ```
 protonvpn-cli login
 ```
 
-Com o login feito, basta conectar.
+Conecte.
 
 ```
 protonvpn-cli connect
 ```
 
-Para desconectar da VPN também é simples.
+Para desconectar:
 
 ```
 protonvpn-cli disconnect
 ```
 
-## Considerações finais
+## No fim
 
-O plano gratuito pode ser utilizado principalmente para garantir a privacidade em conexões em redes desconhecidas (como cafés, restaurantes, bibliotecas), porém os planos pagos dessa VPN podem pesar para o seu bolso, além de existirem opções mais baratas no mercado.
+O plano gratuito ajuda bem em redes desconhecidas, como cafés, restaurantes e bibliotecas. Os planos pagos pesam no bolso e há opções mais baratas no mercado.
 
-A ProtonVPN pode ser uma boa escolha, mas você deve ter cuidado com seus dados e saber que uma VPN, simplesmente, não irá te deixar seguro ou te proteger de tudo o que acontece na Internet.
+A ProtonVPN pode ser uma boa escolha, mas lembre que nenhuma VPN te deixa 100% seguro. Avalie o serviço e use com critério.
 
 // see you later

@@ -11,18 +11,19 @@ tags:
 
 # Node-RED
 
-O Node-RED vem crescendo e expandindo suas fronteiras na utilização em integrações e automações. Seu principal diferencial é ser uma ferramenta low-code, tendo uma curva de aprendizado bem baixa e podendo ser utilizada para muitas aplicações.
+O Node-RED tem crescido em integrações e automações. O diferencial é ser low-code, com curva baixa e muitas aplicações.
 
-No canal onde eu produzo vídeos, [ROVEEb](https://www.youtube.com/roveeb), estou construindo uma série de vídeos onde irei mostrar do início a construção de um bot que notifica no Telegram a cada vídeo novo postado no Youtube, facilitando assim a interação, reduzindo meu esforço em divulgação e construindo um processo com menos falhas.
-Nesse post, vou ensinar (transcrever) o que ensinei na Aula 02 dessa série, ou seja, a instalação do Node-RED em distribuições baseadas no Debian (Ubuntu, por exemplo) como um serviço, podendo assim ser utilizado em servidores.
+No canal [ROVEEb](https://www.youtube.com/roveeb) estou publicando uma série onde construo, do zero, um bot que avisa no Telegram a cada vídeo novo no YouTube. Isso corta trabalho manual de divulgação e deixa o fluxo mais confiável.
 
-Caso você prefira, pode assistir o tutorial feito em vídeo.
+Aqui transcrevo a Aula 02: instalação do Node-RED como serviço em distribuições baseadas no Debian (Ubuntu, por exemplo), para rodar em servidores.
+
+Se preferir, veja o vídeo.
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/TVU_qkelFmU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
 
 ## Instalar o Node-RED
 
-A instalação será feita utilizando um script disponibilizado na própria [documentação](https://nodered.org/docs/getting-started/raspberrypi) do Node-RED.
+A instalação usa um script da própria [documentação](https://nodered.org/docs/getting-started/raspberrypi) do Node-RED.
 
 1. Instalar os pacotes essenciais na sua distribuição;
    ```
@@ -40,27 +41,27 @@ A instalação será feita utilizando um script disponibilizado na própria [doc
    * Are you really sure you want to install as root ? (y/N) ? y
    * Are you really sure you want to do this ? \[y/N] ? y
    * Would you like to install the Pi-specific nodes ? \[y/N] ? n
-5. Agora o Node-RED já se encontra instalado como um serviço, para iniciá-lo toda vez que o sistema reiniciar, é necessário rodar o comando `sudo systemctl enable nodered.service`. Para desativar, basta rodar o comando `sudo systemctl disable nodered.service`.
-6. Para controlar o Node-RED, são utilizados os seguintes comandos:
+5. Agora o Node-RED já está instalado como serviço. Para iniciar sempre que o sistema reiniciar, rode `sudo systemctl enable nodered.service`. Para desativar, `sudo systemctl disable nodered.service`.
+6. Para controlar o Node-RED:
    ```
    sudo node-red-start
    sudo node-red-stop
    sudo node-red-restart
    sudo node-red-log
    ```
-7. Utilize, caso esteja rodando localmente, a URL http://localhost:1880 para acessar o Node-RED;
-8. Também é possível utilizar o NGINX para poder acessar o Node-RED por um endereço, a configuração você pode encontrar [nesse tópico](https://discourse.nodered.org/t/node-red-server-with-nginx-reverse-proxy-howto-guide/27397).
+7. Se estiver local, acesse http://localhost:1880;
+8. Também dá para expor via NGINX. Veja [este guia](https://discourse.nodered.org/t/node-red-server-with-nginx-reverse-proxy-howto-guide/27397).
 
 ## Desinstalar o Node-RED
 
-A remoção do Node-RED é simples, mesmo como instalado como um serviço.
+A remoção é direta, mesmo com serviço.
 
 1. Pare o Node-RED/serviço;
    ```
    sudo node-red-stop
    sudo systemctl stop nodered
    ```
-2. Remova a inicialização do Node-RED ao reiniciar o sistema;
+2. Remova a inicialização ao reiniciar;
    ```
    sudo systemctl disable nodered
    ```
@@ -69,16 +70,16 @@ A remoção do Node-RED é simples, mesmo como instalado como um serviço.
    sudo npm -g remove node-red
    sudo npm -g remove node-red-admin
    ```
-4. Caso o NodeJS não seja usado para outra aplicação, também pode ser removido;
+4. Se o NodeJS não for usado em outra aplicação, pode ser removido;
    ```
    sudo apt remove nodejs
    ```
-5. Remova a pasta do Node-RED (se a instalação foi como usuário root, a pasta se encontra na home desse usuário).
+5. Remova a pasta do Node-RED (se instalou como root, fica na home desse usuário).
    ```
    sudo su -
    rm -rf ~/.node-red
    ```
-6. Rode o comando find para encontrar se ainda existem pastas ou arquivos relacionados ao Node-RED. Caso existam, basta remove-las.
+6. Procure por restos e remova se houver.
    ```
    find / | grep nodered
    ```

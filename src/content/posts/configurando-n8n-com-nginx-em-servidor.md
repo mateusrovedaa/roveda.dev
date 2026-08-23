@@ -13,13 +13,13 @@ tags:
 
 # Configurando o N8N com NGINX em um servidor
 
-Recentemente iniciamos uma série de vídeos no canal falando sobre o N8N. Lá ensinei como instalar o N8N localmente usando Docker. Entretanto, algumas pessoas me pediram sobre como instalar ele em um servidor e usando NGINX. No post de hoje, você terá todos os comandos necessários para isso. Além, é claro, do vídeo que foi publicado no Youtube usando desses comandos.
+Começamos uma série no canal sobre N8N. Já mostrei como instalar local com Docker. Muita gente pediu a instalação em servidor com NGINX. Abaixo estão todos os comandos. Tem vídeo no YouTube com o mesmo passo a passo.
 
 OBS: Todos os comandos abaixo foram executados no Ubuntu 24.04.
 
 ## Instalando o Docker
 
-O primeiro passo é instalar o Docker, seguindo a [documentação oficial](https://docs.docker.com/engine/install/).
+Instale o Docker pela [documentação oficial](https://docs.docker.com/engine/install/).
 
 ```bash
 # Add Docker's official GPG key:
@@ -55,7 +55,7 @@ Entre na pasta criada
 cd n8n-postgres-redis-workers
 ```
 
-Crie uma cópia do arquivo .env.example e modifique as variáveis de protocolo, host, key e senha.
+Crie uma cópia do arquivo .env.example e ajuste protocolo, host, key e senha.
 
 ```bash
 cp .env.example .env
@@ -83,7 +83,7 @@ POSTGRES_NON_ROOT_USER=n8n
 POSTGRES_NON_ROOT_PASSWORD=[senha]
 ```
 
-Levante os serviços.
+Suba os serviços.
 
 ```bash
 docker compose up -d
@@ -103,7 +103,7 @@ Copie o arquivo de configuração do NGINX-http.
 sudo cp webserver-example/nginx-http.conf.example /etc/nginx/sites-avaliable/[host]
 ```
 
-Modifique o arquivo para adicionar o seu host.
+Ajuste o host no arquivo.
 
 ```bash
 sudo vim /etc/nginx/sites-available/[host]
@@ -111,7 +111,7 @@ sudo vim /etc/nginx/sites-available/[host]
 Altere a linha server_name [host];
 ```
 
-Crie um link simbólico para o sites-enabled.
+Crie o link para o sites-enabled.
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/[host] /etc/nginx/sites-enabled/[host]
@@ -125,19 +125,19 @@ sudo bash -c "nginx -t && systemctl nginx reload"
 
 ## Apontamento de DNS
 
-Acesse a sua tabela de DNS e crie um registro A com o host que você definiu, apontando para o IP do servidor.
+Na sua zona de DNS crie um registro A com o host definido, apontando para o IP do servidor.
 
 ![dns](/images/uploads/apontamento-dns.png)
 
 ## Geração de certificado com o Certbot
 
-Instale o certbot seguindo a [documentação oficial](https://certbot.eff.org/instructions?ws=nginx&os=snap).
+Instale o certbot pela [documentação oficial](https://certbot.eff.org/instructions?ws=nginx&os=snap).
 
 ```bash
 sudo snap install --classic certbot
 ```
 
-Crie um link simbólico para o certbot.
+Crie o link para o certbot.
 
 ```bash
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
@@ -149,7 +149,7 @@ Gere o certificado.
 sudo certbot --nginx
 ```
 
-Pressione Enter, depois digite Y e Enter e selecione o domínio listado (provavelmente bastará pressionar 1)
+Digite Enter, depois Y e Enter e escolha o domínio listado (em geral basta pressionar 1)
 
 ![certificado](/images/uploads/certificado.png)
 
@@ -161,7 +161,7 @@ sudo bash -c "nginx -t && systemctl nginx reload"
 
 ### Renovação automática do certificado
 
-Adicione ao crontab a linha abaixo para renovar automaticamente os certificados quando os mesmos estiverem disponíveis para renovação.
+Adicione ao crontab a linha abaixo para renovar quando disponível.
 
 ```bash
 sudo crontab -e
@@ -173,7 +173,7 @@ sudo crontab -e
 
 ## Extra: Firewall
 
-Configure um Firewall para ter maior segurança.
+Para mais segurança, configure um firewall.
 
 ```bash
 sudo apt install ufw
@@ -184,8 +184,8 @@ sudo ufw default deny incoming
 sudo ufw enable
 ```
 
-## Finalização
+## Pronto
 
-Com isso, basta acessar a URL que você definiu para seu N8N e ele estará acessível.
+Acesse a URL que definiu para o N8N. Ele já deve estar no ar.
 
 // see you later
