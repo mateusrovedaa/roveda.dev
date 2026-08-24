@@ -13,24 +13,24 @@
   --color-surface: #EFFEFC;
   --color-surface-dark: #0d2347;
 
-  /* Tokens semânticos - marca pessoal Roveda (claro: fundo quase branco, cards mint) */
+  /* Tokens semânticos - marca pessoal Roveda (alto contraste) */
   color-scheme: light;
-  --surface-page: #FCFFFE;
-  --surface-card: #ffffff;
-  --surface-raised: #EFFEFC;
-  --surface-highlight: #EFFEFC;
+  --surface-page: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --surface-raised: #E6FFF8;
+  --surface-highlight: #E6FFF8;
   --text-strong: #061736;
-  --text-muted: #595959;
-  --text-body: #333F52;
-  --border-subtle: rgba(6, 23, 54, 0.1);
-  --border-card: rgba(6, 23, 54, 0.09);
-  --accent: #077E7D;
+  --text-muted: #3F4A5A;
+  --text-body: #1E2B3A;
+  --border-subtle: rgba(6, 23, 54, 0.16);
+  --border-card: rgba(6, 23, 54, 0.13);
+  --accent: #014144;
   --accent-highlight: #92FDEF;
-  --accent-ink: #077E7D;
+  --accent-ink: #014144;
   --accent-mint: #92FDEF;
-  --chrome-bg: #FCFFFE;
+  --chrome-bg: #FFFFFF;
   --chrome-fg: #061736;
-  --chrome-line: rgba(6, 23, 54, 0.1);
+  --chrome-line: rgba(6, 23, 54, 0.16);
 
   --font-sans: 'Poppins', 'Poppins-fallback', sans-serif;
   --font-mono: 'JetBrains Mono', 'JBMono-fallback', 'Fira Code', monospace;
