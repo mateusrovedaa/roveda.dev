@@ -1,0 +1,194 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getMateriais } from '../../../lib/materiais';
+
+export async function getStaticPaths() {
+  const materiais = getMateriais();
+  return materiais.map((m) => ({
+    params: { path: m.path },
+    props: { file: m },
+  }));
+}
+
+const { file } = Astro.props as { file: { path: string; name: string; ext: string; size: number; mtime: string; url: string } };
+
+const MATERIAIS_DIR = path.join(process.cwd(), 'public', 'materiais');
+const fullPath = path.join(MATERIAIS_DIR, file.path);
+const stat = fs.statSync(fullPath);
+const sizeFmt = stat.size < 1024 ? `${stat.size} B` : stat.size < 1024*1024 ? `${(stat.size/1024).toFixed(1)} kB` : `${(stat.size/(1024*1024)).toFixed(1)} MB`;
+const dateFmt = new Date(file.mtime).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+let htmlContent: string | null = null;
+if (file.ext === '.html' || file.ext === '.htm') {
+  try {
+    const raw = fs.readFileSync(fullPath, 'utf-8');
+    // tenta extrair body; se não houver, usa o arquivo inteiro
+    const bodyMatch = raw.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    htmlContent = bodyMatch ? bodyMatch[1] : raw;
+    // remove scripts que possam quebrar o layout (opcional: mantém)
+    // htmlContent = htmlContent.replace(/<script[\s\S]*?<\/script>/gi, '');
+  } catch {}
+}
+
+const isPdf = file.ext === '.pdf';
+const isHtml = file.ext === '.html' || file.ext === '.htm';
+---
+
+<BaseLayout title={file.name} description={`Material: ${file.path}`}>
+  <nav class="crumb">
+    <a href="/materiais">materiais</a> <span>/</span> <span>{file.path}</span>
+  </nav>
+
+  <header class="mat-header">
+    <div class="mat-meta">
+      <span class="badge">{file.ext.replace('.', '').toUpperCase()}</span>
+      <span>{sizeFmt} · {dateFmt}</span>
+    </div>
+    <h1>{file.name}</h1>
+    <p class="path">{file.path}</p>
+    <div class="actions">
+      <a href={`/materiais/${file.path}`} download class="btn">baixar</a>
+      <a href={`/materiais/${file.path}`} target="_blank" rel="noopener" class="btn-ghost">abrir original ↗</a>
+    </div>
+  </header>
+
+  {isPdf && (
+    <div class="viewer pdf-viewer">
+      <object data={`/materiais/${file.path}`} type="application/pdf" width="100%" height="800">
+        <p>Seu navegador não conseguiu carregar o PDF. <a href={`/materiais/${file.path}`} download>Baixe aqui</a>.</p>
+      </object>
+    </div>
+  )}
+
+  {isHtml && htmlContent && (
+    <article class="viewer html-viewer">
+      <div class="html-frame" set:html={htmlContent} />
+    </article>
+  )}
+
+  {isHtml && !htmlContent && (
+    <div class="viewer">
+      <iframe src={`/materiais/${file.path}`} width="100%" height="800" style="border:1px solid var(--border-subtle); border-radius:12px; background: white;"></iframe>
+    </div>
+  )}
+
+  {!isPdf && !isHtml && (
+    <div class="viewer generic">
+      <p>Arquivo pronto para download. Clique em baixar para salvar.</p>
+      <a href={`/materiais/${file.path}`} download class="btn">baixar {file.name}</a>
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+  .crumb {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .crumb a { color: var(--accent); text-decoration: none; }
+  .crumb a:hover { text-decoration: underline; }
+  .crumb span:last-child { color: var(--text-strong); overflow-wrap: anywhere; }
+
+  .mat-header {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .mat-meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .badge {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+  .mat-header h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  .path {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    overflow-wrap: anywhere;
+  }
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 8px 14px;
+    background: var(--text-strong);
+    color: var(--surface-page);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .btn:hover { background: #014144; color: #EFFEFC; text-decoration: none; }
+  :global(html[data-theme='dark']) .btn { background: #EFFEFC; color: #061736; }
+  :global(html[data-theme='dark']) .btn:hover { background: #92FDEF; }
+  .btn-ghost {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-strong);
+    text-decoration: none;
+  }
+  .btn-ghost:hover { border-color: var(--text-strong); background: var(--surface-raised); text-decoration: none; }
+
+  .viewer {
+    margin-top: 8px;
+  }
+  .pdf-viewer object {
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    display: block;
+  }
+  .html-viewer {
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: var(--surface-card);
+    padding: 24px;
+    overflow: auto;
+  }
+  .html-frame :global(h1),
+  .html-frame :global(h2),
+  .html-frame :global(h3) {
+    color: var(--text-strong);
+    margin: 1em 0 0.5em;
+  }
+  .html-frame :global(p) { margin: 0.8em 0; line-height: 1.7; color: var(--text-body); }
+  .html-frame :global(a) { color: var(--accent); }
+  .html-frame :global(pre) { background: #061736; color: #92FDEF; padding: 14px; border-radius: 8px; overflow: auto; }
+  .html-frame :global(img) { max-width: 100%; height: auto; border-radius: 8px; }
+  .generic p { color: var(--text-muted); margin-bottom: 12px; }
+</style>

@@ -1,0 +1,2876 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Desenhe as Caixas</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=JetBrains+Mono:wght@400;700&display=swap"
+        />
+
+        <style>
+            /* ---------- tokens: papel quadriculado, tinta, dois trilhos ---------- */
+            :root {
+                --papel: #f3f4f1;
+                --papel-fig: #fbfcfa;
+                --grade: #dee5de;
+                --grade-forte: #ccd8ce;
+                --tinta: #1b2a32;
+                --tinta-fraca: #5d6e75;
+                --tinta-tenue: #8a9aa0;
+                --principal: #b44f16;
+                --cruzado: #16705f;
+                --caneta: #b7302a;
+                --caixa-fundo: #cfe0ec;
+                --caixa-borda: #4a7fa5;
+                --caixa-tinta: #1b4463;
+                --sobra: #b44f16;
+                color-scheme: light;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root:not([data-theme="light"]) {
+                    --papel: #14181a;
+                    --papel-fig: #1a2023;
+                    --grade: #242c2e;
+                    --grade-forte: #2e393c;
+                    --tinta: #e5eae7;
+                    --tinta-fraca: #9babae;
+                    --tinta-tenue: #6e7e82;
+                    --principal: #ee9448;
+                    --cruzado: #3fcfb4;
+                    --caneta: #ef6a5e;
+                    --caixa-fundo: #1e3a52;
+                    --caixa-borda: #4a8fc4;
+                    --caixa-tinta: #cfe4f5;
+                    --sobra: #ee9448;
+                    color-scheme: dark;
+                }
+            }
+
+            :root[data-theme="dark"] {
+                --papel: #14181a;
+                --papel-fig: #1a2023;
+                --grade: #242c2e;
+                --grade-forte: #2e393c;
+                --tinta: #e5eae7;
+                --tinta-fraca: #9babae;
+                --tinta-tenue: #6e7e82;
+                --principal: #ee9448;
+                --cruzado: #3fcfb4;
+                --caneta: #ef6a5e;
+                --caixa-fundo: #1e3a52;
+                --caixa-borda: #4a8fc4;
+                --caixa-tinta: #cfe4f5;
+                --sobra: #ee9448;
+                color-scheme: dark;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                background-color: var(--papel);
+                background-image:
+                    repeating-linear-gradient(
+                        to right,
+                        var(--grade) 0 1px,
+                        transparent 1px 28px
+                    ),
+                    repeating-linear-gradient(
+                        to bottom,
+                        var(--grade) 0 1px,
+                        transparent 1px 28px
+                    );
+                color: var(--tinta);
+                font-family: "Newsreader", Georgia, "Times New Roman", serif;
+                font-size: 19px;
+                line-height: 1.62;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            .folha {
+                max-width: 820px;
+                margin: 0 auto;
+                padding: 56px 24px 120px;
+            }
+
+            /* linha de margem do caderno — só onde há espaço para ela */
+            @media (min-width: 900px) {
+                .folha {
+                    border-left: 1px solid var(--caneta);
+                    padding-left: 56px;
+                    max-width: 852px;
+                }
+            }
+
+            /* ---------- tipografia ---------- */
+            h1,
+            h2,
+            h3,
+            .eyebrow,
+            .rotulo,
+            button,
+            th {
+                font-family:
+                    "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+            }
+
+            h1 {
+                font-size: clamp(2.4rem, 7vw, 3.6rem);
+                line-height: 1.02;
+                font-weight: 800;
+                letter-spacing: -0.025em;
+                margin: 0;
+                text-wrap: balance;
+            }
+
+            h2 {
+                font-size: clamp(1.4rem, 3.6vw, 1.85rem);
+                font-weight: 700;
+                letter-spacing: -0.015em;
+                line-height: 1.15;
+                margin: 0;
+                text-wrap: balance;
+            }
+
+            h3 {
+                font-size: 1.02rem;
+                font-weight: 700;
+                letter-spacing: -0.005em;
+                margin: 0;
+            }
+
+            p {
+                margin: 0;
+                max-width: 66ch;
+            }
+
+            .eyebrow {
+                font-size: 0.74rem;
+                font-weight: 600;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--tinta-fraca);
+            }
+
+            .lead {
+                font-size: 1.16rem;
+                color: var(--tinta-fraca);
+            }
+
+            strong {
+                font-weight: 600;
+                color: var(--tinta);
+            }
+            em {
+                font-style: italic;
+            }
+
+            code,
+            .mono {
+                font-family:
+                    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+                font-size: 0.84em;
+            }
+
+            p code,
+            li code,
+            td code {
+                background: color-mix(in srgb, var(--tinta) 8%, transparent);
+                padding: 0.1em 0.34em;
+                border-radius: 3px;
+            }
+
+            .j {
+                color: var(--principal);
+                font-weight: 600;
+            }
+            .a {
+                color: var(--cruzado);
+                font-weight: 600;
+            }
+
+            /* ---------- hero: o título dentro de uma caixa cotada ---------- */
+            .hero {
+                margin-bottom: 68px;
+            }
+
+            .hero-caixa {
+                position: relative;
+                margin-top: 22px;
+                padding: 30px 26px;
+                border: 2px solid var(--tinta);
+                background: var(--papel-fig);
+            }
+
+            .cota {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.66rem;
+                letter-spacing: 0.04em;
+                white-space: nowrap;
+            }
+
+            .cota-topo {
+                top: -11px;
+                left: 22px;
+                background: var(--papel-fig);
+                padding: 0 8px;
+                color: var(--principal);
+            }
+
+            .cota-lado {
+                top: 50%;
+                right: -9px;
+                transform: translateY(-50%);
+                background: var(--papel-fig);
+                padding: 8px 0;
+                writing-mode: vertical-rl;
+                color: var(--cruzado);
+            }
+
+            .hero-sub {
+                margin-top: 18px;
+                font-size: 1.02rem;
+                color: var(--tinta-fraca);
+                max-width: 52ch;
+            }
+
+            /* ---------- seções numeradas (a ordem é real: é a sequência da revisão) ---------- */
+            .passo {
+                margin-bottom: 76px;
+            }
+
+            .passo-cabeca {
+                display: grid;
+                grid-template-columns: 46px 1fr;
+                gap: 16px;
+                align-items: start;
+                margin-bottom: 20px;
+            }
+
+            .passo-num {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.82rem;
+                font-weight: 700;
+                color: var(--papel);
+                background: var(--tinta);
+                width: 30px;
+                height: 30px;
+                display: grid;
+                place-items: center;
+                border-radius: 50%;
+                margin-top: 4px;
+            }
+
+            .passo-corpo {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+            .passo > .passo-corpo {
+                padding-left: 62px;
+            }
+
+            @media (max-width: 620px) {
+                .passo > .passo-corpo {
+                    padding-left: 0;
+                }
+                .passo-cabeca {
+                    grid-template-columns: 34px 1fr;
+                    gap: 12px;
+                }
+            }
+
+            /* ---------- figuras: rompem a coluna de leitura ---------- */
+            .figura {
+                border: 1px solid var(--grade-forte);
+                background: var(--papel-fig);
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .figura-rotulo {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.66rem;
+                letter-spacing: 0.11em;
+                text-transform: uppercase;
+                color: var(--tinta-tenue);
+            }
+
+            /* ---------- palco e caixas ---------- */
+            .palco {
+                display: flex;
+                min-height: 216px;
+                padding: 12px;
+                background: color-mix(in srgb, var(--tinta) 5%, transparent);
+                border-radius: 4px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .cx {
+                background: var(--caixa-fundo);
+                border: 1px solid var(--caixa-borda);
+                color: var(--caixa-tinta);
+                border-radius: 4px;
+                padding: 15px 22px;
+                display: grid;
+                place-items: center;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.8rem;
+                font-weight: 700;
+                transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .cx {
+                    transition: none;
+                }
+            }
+
+            .palco.raiox .cx,
+            .palco.raiox .invisivel {
+                outline: 2px solid var(--caneta);
+                outline-offset: -1px;
+            }
+
+            .invisivel {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                padding: 10px;
+            }
+
+            .invisivel .txt {
+                font-family: "Newsreader", serif;
+                font-size: 0.95rem;
+                color: var(--tinta);
+            }
+
+            /* ---------- controles ---------- */
+            .controles {
+                display: flex;
+                flex-direction: column;
+                gap: 13px;
+            }
+
+            .grupo {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+            }
+
+            .rotulo {
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.01em;
+            }
+
+            .rotulo.j {
+                color: var(--principal);
+            }
+            .rotulo.a {
+                color: var(--cruzado);
+            }
+            .rotulo.d {
+                color: var(--tinta-fraca);
+            }
+
+            .chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            button {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.75rem;
+                padding: 7px 12px;
+                border: 1px solid var(--grade-forte);
+                background: var(--papel);
+                color: var(--tinta-fraca);
+                border-radius: 3px;
+                cursor: pointer;
+                transition:
+                    background 0.13s,
+                    color 0.13s,
+                    border-color 0.13s;
+            }
+
+            button:hover {
+                border-color: var(--tinta-tenue);
+                color: var(--tinta);
+            }
+
+            button:focus-visible {
+                outline: 2px solid var(--tinta);
+                outline-offset: 2px;
+            }
+
+            button[aria-pressed="true"] {
+                background: var(--tinta);
+                border-color: var(--tinta);
+                color: var(--papel);
+                font-weight: 700;
+            }
+
+            .chips.j button[aria-pressed="true"] {
+                background: var(--principal);
+                border-color: var(--principal);
+                color: var(--papel-fig);
+            }
+            .chips.a button[aria-pressed="true"] {
+                background: var(--cruzado);
+                border-color: var(--cruzado);
+                color: var(--papel-fig);
+            }
+
+            /* ---------- bússola dos trilhos ---------- */
+            .bussola {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 26px;
+                padding: 13px 15px;
+                border: 1px dashed var(--grade-forte);
+                border-radius: 4px;
+            }
+
+            .bussola-item {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.73rem;
+            }
+
+            .seta {
+                font-size: 1.15rem;
+                line-height: 1;
+                display: inline-block;
+                transition: transform 0.22s ease;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .seta {
+                    transition: none;
+                }
+            }
+
+            .bussola-item .nome {
+                font-weight: 700;
+            }
+            .bussola-item .dir {
+                color: var(--tinta-fraca);
+            }
+
+            /* ---------- os dois trilhos, lado a lado ---------- */
+            .trilhos {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(226px, 1fr));
+                gap: 14px;
+            }
+
+            .trilho-card {
+                border: 1px solid var(--grade-forte);
+                background: var(--papel-fig);
+                padding: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .trilho-card .titulo {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.74rem;
+                font-weight: 700;
+                color: var(--tinta);
+            }
+
+            .trilho-card .desenho {
+                display: grid;
+                place-items: center;
+            }
+
+            .trilho-card svg {
+                display: block;
+            }
+            .cl {
+                stroke: var(--tinta);
+                fill: none;
+                stroke-width: 1.6;
+            }
+            .cxs {
+                fill: var(--grade-forte);
+                stroke: var(--tinta);
+                stroke-width: 1.4;
+            }
+            .sj {
+                stroke: var(--principal);
+                fill: none;
+                stroke-width: 2;
+            }
+            .sa {
+                stroke: var(--cruzado);
+                fill: none;
+                stroke-width: 2;
+            }
+            .tj {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 11px;
+                font-weight: 700;
+                fill: var(--principal);
+            }
+            .ta {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 11px;
+                font-weight: 700;
+                fill: var(--cruzado);
+            }
+
+            .trilho-legenda {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+            }
+            .trilho-legenda div {
+                font-size: 0.93rem;
+                color: var(--tinta-fraca);
+                line-height: 1.45;
+            }
+
+            /* ---------- os trilhos desenhados nas margens do palco ---------- */
+            .palco-trilhos {
+                display: grid;
+                grid-template-columns: 26px 1fr;
+                grid-template-rows: 1fr 26px;
+                gap: 5px;
+            }
+
+            .palco-trilhos .palco {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .trilho-v {
+                grid-column: 1;
+                grid-row: 1;
+                position: relative;
+            }
+            .trilho-h {
+                grid-column: 2;
+                grid-row: 2;
+                position: relative;
+            }
+
+            .trilho-v.laranja,
+            .trilho-h.laranja {
+                color: var(--principal);
+            }
+            .trilho-v.verde,
+            .trilho-h.verde {
+                color: var(--cruzado);
+            }
+
+            /* a linha */
+            .trilho-h::before {
+                content: "";
+                position: absolute;
+                left: 17px;
+                right: 10px;
+                top: 50%;
+                margin-top: -1px;
+                height: 2px;
+                background: currentColor;
+            }
+
+            .trilho-v::before {
+                content: "";
+                position: absolute;
+                top: 17px;
+                bottom: 10px;
+                left: 50%;
+                margin-left: -1px;
+                width: 2px;
+                background: currentColor;
+            }
+
+            /* a ponta da seta */
+            .trilho-h::after {
+                content: "";
+                position: absolute;
+                right: 0;
+                top: 50%;
+                margin-top: -5px;
+                width: 0;
+                height: 0;
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                border-left: 10px solid currentColor;
+            }
+
+            .trilho-v::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                margin-left: -5px;
+                width: 0;
+                height: 0;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 10px solid currentColor;
+            }
+
+            .trilho-letra {
+                position: absolute;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.76rem;
+                font-weight: 700;
+            }
+
+            .trilho-h .trilho-letra {
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .trilho-v .trilho-letra {
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* ---------- código gerado ---------- */
+            pre {
+                margin: 0;
+                padding: 16px 18px;
+                background: color-mix(in srgb, var(--tinta) 7%, transparent);
+                border-radius: 4px;
+                overflow-x: auto;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.78rem;
+                line-height: 1.75;
+                color: var(--tinta-fraca);
+            }
+
+            pre .k {
+                color: var(--tinta-fraca);
+            }
+            pre .v {
+                color: var(--tinta);
+                font-weight: 700;
+            }
+
+            /* ---------- quem manda em quem: codigo clicavel + print da tela ---------- */
+            .quemmanda {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            @media (min-width: 760px) {
+                .quemmanda {
+                    grid-template-columns: 1fr 232px;
+                    align-items: start;
+                }
+            }
+
+            .codigo-vivo {
+                display: flex;
+                flex-direction: column;
+                background: color-mix(in srgb, var(--tinta) 7%, transparent);
+                border-radius: 4px;
+                padding: 12px 6px;
+                overflow-x: auto;
+            }
+
+            .codigo-vivo .fixo {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.76rem;
+                line-height: 1.9;
+                color: var(--tinta-tenue);
+                padding: 0 10px;
+                white-space: pre;
+            }
+
+            button.linha-cod {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.76rem;
+                line-height: 1.9;
+                text-align: left;
+                white-space: pre;
+                border: 0;
+                border-left: 2px solid transparent;
+                border-radius: 0;
+                background: transparent;
+                color: var(--tinta-fraca);
+                padding: 0 10px;
+                cursor: pointer;
+                transition:
+                    background 0.13s,
+                    border-color 0.13s;
+            }
+
+            button.linha-cod:hover {
+                background: color-mix(in srgb, var(--tinta) 8%, transparent);
+                border-left-color: var(--tinta-tenue);
+                color: var(--tinta);
+            }
+
+            button.linha-cod[aria-pressed="true"] {
+                background: color-mix(in srgb, var(--tinta) 13%, transparent);
+                border-left-color: var(--tinta);
+                color: var(--tinta);
+                font-weight: 700;
+            }
+
+            button.linha-cod .val {
+                color: var(--tinta);
+            }
+            button.linha-cod[aria-pressed="true"] .val {
+                color: var(--tinta);
+            }
+
+            button.linha-cod.fantasma {
+                font-style: italic;
+                color: var(--tinta-tenue);
+            }
+
+            button.linha-cod.fantasma .val {
+                color: var(--tinta-tenue);
+            }
+
+            /* o print da tela do app tem paleta propria: e uma captura, nao parte da pagina */
+            .aparelho {
+                border: 2px solid var(--tinta);
+                border-radius: 18px;
+                padding: 6px;
+                background: var(--tinta);
+                justify-self: center;
+                width: 100%;
+                max-width: 232px;
+            }
+
+            .demo-tela {
+                background: #3c3c3c;
+                border-radius: 13px;
+                padding-top: 34px;
+                height: 258px;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .demo-verde {
+                background: #32a852;
+                height: 62px;
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .demo-txt {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.72rem;
+                color: #00ffff;
+            }
+
+            .realce {
+                outline: 3px solid #ffd54a;
+                outline-offset: -1px;
+                border-radius: 2px;
+            }
+
+            .aparelho-legenda {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.6rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--tinta-tenue);
+                text-align: center;
+                margin-top: 8px;
+            }
+
+            .veredito {
+                display: flex;
+                flex-direction: column;
+                gap: 9px;
+                padding: 15px 16px;
+                border: 1px dashed var(--grade-forte);
+                border-radius: 4px;
+                min-height: 118px;
+            }
+
+            .selo {
+                align-self: flex-start;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.63rem;
+                font-weight: 700;
+                letter-spacing: 0.11em;
+                text-transform: uppercase;
+                background: var(--tinta);
+                color: var(--papel);
+                padding: 4px 9px;
+                border-radius: 3px;
+            }
+
+            .veredito .explica {
+                font-size: 1rem;
+                color: var(--tinta-fraca);
+                max-width: 58ch;
+            }
+            .veredito .explica strong {
+                color: var(--tinta);
+            }
+
+            /* ---------- sobra (flex: 1) ---------- */
+            .sobra-marca {
+                flex: 1;
+                border: 1px dashed var(--sobra);
+                border-radius: 4px;
+                background: repeating-linear-gradient(
+                    45deg,
+                    transparent 0 5px,
+                    color-mix(in srgb, var(--sobra) 22%, transparent) 5px 6px
+                );
+                display: grid;
+                place-items: center;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.66rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--sobra);
+                min-width: 0;
+            }
+
+            .cx.cresce {
+                flex: 1;
+            }
+
+            /* ---------- divisores de parte ---------- */
+            .parte {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                margin: 0 0 46px;
+            }
+
+            .parte span {
+                font-family: "Bricolage Grotesque", Arial, sans-serif;
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--tinta-fraca);
+                white-space: nowrap;
+            }
+
+            .parte::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: var(--grade-forte);
+            }
+
+            .precisa {
+                margin-top: 20px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.74rem;
+                color: var(--tinta-fraca);
+                border: 1px dashed var(--grade-forte);
+                border-radius: 3px;
+                padding: 10px 14px;
+                display: inline-block;
+            }
+
+            /* ---------- notação de desenho ---------- */
+            .notacao {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+                gap: 16px;
+            }
+
+            .traco {
+                border: 1px solid var(--grade-forte);
+                background: var(--papel-fig);
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: 11px;
+            }
+
+            .traco .desenho {
+                height: 76px;
+                display: grid;
+                place-items: center;
+            }
+
+            .traco .nome {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                color: var(--tinta);
+            }
+
+            .traco .quando {
+                font-size: 0.92rem;
+                color: var(--tinta-fraca);
+                line-height: 1.45;
+            }
+
+            .l {
+                stroke: var(--tinta);
+                fill: none;
+                stroke-width: 1.6;
+            }
+            .l-tracejada {
+                stroke: var(--tinta);
+                fill: none;
+                stroke-width: 1.4;
+                stroke-dasharray: 4 3;
+            }
+            .l-seta {
+                stroke: var(--principal);
+                fill: none;
+                stroke-width: 2;
+            }
+            .l-seta-a {
+                stroke: var(--cruzado);
+                fill: none;
+                stroke-width: 2;
+            }
+            .l-hachura {
+                stroke: var(--cruzado);
+                fill: none;
+                stroke-width: 1.2;
+            }
+            .t-j {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 11px;
+                font-weight: 700;
+                fill: var(--principal);
+            }
+            .t-a {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 11px;
+                font-weight: 700;
+                fill: var(--cruzado);
+            }
+            .t-mao {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                fill: var(--tinta-fraca);
+            }
+
+            /* ---------- se travar ---------- */
+            .travou {
+                border-left: 3px solid var(--tinta);
+                padding: 4px 0 4px 18px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .travou .titulo {
+                font-size: 1rem;
+                font-weight: 700;
+                color: var(--tinta);
+            }
+            .travou li {
+                font-size: 0.96rem;
+                color: var(--tinta-fraca);
+                margin-bottom: 5px;
+            }
+
+            /* ---------- exercícios da rodada 1 ---------- */
+            .exercicio {
+                border: 1px solid var(--grade-forte);
+                background: var(--papel-fig);
+                padding: 18px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .exercicio-topo {
+                display: flex;
+                align-items: baseline;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            .num {
+                font-family: "Bricolage Grotesque", Arial, sans-serif;
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--papel);
+                background: var(--tinta);
+                padding: 3px 8px;
+                border-radius: 3px;
+            }
+
+            .exercicio-topo .treina {
+                font-size: 0.9rem;
+                color: var(--tinta-fraca);
+                font-style: italic;
+            }
+            .exercicio p {
+                font-size: 0.94rem;
+                color: var(--tinta-fraca);
+            }
+            .lista-exercicios {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            /* ---------- a tela para dividir em caixas ---------- */
+            .app {
+                background: #ffffff;
+                border-radius: 14px;
+                overflow: hidden;
+                height: 380px;
+            }
+            .app-topo {
+                height: 26px;
+                background: #eceff1;
+            }
+
+            .app-perfil {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 12px;
+                padding: 18px 16px;
+            }
+            .app-avatar {
+                width: 54px;
+                height: 54px;
+                border-radius: 27px;
+                background: #b0bec5;
+                flex-shrink: 0;
+            }
+            .app-nomes {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+            .app-nome {
+                width: 96px;
+                height: 11px;
+                border-radius: 2px;
+                background: #37474f;
+            }
+            .app-arroba {
+                width: 62px;
+                height: 8px;
+                border-radius: 2px;
+                background: #b0bec5;
+            }
+
+            .app-stats {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 14px 10px;
+                background: #f5f7f8;
+            }
+            .app-stat {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+            .app-stat .n {
+                width: 26px;
+                height: 12px;
+                border-radius: 2px;
+                background: #37474f;
+            }
+            .app-stat .r {
+                width: 42px;
+                height: 7px;
+                border-radius: 2px;
+                background: #b0bec5;
+            }
+
+            .app-botao {
+                margin: 16px;
+                height: 40px;
+                border-radius: 8px;
+                background: #2e6fa8;
+            }
+
+            .app-lista {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 0 16px;
+            }
+            .app-linha {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+            }
+            .app-quad {
+                width: 34px;
+                height: 34px;
+                border-radius: 5px;
+                background: #cfd8dc;
+                flex-shrink: 0;
+            }
+            .app-barras {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                flex: 1;
+            }
+            .app-b1 {
+                height: 8px;
+                border-radius: 2px;
+                background: #90a4ae;
+                width: 100%;
+            }
+            .app-b2 {
+                height: 6px;
+                border-radius: 2px;
+                background: #cfd8dc;
+                width: 60%;
+            }
+
+            .lado-a-lado {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 22px;
+                align-items: start;
+            }
+            @media (min-width: 700px) {
+                .lado-a-lado {
+                    grid-template-columns: 1fr 232px;
+                }
+            }
+
+            .destaque {
+                border: 2px solid var(--tinta);
+                background: var(--papel-fig);
+                padding: 20px 22px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .destaque h3 {
+                font-size: 1.12rem;
+            }
+
+            ol {
+                margin: 0;
+                padding-left: 22px;
+                max-width: 64ch;
+            }
+            ol li {
+                margin-bottom: 9px;
+            }
+            ol li::marker {
+                color: var(--tinta-tenue);
+            }
+
+            /* ---------- tabelas de consulta ---------- */
+            .rolagem-h {
+                overflow-x: auto;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.92rem;
+                min-width: 480px;
+            }
+
+            th {
+                text-align: left;
+                font-size: 0.7rem;
+                letter-spacing: 0.11em;
+                text-transform: uppercase;
+                color: var(--tinta-tenue);
+                font-weight: 600;
+                padding: 0 12px 9px 0;
+                border-bottom: 1px solid var(--grade-forte);
+            }
+
+            td {
+                padding: 11px 12px 11px 0;
+                border-bottom: 1px solid var(--grade);
+                vertical-align: top;
+                color: var(--tinta-fraca);
+            }
+
+            td:first-child {
+                color: var(--tinta);
+                white-space: nowrap;
+            }
+
+            /* ---------- erros comuns: caneta vermelha ---------- */
+            .erro {
+                border-left: 3px solid var(--caneta);
+                padding: 3px 0 3px 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .erro .sintoma {
+                font-weight: 600;
+            }
+            .erro .causa {
+                color: var(--tinta-fraca);
+                font-size: 0.96rem;
+            }
+            .erros {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            /* ---------- fechamento ---------- */
+            .links {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .link-item {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                padding-bottom: 14px;
+                border-bottom: 1px solid var(--grade);
+            }
+
+            .link-item:last-child {
+                border-bottom: 0;
+            }
+
+            .link-item a {
+                color: var(--tinta);
+                text-decoration: none;
+                border-bottom: 1px solid var(--caneta);
+                font-weight: 600;
+                align-self: flex-start;
+            }
+
+            .link-item a:hover {
+                color: var(--caneta);
+            }
+            .link-item span {
+                font-size: 0.94rem;
+                color: var(--tinta-fraca);
+            }
+
+            hr {
+                border: 0;
+                border-top: 1px solid var(--grade-forte);
+                margin: 0;
+            }
+
+            .assinatura {
+                margin-top: 56px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.68rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--tinta-tenue);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="folha">
+            <header class="hero">
+                <div class="eyebrow">
+                    Univates &middot; Desenvolvimento mobile
+                </div>
+                <div class="hero-caixa">
+                    <div class="cota cota-topo">← justifyContent →</div>
+                    <div class="cota cota-lado">← alignItems →</div>
+                    <h1>Desenhe as Caixas</h1>
+                </div>
+                <p class="hero-sub">
+                    Estilizar em React Native é decidir duas coisas:
+                    <strong>onde a caixa fica</strong> e
+                    <strong>em qual direção ela organiza os filhos</strong>.
+                    Todo o resto é consequência. A primeira parte desta página é
+                    para mexer e ver acontecer. A segunda é para desenhar no
+                    papel, antes de escrever qualquer código.
+                </p>
+                <div class="precisa">
+                    para a parte 2 você precisa de: uma folha e um lápis ou
+                    caneta
+                </div>
+            </header>
+
+            <div class="parte"><span>Parte 1 &middot; Entender</span></div>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">1</div>
+                    <h2>A caixa está lá. Você só não a vê.</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        Uma <code>&lt;View&gt;</code> sem
+                        <code>backgroundColor</code> é invisível. Você muda uma
+                        propriedade, nada aparece na tela, e conclui que não
+                        entendeu. Errado: você entendeu, só não está
+                        <em>vendo</em> a caixa que está tentando controlar.
+                    </p>
+                    <p>
+                        Ligue o raio-x abaixo. As mesmas caixas, o mesmo código
+                        — a única diferença é uma borda vermelha temporária.
+                    </p>
+
+                    <div class="figura">
+                        <div class="figura-rotulo">
+                            Figura 1 — a mesma tela, com e sem raio-x
+                        </div>
+                        <div
+                            class="palco"
+                            id="p1"
+                            style="
+                                flex-direction: column;
+                                gap: 10px;
+                                align-items: flex-start;
+                            "
+                        >
+                            <div class="invisivel">
+                                <span class="txt">Olá, estudante!</span>
+                                <span class="txt">Boas vindas.</span>
+                            </div>
+                            <div class="cx">1</div>
+                            <div class="invisivel">
+                                <span class="txt">Rodapé</span>
+                            </div>
+                        </div>
+                        <div class="chips">
+                            <button id="btn-raiox" aria-pressed="false">
+                                ligar raio-x
+                            </button>
+                        </div>
+                    </div>
+
+                    <p>
+                        Guarde isso como ferramenta de trabalho, não como
+                        truque. Deixe no topo do seu
+                        <code>StyleSheet</code>:
+                    </p>
+
+                    <pre><span class="k">const</span> <span class="v">debug</span> = { <span class="k">borderWidth</span>: <span class="v">2</span>, <span class="k">borderColor</span>: <span class="v">"red"</span> };
+
+<span class="k">// e use assim, em qualquer View:</span>
+&lt;<span class="v">View</span> <span class="k">style</span>={[<span class="v">styles.caixaMaior</span>, <span class="v">debug</span>]}&gt;</pre>
+
+                    <p>
+                        Repare em duas coisas: <code>style</code> aceita uma
+                        <strong>lista</strong> de estilos, e a de baixo vence a
+                        de cima. Quando terminar de depurar, apague só a palavra
+                        <code>debug</code> de dentro dos colchetes.
+                    </p>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">2</div>
+                    <h2>
+                        Os dois trilhos — a única regra que você precisa decorar
+                    </h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        <code>justifyContent</code> e <code>alignItems</code>
+                        <strong>não</strong> significam "horizontal" e
+                        "vertical". Elas mudam de sentido conforme o
+                        <code>flexDirection</code>:
+                    </p>
+                    <p>
+                        Pense em dois trilhos dentro da caixa, como o trilho de
+                        uma gaveta. Um deles é
+                        <strong>J</strong> e o outro é <strong>A</strong>, e as
+                        letras são as iniciais das duas propriedades.
+                    </p>
+                    <p>
+                        O <strong>trilho J</strong> é o que o
+                        <code>flexDirection</code> escolheu:
+                        <code>row</code> deixa ele deitado,
+                        <code>column</code> deixa ele em pé. O
+                        <strong>trilho A</strong> é sempre o que cruza.
+                    </p>
+                    <p>
+                        <span class="j">justifyContent</span> escolhe onde os
+                        filhos param no trilho J.<br />
+                        <span class="a">alignItems</span> escolhe onde eles
+                        param no trilho A.
+                    </p>
+
+                    <div class="trilhos">
+                        <div class="trilho-card">
+                            <div class="titulo">flexDirection: "row"</div>
+                            <div class="desenho">
+                                <svg
+                                    width="164"
+                                    height="112"
+                                    viewBox="0 0 164 112"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        class="cl"
+                                        x="26"
+                                        y="6"
+                                        width="130"
+                                        height="76"
+                                    />
+                                    <rect
+                                        class="cxs"
+                                        x="44"
+                                        y="30"
+                                        width="26"
+                                        height="28"
+                                    />
+                                    <rect
+                                        class="cxs"
+                                        x="78"
+                                        y="30"
+                                        width="26"
+                                        height="28"
+                                    />
+                                    <rect
+                                        class="cxs"
+                                        x="112"
+                                        y="30"
+                                        width="26"
+                                        height="28"
+                                    />
+                                    <line
+                                        class="sj"
+                                        x1="26"
+                                        y1="97"
+                                        x2="152"
+                                        y2="97"
+                                    />
+                                    <polyline
+                                        class="sj"
+                                        points="145,91 152,97 145,103"
+                                    />
+                                    <text class="tj" x="27" y="92">J</text>
+                                    <line
+                                        class="sa"
+                                        x1="14"
+                                        y1="6"
+                                        x2="14"
+                                        y2="76"
+                                    />
+                                    <polyline
+                                        class="sa"
+                                        points="8,69 14,76 20,69"
+                                    />
+                                    <text class="ta" x="1" y="14">A</text>
+                                </svg>
+                            </div>
+                            <div class="trilho-legenda">
+                                <div>
+                                    <span class="j">J</span> empurra os filhos
+                                    para a esquerda, o meio ou a direita.
+                                </div>
+                                <div>
+                                    <span class="a">A</span> empurra os filhos
+                                    para cima, o meio ou baixo.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="trilho-card">
+                            <div class="titulo">flexDirection: "column"</div>
+                            <div class="desenho">
+                                <svg
+                                    width="164"
+                                    height="112"
+                                    viewBox="0 0 164 112"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        class="cl"
+                                        x="26"
+                                        y="6"
+                                        width="130"
+                                        height="76"
+                                    />
+                                    <rect
+                                        class="cxs"
+                                        x="62"
+                                        y="12"
+                                        width="58"
+                                        height="18"
+                                    />
+                                    <rect
+                                        class="cxs"
+                                        x="62"
+                                        y="35"
+                                        width="58"
+                                        height="18"
+                                    />
+                                    <rect
+                                        class="cxs"
+                                        x="62"
+                                        y="58"
+                                        width="58"
+                                        height="18"
+                                    />
+                                    <line
+                                        class="sj"
+                                        x1="14"
+                                        y1="6"
+                                        x2="14"
+                                        y2="76"
+                                    />
+                                    <polyline
+                                        class="sj"
+                                        points="8,69 14,76 20,69"
+                                    />
+                                    <text class="tj" x="1" y="14">J</text>
+                                    <line
+                                        class="sa"
+                                        x1="26"
+                                        y1="97"
+                                        x2="152"
+                                        y2="97"
+                                    />
+                                    <polyline
+                                        class="sa"
+                                        points="145,91 152,97 145,103"
+                                    />
+                                    <text class="ta" x="27" y="92">A</text>
+                                </svg>
+                            </div>
+                            <div class="trilho-legenda">
+                                <div>
+                                    <span class="j">J</span> empurra os filhos
+                                    para cima, o meio ou baixo.
+                                </div>
+                                <div>
+                                    <span class="a">A</span> empurra os filhos
+                                    para a esquerda, o meio ou a direita.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>
+                        Os dois trilhos estão desenhados nas margens do palco.
+                        Troque <code>column</code> por <code>row</code> e olhe
+                        para eles: giram juntos, e as letras trocam de lugar.
+                        Aqui na tela o J é laranja e o A é verde para ajudar,
+                        mas no papel a letra já basta.
+                    </p>
+
+                    <div class="figura">
+                        <div class="figura-rotulo">
+                            Figura 2 — playground dos trilhos
+                        </div>
+
+                        <div class="bussola">
+                            <div class="bussola-item">
+                                <span class="seta j" id="seta-principal"
+                                    >↓</span
+                                >
+                                <span
+                                    ><span class="nome j"
+                                        >J = justifyContent</span
+                                    >
+                                    <span class="dir" id="dir-principal"
+                                        >empurra na vertical</span
+                                    ></span
+                                >
+                            </div>
+                            <div class="bussola-item">
+                                <span class="seta a" id="seta-cruzado">→</span>
+                                <span
+                                    ><span class="nome a">A = alignItems</span>
+                                    <span class="dir" id="dir-cruzado"
+                                        >empurra na horizontal</span
+                                    ></span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="palco-trilhos">
+                            <div class="trilho-v laranja" id="trilho-v">
+                                <span class="trilho-letra" id="letra-v">J</span>
+                            </div>
+                            <div class="palco" id="palco2">
+                                <div class="cx">1</div>
+                                <div class="cx">2</div>
+                                <div class="cx">3</div>
+                            </div>
+                            <div class="trilho-h verde" id="trilho-h">
+                                <span class="trilho-letra" id="letra-h">A</span>
+                            </div>
+                        </div>
+
+                        <div class="controles">
+                            <div class="grupo">
+                                <div class="rotulo d">flexDirection</div>
+                                <div class="chips" data-prop="flexDirection">
+                                    <button data-v="column" aria-pressed="true">
+                                        column
+                                    </button>
+                                    <button data-v="row" aria-pressed="false">
+                                        row
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grupo">
+                                <div class="rotulo j">justifyContent</div>
+                                <div class="chips j" data-prop="justifyContent">
+                                    <button
+                                        data-v="flex-start"
+                                        aria-pressed="true"
+                                    >
+                                        flex-start
+                                    </button>
+                                    <button
+                                        data-v="center"
+                                        aria-pressed="false"
+                                    >
+                                        center
+                                    </button>
+                                    <button
+                                        data-v="flex-end"
+                                        aria-pressed="false"
+                                    >
+                                        flex-end
+                                    </button>
+                                    <button
+                                        data-v="space-between"
+                                        aria-pressed="false"
+                                    >
+                                        space-between
+                                    </button>
+                                    <button
+                                        data-v="space-around"
+                                        aria-pressed="false"
+                                    >
+                                        space-around
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grupo">
+                                <div class="rotulo a">alignItems</div>
+                                <div class="chips a" data-prop="alignItems">
+                                    <button
+                                        data-v="stretch"
+                                        aria-pressed="true"
+                                    >
+                                        stretch
+                                    </button>
+                                    <button
+                                        data-v="flex-start"
+                                        aria-pressed="false"
+                                    >
+                                        flex-start
+                                    </button>
+                                    <button
+                                        data-v="center"
+                                        aria-pressed="false"
+                                    >
+                                        center
+                                    </button>
+                                    <button
+                                        data-v="flex-end"
+                                        aria-pressed="false"
+                                    >
+                                        flex-end
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grupo">
+                                <div class="rotulo d">gap</div>
+                                <div class="chips" data-prop="gap">
+                                    <button data-v="0" aria-pressed="true">
+                                        0
+                                    </button>
+                                    <button data-v="10" aria-pressed="false">
+                                        10
+                                    </button>
+                                    <button data-v="24" aria-pressed="false">
+                                        24
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <pre id="codigo2"></pre>
+                    </div>
+
+                    <p>
+                        Repare no <code>stretch</code>: ele é o
+                        <strong>padrão</strong> do React Native. Foi ele que
+                        esticou a caixa verde da aula &mdash; o estilo
+                        <code>corDeFundo</code> &mdash; pela largura inteira,
+                        sem ninguém pedir. Ela não tem <code>width</code>, então
+                        esticou no trilho A.
+                    </p>
+                    <p>
+                        E aqui mora a confusão mais cara desta aula: o
+                        <code>stretch</code> que esticou a caixa verde
+                        <strong>não está escrito nela</strong>. Está no pai, o
+                        estilo <code>tela</code> &mdash; que nem escreve
+                        <code>alignItems</code>, e justamente por isso usa o
+                        padrão.
+                    </p>
+                    <p>
+                        A caixa verde escreve <code>alignItems: "center"</code>,
+                        e isso não faz nada com ela: o que essa linha centraliza
+                        são os dois <code>&lt;Text&gt;</code>
+                        <em>dentro</em> dela. Duas propriedades diferentes, em
+                        dois lugares diferentes, e é fácil trocar uma pela outra
+                        ao ler.
+                    </p>
+                    <p>
+                        Guarde como regra: <code>justifyContent</code> e
+                        <code>alignItems</code> nunca falam da caixa onde você
+                        as escreveu. Elas falam sempre
+                        <strong>dos filhos dela</strong>. Se você quer mover a
+                        caixa em si, a propriedade que resolve está no
+                        <strong>pai</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">3</div>
+                    <h2>Quem manda em quem</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        Este é o código da aula do dia 14, sem tirar nem pôr.
+                        Ele é o melhor exemplo possível porque a caixa verde faz
+                        <strong>os dois papéis ao mesmo tempo</strong>: ela é
+                        <em>filha</em> da tela (e por isso foi esticada) e é
+                        <em>mãe</em> dos dois textos (e por isso os centraliza).
+                    </p>
+                    <p>Clique em qualquer linha e veja em quem ela manda.</p>
+
+                    <div class="figura">
+                        <div class="figura-rotulo">
+                            Figura 3 — essa linha manda em quem?
+                        </div>
+
+                        <div class="quemmanda">
+                            <div class="codigo-vivo" id="codigo-vivo">
+                                <div class="fixo">tela: {</div>
+                                <button
+                                    class="linha-cod"
+                                    data-id="flex"
+                                    aria-pressed="false"
+                                >
+                                    flex: <span class="val">1</span>,
+                                </button>
+                                <button
+                                    class="linha-cod"
+                                    data-id="paddingTop"
+                                    aria-pressed="false"
+                                >
+                                    paddingTop: <span class="val">60</span>,
+                                </button>
+                                <button
+                                    class="linha-cod"
+                                    data-id="bgTela"
+                                    aria-pressed="false"
+                                >
+                                    backgroundColor:
+                                    <span class="val">"#3C3C3C"</span>,
+                                </button>
+                                <button
+                                    class="linha-cod fantasma"
+                                    data-id="stretch"
+                                    aria-pressed="false"
+                                >
+                                    alignItems:
+                                    <span class="val">"stretch"</span>, ← não
+                                    escrito
+                                </button>
+                                <div class="fixo">},</div>
+                                <div class="fixo"></div>
+                                <div class="fixo">corDeFundo: {</div>
+                                <button
+                                    class="linha-cod"
+                                    data-id="direction"
+                                    aria-pressed="false"
+                                >
+                                    flexDirection:
+                                    <span class="val">"row"</span>,
+                                </button>
+                                <button
+                                    class="linha-cod"
+                                    data-id="gap"
+                                    aria-pressed="false"
+                                >
+                                    gap: <span class="val">10</span>,
+                                </button>
+                                <button
+                                    class="linha-cod"
+                                    data-id="bgVerde"
+                                    aria-pressed="false"
+                                >
+                                    backgroundColor:
+                                    <span class="val">"#32a852"</span>,
+                                </button>
+                                <button
+                                    class="linha-cod"
+                                    data-id="justify"
+                                    aria-pressed="false"
+                                >
+                                    justifyContent:
+                                    <span class="val">"center"</span>,
+                                </button>
+                                <button
+                                    class="linha-cod"
+                                    data-id="align"
+                                    aria-pressed="false"
+                                >
+                                    alignItems:
+                                    <span class="val">"center"</span>,
+                                </button>
+                                <button
+                                    class="linha-cod"
+                                    data-id="height"
+                                    aria-pressed="false"
+                                >
+                                    height: <span class="val">100</span>,
+                                </button>
+                                <div class="fixo">},</div>
+                            </div>
+
+                            <div>
+                                <div class="aparelho">
+                                    <div class="demo-tela" id="d-tela">
+                                        <div class="demo-verde" id="d-verde">
+                                            <span class="demo-txt">Batata</span>
+                                            <span class="demo-txt"
+                                                >Batata2</span
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aparelho-legenda">
+                                    a tela da aula
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="veredito">
+                            <div class="selo" id="selo">clique numa linha</div>
+                            <div class="explica" id="explica">
+                                Comece pela linha em itálico &mdash; a que
+                                ninguém escreveu.
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>
+                        Passando por todas as linhas, aparece a divisão que
+                        resolve metade das dúvidas de estilização:
+                        <code>backgroundColor</code>, <code>height</code>,
+                        <code>flex</code> e <code>borderRadius</code> falam da
+                        <strong>própria caixa</strong>;
+                        <code>flexDirection</code>, <code>justifyContent</code>,
+                        <code>alignItems</code> e <code>gap</code> falam
+                        <strong>dos filhos dela</strong>. Nenhuma propriedade do
+                        segundo grupo move a caixa onde está escrita.
+                    </p>
+                    <p>
+                        Vale usar esse mesmo bloco no papel: leia linha por
+                        linha em voz alta e responda "manda nela mesma ou nos
+                        filhos?". Quem acerta as dez entendeu a aula.
+                    </p>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">4</div>
+                    <h2><code>flex: 1</code> não é um tamanho. É a sobra.</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        <code>flex: 1</code> não significa "tamanho 1".
+                        Significa:
+                        <strong>fique com todo o espaço que sobrou</strong>
+                        depois que as caixas de tamanho fixo se acomodaram.
+                    </p>
+                    <p>
+                        À esquerda, a sobra está marcada em hachura. Aperte o
+                        botão e veja quem come essa sobra.
+                    </p>
+
+                    <div class="figura">
+                        <div class="figura-rotulo">
+                            Figura 4 — quem fica com a sobra
+                        </div>
+                        <div
+                            class="palco"
+                            id="palco3"
+                            style="
+                                flex-direction: column;
+                                gap: 8px;
+                                align-items: stretch;
+                            "
+                        >
+                            <div class="cx">1</div>
+                            <div class="cx" id="cx-cresce">2</div>
+                            <div class="cx">3</div>
+                            <div class="sobra-marca" id="marca-sobra">
+                                espaço que sobrou
+                            </div>
+                        </div>
+                        <div class="chips">
+                            <button id="btn-flex" aria-pressed="false">
+                                dar flex: 1 para a caixa 2
+                            </button>
+                        </div>
+                    </div>
+
+                    <p>
+                        É a mesma coisa que <code>flex: 1</code> faz na
+                        <code>View</code> mais externa dos seus projetos: a
+                        sobra ali é a <strong>tela inteira</strong>. Sem ele, a
+                        caixa raiz encolhe até o tamanho do conteúdo e o fundo
+                        colorido para no meio da tela.
+                    </p>
+                </div>
+            </section>
+
+            <div class="parte">
+                <span>Parte 2 &middot; Desenhar no papel</span>
+            </div>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">5</div>
+                    <h2>Como desenhar</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        Daqui para frente é papel e lápis. Todo mundo desenha
+                        <strong>do mesmo jeito</strong>: se cada um inventar o
+                        seu, ninguém lê o desenho do colega. São quatro símbolos
+                        e você não precisa de mais nenhum.
+                    </p>
+
+                    <div class="notacao">
+                        <div class="traco">
+                            <div class="desenho">
+                                <svg
+                                    width="104"
+                                    height="72"
+                                    viewBox="0 0 104 72"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        class="l"
+                                        x="4"
+                                        y="4"
+                                        width="96"
+                                        height="64"
+                                    />
+                                    <rect
+                                        class="l"
+                                        x="16"
+                                        y="16"
+                                        width="46"
+                                        height="40"
+                                    />
+                                </svg>
+                            </div>
+                            <div class="nome">1 &middot; retângulo</div>
+                            <div class="quando">
+                                Uma <code>&lt;View&gt;</code> é um retângulo.
+                                Caixa dentro de caixa: retângulo dentro de
+                                retângulo. Comece pelo de fora.
+                            </div>
+                        </div>
+
+                        <div class="traco">
+                            <div class="desenho">
+                                <svg
+                                    width="104"
+                                    height="72"
+                                    viewBox="0 0 104 72"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        class="l-tracejada"
+                                        x="4"
+                                        y="20"
+                                        width="96"
+                                        height="32"
+                                    />
+                                    <text class="t-mao" x="16" y="41">
+                                        Batata
+                                    </text>
+                                </svg>
+                            </div>
+                            <div class="nome">2 &middot; tracejado</div>
+                            <div class="quando">
+                                Retângulo tracejado com a palavra escrita dentro
+                                é um <code>&lt;Text&gt;</code>. Serve para não
+                                misturar texto com caixa.
+                            </div>
+                        </div>
+
+                        <div class="traco">
+                            <div class="desenho">
+                                <svg
+                                    width="104"
+                                    height="72"
+                                    viewBox="0 0 104 72"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        class="l"
+                                        x="4"
+                                        y="4"
+                                        width="96"
+                                        height="64"
+                                    />
+                                    <line
+                                        class="l-seta"
+                                        x1="16"
+                                        y1="36"
+                                        x2="84"
+                                        y2="36"
+                                    />
+                                    <polyline
+                                        class="l-seta"
+                                        points="77,30 84,36 77,42"
+                                    />
+                                    <text class="t-j" x="17" y="31">J</text>
+                                    <line
+                                        class="l-seta-a"
+                                        x1="50"
+                                        y1="13"
+                                        x2="50"
+                                        y2="61"
+                                    />
+                                    <polyline
+                                        class="l-seta-a"
+                                        points="44,54 50,61 56,54"
+                                    />
+                                    <text class="t-a" x="54" y="21">A</text>
+                                </svg>
+                            </div>
+                            <div class="nome">3 &middot; os dois trilhos</div>
+                            <div class="quando">
+                                Duas setas que se cruzam. A seta
+                                <strong>J</strong> segue o
+                                <code>flexDirection</code>. A seta
+                                <strong>A</strong> é a que cruza. Escreva o
+                                valor de cada uma ao lado da sua letra.
+                            </div>
+                        </div>
+
+                        <div class="traco">
+                            <div class="desenho">
+                                <svg
+                                    width="104"
+                                    height="72"
+                                    viewBox="0 0 104 72"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        class="l"
+                                        x="4"
+                                        y="4"
+                                        width="96"
+                                        height="64"
+                                    />
+                                    <rect
+                                        class="l"
+                                        x="10"
+                                        y="10"
+                                        width="84"
+                                        height="18"
+                                    />
+                                    <g class="l-hachura">
+                                        <line x1="12" y1="62" x2="30" y2="34" />
+                                        <line x1="24" y1="62" x2="42" y2="34" />
+                                        <line x1="36" y1="62" x2="54" y2="34" />
+                                        <line x1="48" y1="62" x2="66" y2="34" />
+                                        <line x1="60" y1="62" x2="78" y2="34" />
+                                        <line x1="72" y1="62" x2="90" y2="34" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="nome">4 &middot; hachura</div>
+                            <div class="quando">
+                                Rabisque o espaço que
+                                <strong>sobrou</strong> depois que as caixas de
+                                tamanho fixo se acomodaram. Quem ocupa a hachura
+                                leva <code>flex: 1</code>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>
+                        Não precisa de régua, nem de proporção certa, nem de
+                        cor. O desenho não precisa ficar bonito. Ele precisa ser
+                        bom o bastante para
+                        <strong>outra pessoa programar a partir dele</strong>.
+                    </p>
+                    <p>
+                        Repare que <code>flexDirection</code> não aparece em
+                        nenhum símbolo, e não precisa: a
+                        <strong>direção do trilho J</strong> já é o
+                        <code>flexDirection</code>. Desenhe os dois trilhos
+                        olhando a tela e escreva as letras depois.
+                    </p>
+
+                    <div class="travou">
+                        <div class="titulo">
+                            Se travar olhando a folha em branco
+                        </div>
+                        <p>
+                            Você está tentando resolver a tela toda de uma vez.
+                            Faça uma caixa por vez, em voz alta:
+                        </p>
+                        <ol>
+                            <li>
+                                "O que está <strong>empilhado</strong> de cima
+                                para baixo?" Desenhe as faixas.
+                            </li>
+                            <li>
+                                "Dentro desta faixa, o que está
+                                <strong>lado a lado</strong>?" Desenhe os
+                                trilhos.
+                            </li>
+                            <li>"Sobrou espaço?" Hachure.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">6</div>
+                    <h2>Rodada 1 &mdash; do código para o papel</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p class="eyebrow">Em trios</p>
+                    <p>
+                        Três códigos. Para cada um, desenhe a tela que ele
+                        produz. Não rode. Se rodar, o exercício acabou.
+                    </p>
+
+                    <div class="lista-exercicios">
+                        <div class="exercicio">
+                            <div class="exercicio-topo">
+                                <span class="num">A</span>
+                                <span class="treina"
+                                    >duas caixas, uma direção</span
+                                >
+                            </div>
+                            <pre>&lt;<span class="v">View</span> style={{ flex: <span class="v">1</span>, flexDirection: <span class="v">"row"</span>,
+              justifyContent: <span class="v">"space-between"</span>, padding: <span class="v">20</span> }}&gt;
+  &lt;<span class="v">View</span> style={{ width: <span class="v">60</span>, height: <span class="v">60</span>, backgroundColor: <span class="v">"blue"</span> }} /&gt;
+  &lt;<span class="v">View</span> style={{ width: <span class="v">60</span>, height: <span class="v">60</span>, backgroundColor: <span class="v">"blue"</span> }} /&gt;
+&lt;/<span class="v">View</span>&gt;</pre>
+                        </div>
+                        <div class="exercicio">
+                            <div class="exercicio-topo">
+                                <span class="num">B</span>
+                                <span class="treina"
+                                    >a mesma ideia, em dois níveis</span
+                                >
+                            </div>
+                            <pre>&lt;<span class="v">View</span> style={{ flex: <span class="v">1</span>, alignItems: <span class="v">"center"</span>, paddingTop: <span class="v">40</span> }}&gt;
+  &lt;<span class="v">View</span> style={{ width: <span class="v">200</span>, height: <span class="v">80</span>, backgroundColor: <span class="v">"green"</span>,
+                flexDirection: <span class="v">"row"</span>, justifyContent: <span class="v">"flex-end"</span>,
+                alignItems: <span class="v">"center"</span> }}&gt;
+    &lt;<span class="v">Text</span>&gt;Olá&lt;/<span class="v">Text</span>&gt;
+  &lt;/<span class="v">View</span>&gt;
+&lt;/<span class="v">View</span>&gt;</pre>
+                        </div>
+                        <div class="exercicio">
+                            <div class="exercicio-topo">
+                                <span class="num">C</span>
+                                <span class="treina"
+                                    >o layout de todo aplicativo que
+                                    existe</span
+                                >
+                            </div>
+                            <pre>&lt;<span class="v">View</span> style={{ flex: <span class="v">1</span> }}&gt;
+  &lt;<span class="v">View</span> style={{ height: <span class="v">60</span>, backgroundColor: <span class="v">"gray"</span> }} /&gt;
+  &lt;<span class="v">View</span> style={{ flex: <span class="v">1</span>, backgroundColor: <span class="v">"white"</span> }} /&gt;
+  &lt;<span class="v">View</span> style={{ height: <span class="v">60</span>, backgroundColor: <span class="v">"gray"</span> }} /&gt;
+&lt;/<span class="v">View</span>&gt;</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">7</div>
+                    <h2>Rodada 2 &mdash; do papel para o código</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p class="eyebrow">
+                        Individual &middot; 20 minutos &middot; notebook fechado
+                    </p>
+                    <p>
+                        Agora o caminho contrário, que é o que se faz no
+                        trabalho: alguém te entrega uma tela e você precisa
+                        montar. Divida a tela abaixo em caixas
+                        <strong>no papel</strong>, com os quatro símbolos. Sete
+                        retângulos dão conta da estrutura.
+                    </p>
+
+                    <div class="lado-a-lado">
+                        <div>
+                            <ol>
+                                <li>
+                                    Desenhe o retângulo de fora. Ele leva
+                                    <code>flex: 1</code>.
+                                </li>
+                                <li>
+                                    Corte em faixas horizontais, de cima para
+                                    baixo. Não entre nas faixas ainda.
+                                </li>
+                                <li>
+                                    Entre em cada faixa e pergunte:
+                                    <em>o que está lado a lado aqui dentro?</em>
+                                    Se tiver duas coisas ou mais, desenhe os
+                                    dois trilhos.
+                                </li>
+                                <li>
+                                    Escreva <strong>J:</strong> e
+                                    <strong>A:</strong> nos trilhos, um em cada.
+                                </li>
+                                <li>Hachure o que sobrou.</li>
+                                <li>
+                                    Agora abra o editor e escreva o
+                                    <code>StyleSheet</code> olhando o papel.
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div>
+                            <div class="aparelho">
+                                <div class="app">
+                                    <div class="app-topo"></div>
+                                    <div class="app-perfil">
+                                        <div class="app-avatar"></div>
+                                        <div class="app-nomes">
+                                            <div class="app-nome"></div>
+                                            <div class="app-arroba"></div>
+                                        </div>
+                                    </div>
+                                    <div class="app-stats">
+                                        <div class="app-stat">
+                                            <div class="n"></div>
+                                            <div class="r"></div>
+                                        </div>
+                                        <div class="app-stat">
+                                            <div class="n"></div>
+                                            <div class="r"></div>
+                                        </div>
+                                        <div class="app-stat">
+                                            <div class="n"></div>
+                                            <div class="r"></div>
+                                        </div>
+                                    </div>
+                                    <div class="app-botao"></div>
+                                    <div class="app-lista">
+                                        <div class="app-linha">
+                                            <div class="app-quad"></div>
+                                            <div class="app-barras">
+                                                <div class="app-b1"></div>
+                                                <div class="app-b2"></div>
+                                            </div>
+                                        </div>
+                                        <div class="app-linha">
+                                            <div class="app-quad"></div>
+                                            <div class="app-barras">
+                                                <div class="app-b1"></div>
+                                                <div class="app-b2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="destaque">
+                        <h3>A troca de folhas</h3>
+                        <p>
+                            Terminou o desenho?
+                            <strong
+                                >Troque de papel com o colega do lado</strong
+                            >
+                            e programe o desenho dele, não o seu. Sem conversar
+                            e sem olhar a tela original.
+                        </p>
+                        <p>
+                            Se o desenho não disser para que lado cada caixa
+                            organiza os filhos, quem recebeu
+                            <strong>não chega na tela</strong>. E o problema é
+                            do desenho, não de quem programou. Desenho bom é
+                            desenho que outra pessoa consegue executar.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="parte"><span>Parte 3 &middot; Consultar</span></div>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">8</div>
+                    <h2>Erros que vão acontecer com você</h2>
+                </div>
+                <div class="passo-corpo">
+                    <div class="erros">
+                        <div class="erro">
+                            <div class="sintoma">
+                                "Mudei <code>alignItems</code> e não aconteceu
+                                nada."
+                            </div>
+                            <div class="causa">
+                                A caixa tem exatamente o tamanho do conteúdo —
+                                não há espaço para distribuir nada dentro dela.
+                                Dê uma <code>height</code> (ou
+                                <code>flex: 1</code>) e ligue o raio-x.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                "Coloquei <code>alignItems: center</code> mas
+                                quero centralizar na horizontal e ele
+                                centralizou na vertical."
+                            </div>
+                            <div class="causa">
+                                Seu <code>flexDirection</code> é
+                                <code>row</code>. Nesse caso o trilho A está em
+                                pé. Quem centraliza na horizontal ali é
+                                <code>justifyContent</code>.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                "Quero mover esta caixa para o centro, mexi nela
+                                e ela não saiu do lugar."
+                            </div>
+                            <div class="causa">
+                                <code>justifyContent</code> e
+                                <code>alignItems</code> movem os
+                                <strong>filhos</strong> de uma caixa, nunca a
+                                própria caixa. Para mover esta caixa, escreva a
+                                propriedade no <strong>pai</strong> dela.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                "O fundo colorido só pinta a faixa de cima da
+                                tela."
+                            </div>
+                            <div class="causa">
+                                Falta <code>flex: 1</code> na
+                                <code>View</code> mais externa. Sem ele ela
+                                encolhe até o conteúdo.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                "Copiei do Stack Overflow e a propriedade não
+                                existe."
+                            </div>
+                            <div class="causa">
+                                Provavelmente era CSS de web. React Native usa
+                                um <em>subconjunto</em> — veja a tabela abaixo.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                "<code>styles.caixaMaior</code> deu erro."
+                            </div>
+                            <div class="causa">
+                                Esse nome foi inventado por quem escreveu o
+                                arquivo. Ele só funciona se existir uma chave
+                                com <em>exatamente</em> esse nome dentro do
+                                <code>StyleSheet.create({ ... })</code>. Nomes
+                                de estilo não são palavras do React Native.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">9</div>
+                    <h2>Consulta rápida</h2>
+                </div>
+                <div class="passo-corpo">
+                    <h3>O que cada propriedade faz</h3>
+                    <div class="rolagem-h">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Propriedade</th>
+                                    <th>Pergunta que ela responde</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>flexDirection</code></td>
+                                    <td>
+                                        Os filhos ficam empilhados
+                                        (<code>column</code>, padrão) ou lado a
+                                        lado (<code>row</code>)?
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>justifyContent</code></td>
+                                    <td>
+                                        Onde os filhos param no trilho que o
+                                        flexDirection escolheu (o J)?
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>alignItems</code></td>
+                                    <td>
+                                        Onde os filhos param no trilho que cruza
+                                        o outro (o A)?
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>gap</code></td>
+                                    <td>
+                                        Quantos pixels de respiro entre um filho
+                                        e o próximo?
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>flex: 1</code></td>
+                                    <td>
+                                        Esta caixa fica com o espaço que sobrou?
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>padding</code></td>
+                                    <td>
+                                        Respiro <em>dentro</em> da caixa, entre
+                                        a borda e o conteúdo.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>margin</code></td>
+                                    <td>
+                                        Respiro <em>fora</em> da caixa,
+                                        empurrando as vizinhas.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>borderRadius</code></td>
+                                    <td>
+                                        Quanto os cantos são arredondados.
+                                        Metade da largura = círculo.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Se você for pesquisar CSS de web, cuidado</h3>
+                    <div class="rolagem-h">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>CSS na web</th>
+                                    <th>React Native</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>flexDirection padrão</td>
+                                    <td><code>row</code></td>
+                                    <td><code>column</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Nome das propriedades</td>
+                                    <td><code>background-color</code></td>
+                                    <td><code>backgroundColor</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Unidades</td>
+                                    <td>
+                                        <code>10px</code>, <code>1rem</code>,
+                                        <code>%</code>
+                                    </td>
+                                    <td>
+                                        número puro (<code>10</code>) ou
+                                        <code>"50%"</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Atalhos</td>
+                                    <td><code>border: 1px solid red</code></td>
+                                    <td>
+                                        uma linha por parte:
+                                        <code>borderWidth</code>,
+                                        <code>borderColor</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Herança de fonte</td>
+                                    <td>filhos herdam do pai</td>
+                                    <td>
+                                        não herda — estilize cada
+                                        <code>&lt;Text&gt;</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Texto solto</td>
+                                    <td>pode ficar direto na div</td>
+                                    <td>
+                                        todo texto precisa estar dentro de
+                                        <code>&lt;Text&gt;</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>position</code> padrão</td>
+                                    <td><code>static</code></td>
+                                    <td><code>relative</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Existe <code>float</code>?</td>
+                                    <td>sim</td>
+                                    <td>não</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <hr />
+
+            <section class="passo" style="margin-top: 40px; margin-bottom: 0">
+                <div class="passo-cabeca">
+                    <div class="passo-num" style="background: var(--caneta)">
+                        ✓
+                    </div>
+                    <h2>Onde praticar</h2>
+                </div>
+                <div class="passo-corpo">
+                    <div class="links">
+                        <div class="link-item">
+                            <strong
+                                style="
+                                    border-bottom: 1px solid var(--caneta);
+                                    align-self: flex-start;
+                                "
+                                >Projeto
+                                <code class="mono"
+                                    >4-playground-estilizacao</code
+                                >
+                                do repositório da disciplina</strong
+                            >
+                            <span
+                                >A Figura 2 desta página, mas rodando de verdade
+                                no seu celular. <code>npm install</code> e
+                                <code>npm start</code>.</span
+                            >
+                        </div>
+                        <div class="link-item">
+                            <a
+                                href="https://flexboxfroggy.com/#pt-br"
+                                target="_blank"
+                                rel="noopener"
+                                >Flexbox Froggy</a
+                            >
+                            <span
+                                >24 níveis em português. É CSS de web, mas os
+                                trilhos são os mesmos.</span
+                            >
+                        </div>
+                        <div class="link-item">
+                            <a
+                                href="https://snack.expo.dev"
+                                target="_blank"
+                                rel="noopener"
+                                >Expo Snack</a
+                            >
+                            <span
+                                >React Native rodando no navegador, sem instalar
+                                nada. Bom para testar uma dúvida em trinta
+                                segundos.</span
+                            >
+                        </div>
+                        <div class="link-item">
+                            <a
+                                href="https://reactnative.dev/docs/flexbox"
+                                target="_blank"
+                                rel="noopener"
+                                >Documentação oficial — Layout with Flexbox</a
+                            >
+                            <span
+                                >A referência final quando as tabelas acima não
+                                bastarem.</span
+                            >
+                        </div>
+                    </div>
+
+                    <div class="assinatura">
+                        Material de revisão &middot; aula de estilização
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <script>
+            // ---- Figura 1: raio-x -------------------------------------------------
+            const btnRaiox = document.getElementById("btn-raiox");
+            const p1 = document.getElementById("p1");
+            btnRaiox.addEventListener("click", () => {
+                const ligado = btnRaiox.getAttribute("aria-pressed") === "true";
+                btnRaiox.setAttribute("aria-pressed", String(!ligado));
+                p1.classList.toggle("raiox", !ligado);
+                btnRaiox.textContent = ligado
+                    ? "ligar raio-x"
+                    : "desligar raio-x";
+            });
+
+            // ---- Figura 2: playground dos trilhos --------------------------------
+            const estado = {
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "stretch",
+                gap: "0",
+            };
+
+            const palco2 = document.getElementById("palco2");
+            const codigo2 = document.getElementById("codigo2");
+            const trilhoV = document.getElementById("trilho-v");
+            const trilhoH = document.getElementById("trilho-h");
+            const letraV = document.getElementById("letra-v");
+            const letraH = document.getElementById("letra-h");
+            const setaPrincipal = document.getElementById("seta-principal");
+            const setaCruzado = document.getElementById("seta-cruzado");
+            const dirPrincipal = document.getElementById("dir-principal");
+            const dirCruzado = document.getElementById("dir-cruzado");
+
+            function desenhar() {
+                palco2.style.flexDirection = estado.flexDirection;
+                palco2.style.justifyContent = estado.justifyContent;
+                palco2.style.alignItems = estado.alignItems;
+                palco2.style.gap = estado.gap + "px";
+
+                const linha = estado.flexDirection === "row";
+                setaPrincipal.textContent = linha ? "→" : "↓";
+                setaCruzado.textContent = linha ? "↓" : "→";
+                // os trilhos giram junto: o laranja segue o flexDirection, o verde cruza
+                trilhoV.className = "trilho-v " + (linha ? "verde" : "laranja");
+                trilhoH.className = "trilho-h " + (linha ? "laranja" : "verde");
+                letraV.textContent = linha ? "A" : "J";
+                letraH.textContent = linha ? "J" : "A";
+
+                dirPrincipal.textContent = linha
+                    ? "empurra na horizontal"
+                    : "empurra na vertical";
+                dirCruzado.textContent = linha
+                    ? "empurra na vertical"
+                    : "empurra na horizontal";
+
+                codigo2.innerHTML =
+                    '<span class="k">const</span> <span class="v">styles</span> = <span class="v">StyleSheet</span>.<span class="v">create</span>({\n' +
+                    '  <span class="k">palco</span>: {\n' +
+                    '    <span class="k">flexDirection</span>: <span class="v">"' +
+                    estado.flexDirection +
+                    '"</span>,\n' +
+                    '    <span class="k" style="color: var(--principal)">justifyContent</span>: <span class="v">"' +
+                    estado.justifyContent +
+                    '"</span>,\n' +
+                    '    <span class="k" style="color: var(--cruzado)">alignItems</span>: <span class="v">"' +
+                    estado.alignItems +
+                    '"</span>,\n' +
+                    '    <span class="k">gap</span>: <span class="v">' +
+                    estado.gap +
+                    "</span>,\n" +
+                    "  },\n" +
+                    "});";
+            }
+
+            document.querySelectorAll(".chips[data-prop]").forEach((grupo) => {
+                const prop = grupo.dataset.prop;
+                grupo.addEventListener("click", (evento) => {
+                    const botao = evento.target.closest("button");
+                    if (!botao) return;
+                    grupo
+                        .querySelectorAll("button")
+                        .forEach((b) =>
+                            b.setAttribute("aria-pressed", String(b === botao)),
+                        );
+                    estado[prop] = botao.dataset.v;
+                    desenhar();
+                });
+            });
+
+            desenhar();
+
+            // ---- Figura 3: quem manda em quem ------------------------------------
+            // Para cada linha do codigo da aula: em quem ela manda, e o que faz.
+            const LICOES = {
+                flex: {
+                    alvo: "tela",
+                    dona: true,
+                    texto:
+                        "A <strong>tela</strong> fica com a sobra. Como ela é a caixa de fora, a sobra é o " +
+                        "celular inteiro. Sem esta linha, o cinza pararia na altura do conteúdo.",
+                },
+                paddingTop: {
+                    alvo: "tela",
+                    dona: true,
+                    texto:
+                        "Cria 60 de respiro por dentro da <strong>tela</strong>, antes do primeiro filho. É o que " +
+                        "empurra a faixa verde para baixo da barra de status.",
+                },
+                bgTela: {
+                    alvo: "tela",
+                    dona: true,
+                    texto: "Pinta o fundo cinza da <strong>tela</strong>. Só a caixa, nada dos filhos.",
+                },
+                stretch: {
+                    alvo: "verde",
+                    dona: false,
+                    texto:
+                        "A linha que ninguém escreveu &mdash; e a mais importante desta tela. " +
+                        "<strong>stretch</strong> é o padrão do React Native: como a caixa verde não tem " +
+                        "<code>width</code>, ela é esticada de ponta a ponta no trilho A. É por isso que a " +
+                        "faixa verde ocupa a largura inteira sem ninguém pedir.",
+                },
+                direction: {
+                    alvo: "textos",
+                    dona: false,
+                    texto:
+                        "Coloca os dois <code>&lt;Text&gt;</code> lado a lado em vez de empilhados. E muda o " +
+                        "sentido das duas linhas de baixo.",
+                },
+                gap: {
+                    alvo: "textos",
+                    dona: false,
+                    texto:
+                        "10 de respiro entre um filho e o próximo &mdash; entre <strong>Batata</strong> e " +
+                        "<strong>Batata2</strong>. Nunca em volta da caixa verde.",
+                },
+                bgVerde: {
+                    alvo: "verde",
+                    dona: true,
+                    texto:
+                        "Pinta o verde da própria caixa. É esta linha que torna visível a caixa que você está " +
+                        "estudando &mdash; sem ela, tudo aqui seria invisível.",
+                },
+                justify: {
+                    alvo: "textos",
+                    dona: false,
+                    texto:
+                        "Junta os dois textos no meio do <strong>trilho J</strong>. Como o " +
+                        "<code>flexDirection</code> é <code>row</code>, aqui isso quer dizer no meio da horizontal.",
+                },
+                align: {
+                    alvo: "textos",
+                    dona: false,
+                    texto:
+                        "Centraliza os dois textos no <strong>trilho A</strong>, ou seja na vertical, dentro " +
+                        "dos 100 de altura. Esta linha <strong>não faz nada com a caixa verde</strong> &mdash; e é " +
+                        "exatamente aqui que quase todo mundo se perde.",
+                },
+                height: {
+                    alvo: "verde",
+                    dona: true,
+                    texto:
+                        "A própria caixa verde passa a ter 100 de altura. Sem isso ela teria a altura dos textos, " +
+                        "e a linha do <code>alignItems</code> não teria espaço nenhum para centralizar.",
+                },
+            };
+
+            const dTela = document.getElementById("d-tela");
+            const dVerde = document.getElementById("d-verde");
+            const dTextos = Array.from(document.querySelectorAll(".demo-txt"));
+            const selo = document.getElementById("selo");
+            const explica = document.getElementById("explica");
+            const linhas = Array.from(
+                document.querySelectorAll("button.linha-cod"),
+            );
+
+            function realcar(alvo) {
+                [dTela, dVerde, ...dTextos].forEach((el) =>
+                    el.classList.remove("realce"),
+                );
+                if (alvo === "tela") dTela.classList.add("realce");
+                if (alvo === "verde") dVerde.classList.add("realce");
+                if (alvo === "textos")
+                    dTextos.forEach((el) => el.classList.add("realce"));
+            }
+
+            linhas.forEach((linha) => {
+                linha.addEventListener("click", () => {
+                    const licao = LICOES[linha.dataset.id];
+                    if (!licao) return;
+                    linhas.forEach((b) =>
+                        b.setAttribute("aria-pressed", String(b === linha)),
+                    );
+                    realcar(licao.alvo);
+                    selo.textContent = licao.dona
+                        ? "manda nela mesma"
+                        : "manda nos filhos";
+                    explica.innerHTML = licao.texto;
+                });
+            });
+
+            // ---- Figura 4: a sobra -----------------------------------------------
+            const btnFlex = document.getElementById("btn-flex");
+            const cxCresce = document.getElementById("cx-cresce");
+            const marcaSobra = document.getElementById("marca-sobra");
+            btnFlex.addEventListener("click", () => {
+                const ligado = btnFlex.getAttribute("aria-pressed") === "true";
+                btnFlex.setAttribute("aria-pressed", String(!ligado));
+                cxCresce.classList.toggle("cresce", !ligado);
+                marcaSobra.style.display = ligado ? "grid" : "none";
+                btnFlex.textContent = ligado
+                    ? "dar flex: 1 para a caixa 2"
+                    : "tirar o flex: 1 da caixa 2";
+            });
+        </script>
+    </body>
+</html>

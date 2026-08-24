@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { getMateriais } from '../../lib/materiais';
+
+const materiais = getMateriais();
+
+function iconFor(ext: string) {
+  if (ext === '.pdf') return 'PDF';
+  if (ext === '.html' || ext === '.htm') return 'HTML';
+  if (ext === '.zip') return 'ZIP';
+  if (ext === '.md') return 'MD';
+  return ext.replace('.', '').toUpperCase() || 'FILE';
+}
+
+function fmtSize(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} kB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+function fmtDate(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+---
+
+<BaseLayout title="Materiais" description="Materiais para alunos, apostilas, roteiros e arquivos de aula.">
+  <PageHeader
+    eyebrow="~/materiais"
+    title="Materiais"
+    subtitle="Arquivos para alunos. HTML abre no site, PDF tem visualizador e download. É só colocar arquivos em public/materiais e fazer build."
+  />
+
+  {materiais.length === 0 ? (
+    <div class="empty">
+      <p>Nenhum material ainda.</p>
+      <p class="empty-hint">Coloque arquivos em <code>public/materiais/</code> e rode <code>pnpm build</code>. Exemplo: <code>aula01.html</code>, <code>apostila.pdf</code> ou pastas como <code>roteiro/lab01.html</code>.</p>
+    </div>
+  ) : (
+    <div class="mat-grid">
+      {materiais.map((m) => (
+        <a
+          href={`/materiais/view/${m.path}`}
+          class="mat-card"
+          data-ext={m.ext}
+        >
+          <div class="mat-top">
+            <span class="mat-ext">{iconFor(m.ext)}</span>
+            <span class="mat-size">{fmtSize(m.size)}</span>
+          </div>
+          <strong class="mat-name">{m.path}</strong>
+          <span class="mat-date">{fmtDate(m.mtime)}</span>
+        </a>
+      ))}
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+  .empty {
+    border: 1px dashed var(--border-subtle);
+    border-radius: 12px;
+    padding: 28px;
+    background: var(--surface-highlight);
+  }
+  .empty p { color: var(--text-muted); }
+  .empty-hint { margin-top: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+  .empty-hint code { font-size: 12px; background: var(--surface-page); border: 1px solid var(--border-subtle); padding: 1px 5px; border-radius: 4px; }
+
+  .mat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .mat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: var(--surface-card);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .mat-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .mat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .mat-ext {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+    color: var(--text-strong);
+    letter-spacing: 0.06em;
+  }
+  .mat-card[data-ext=".pdf"] .mat-ext { background: rgba(220, 38, 38, 0.08); color: #dc2626; border-color: rgba(220,38,38,0.18); }
+  :global(html[data-theme='dark']) .mat-card[data-ext=".pdf"] .mat-ext { background: rgba(248,113,113,0.12); color: #f87171; }
+  .mat-card[data-ext=".html"] .mat-ext,
+  .mat-card[data-ext=".htm"] .mat-ext { background: rgba(0,92,254,0.08); color: var(--color-blue-deep); border-color: rgba(0,92,254,0.15); }
+  .mat-size { color: var(--text-muted); letter-spacing: 0.04em; }
+  .mat-name {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--text-strong);
+    overflow-wrap: anywhere;
+  }
+  .mat-date {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+</style>
