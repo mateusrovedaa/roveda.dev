@@ -53,7 +53,6 @@ const isActive = (href: string) => {
     </nav>
 
     <div class="header-actions">
-      <a href="mailto:mateus@roveda.dev" class="contact-btn">contato</a>
       <Search />
       <button id="theme-toggle" type="button" class="theme-toggle" aria-label="Alternar tema claro e escuro" title="Alternar tema">
         <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -88,7 +87,7 @@ const isActive = (href: string) => {
   }
 
   .header-inner {
-    max-width: 1200px;
+    max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 32px;
     height: 76px;
@@ -155,26 +154,6 @@ const isActive = (href: string) => {
     flex-shrink: 0;
   }
 
-  .contact-btn {
-    font-family: var(--font-mono);
-    font-size: 13.5px;
-    color: var(--text-body);
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 7px;
-    padding: 8px 14px;
-    text-decoration: none;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    white-space: nowrap;
-  }
-  .contact-btn:hover,
-  .contact-btn:focus-visible {
-    background: var(--surface-raised);
-    border-color: var(--border-control);
-    color: var(--text-strong);
-    text-decoration: none;
-  }
-
   .theme-toggle {
     display: inline-flex;
     align-items: center;
@@ -219,7 +198,6 @@ const isActive = (href: string) => {
   @media (max-width: 520px) {
     .header-inner { padding: 12px 16px; }
     .nav ul { justify-content: space-between; width: 100%; }
-    .contact-btn { padding: 6px 10px; font-size: 12.5px; }
   }
 </style>
 
