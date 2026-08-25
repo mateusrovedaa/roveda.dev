@@ -2,9 +2,9 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 // Fontes self-hosted (apenas os pesos usados) - elimina request render-blocking do Google Fonts
-import '@fontsource/poppins/300.css';
+import '@fontsource-variable/geist/wght.css';
 import '@fontsource/poppins/400.css';
-import '@fontsource/poppins/700.css';
+import '@fontsource/poppins/600.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
 import '../styles/global.css';
@@ -36,6 +36,7 @@ const fullTitle = fullTitleOverride ?? `${title} · Roveda`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FFFFFF" />
     <script is:inline>
       // Define o tema antes do paint (evita FOUC). localStorage > preferência do SO.
       (function () {
@@ -46,6 +47,8 @@ const fullTitle = fullTitleOverride ?? `${title} · Roveda`;
           }
           document.documentElement.dataset.theme = t;
           document.documentElement.style.setProperty('color-scheme', t);
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', t === 'dark' ? '#111111' : '#FFFFFF');
         } catch (e) {}
       })();
     </script>
@@ -55,7 +58,6 @@ const fullTitle = fullTitleOverride ?? `${title} · Roveda`;
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#FCFFFE" />
     <link rel="canonical" href={canonicalURL} />
 
     <title>{fullTitle}</title>
@@ -94,6 +96,16 @@ const fullTitle = fullTitleOverride ?? `${title} · Roveda`;
     max-width: var(--max-width);
     margin: 0 auto;
     padding: var(--space-xl) var(--space-lg);
+  }
+
+  /* Só posts usam caixa larga: main expande quando contém .post */
+  main:has(.post) {
+    max-width: calc(var(--post-width) + 2 * var(--space-lg));
+  }
+
+  /* Posts com trilhas de comentários/recap (layout de 3 colunas) usam caixa ainda mais larga */
+  main:has(.post-page) {
+    max-width: 1560px;
   }
 
   @media (max-width: 640px) {

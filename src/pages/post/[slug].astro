@@ -26,68 +26,282 @@ const readMin = Math.max(
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} type="article">
-  <div class="read-progress" id="read-progress"></div>
-  <article class="post" data-pagefind-body>
-    <header class="post-header">
-      <p class="stat-cmd"><span class="p">$</span> stat {post.id}.md</p>
-      <div class="post-meta">
-        <time datetime={post.data.date.toISOString()}>{dateFormatted}</time>
-        {post.data.categorias && post.data.categorias.length > 0 && (
-          <div class="post-categories">
-            {post.data.categorias.map((cat) => (
-              <span class="cat-tag">{cat}</span>
-            ))}
-          </div>
-        )}
-        <span class="readtime">~{readMin} min de leitura</span>
+  <button id="back-to-top" class="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo">
+    <svg class="btt-ring" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">
+      <circle class="btt-ring-bg" cx="22" cy="22" r="19" fill="none" stroke-width="2"></circle>
+      <circle class="btt-ring-progress" cx="22" cy="22" r="19" fill="none" stroke-width="2"></circle>
+    </svg>
+    <svg class="btt-arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </button>
+  <div class="post-page">
+    <aside class="post-rail post-rail-left">
+      <div class="rail-sticky">
+        <p class="rail-label">~/comentários</p>
+        <div class="giscus-mount">
+          <script
+            is:inline
+            src="https://giscus.app/client.js"
+            data-repo="mateusrovedaa/roveda.dev"
+            data-repo-id="R_kgDOHI-Q9A"
+            data-category="Site"
+            data-category-id="DIC_kwDOHI-Q9M4CRA1Q"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="light"
+            data-lang="pt-BR"
+            crossorigin="anonymous"
+            async
+          ></script>
+        </div>
       </div>
-      <h1>{post.data.title}</h1>
-      {post.data.author && <p class="author">por {post.data.author}</p>}
-    </header>
+    </aside>
 
-    <div class="post-content">
-      <Content />
-    </div>
+    <article class="post" data-pagefind-body>
+      <header class="post-header">
+        <p class="stat-cmd"><span class="p">$</span> vim {post.id}.md</p>
+        <div class="post-meta">
+          <time datetime={post.data.date.toISOString()}>{dateFormatted}</time>
+          {post.data.categorias && post.data.categorias.length > 0 && (
+            <div class="post-categories">
+              {post.data.categorias.map((cat) => (
+                <span class="cat-tag">{cat}</span>
+              ))}
+            </div>
+          )}
+          <span class="readtime">~{readMin} min de leitura</span>
+        </div>
+        <h1>{post.data.title}</h1>
+        {post.data.author && <p class="author">por {post.data.author}</p>}
+      </header>
 
-    {post.data.tags && post.data.tags.length > 0 && (
-      <footer class="post-tags">
-        {post.data.tags.map((tag) => (
-          <span class="tag">#{tag}</span>
-        ))}
-      </footer>
-    )}
-  </article>
+      <div class="post-content">
+        <Content />
+      </div>
+
+      {post.data.tags && post.data.tags.length > 0 && (
+        <footer class="post-tags">
+          {post.data.tags.map((tag) => (
+            <span class="tag">#{tag}</span>
+          ))}
+        </footer>
+      )}
+    </article>
+
+    <aside class="post-rail post-rail-right">
+      <div class="rail-sticky">
+        <p class="rail-label">você está lendo</p>
+        <h2 class="recap-title">{post.data.title}</h2>
+        <div class="recap-meta">
+          <time datetime={post.data.date.toISOString()}>{dateFormatted}</time>
+          {post.data.categorias && post.data.categorias.length > 0 && (
+            <div class="post-categories">
+              {post.data.categorias.map((cat) => (
+                <span class="cat-tag">{cat}</span>
+              ))}
+            </div>
+          )}
+          <span class="readtime">~{readMin} min de leitura</span>
+        </div>
+      </div>
+    </aside>
+  </div>
 
   <script is:inline>
     (function () {
-      var bar = document.getElementById('read-progress');
-      if (!bar) return;
+      var btn = document.getElementById('back-to-top');
+      if (!btn) return;
+      var ring = btn.querySelector('.btt-ring-progress');
       var doc = document.documentElement;
+      var radius = 19;
+      var circumference = 2 * Math.PI * radius;
+      ring.style.strokeDasharray = circumference.toFixed(2);
+      ring.style.strokeDashoffset = circumference.toFixed(2);
+
       function upd() {
         var max = doc.scrollHeight - doc.clientHeight;
-        bar.style.width = (max > 0 ? (doc.scrollTop / max) * 100 : 0) + '%';
+        var progress = max > 0 ? Math.min(1, doc.scrollTop / max) : 0;
+        ring.style.strokeDashoffset = (circumference * (1 - progress)).toFixed(2);
+        btn.classList.toggle('is-visible', doc.scrollTop > 240);
       }
+
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
       addEventListener('scroll', upd, { passive: true });
       addEventListener('resize', upd);
       upd();
     })();
   </script>
+
+  <script is:inline>
+    (function () {
+      function currentTheme() {
+        return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+      }
+      function setGiscusTheme(theme) {
+        var iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme } } },
+          'https://giscus.app'
+        );
+      }
+      document.addEventListener('site-theme-change', function (e) {
+        setGiscusTheme(e.detail === 'dark' ? 'dark' : 'light');
+      });
+      var tries = 0;
+      var iv = setInterval(function () {
+        tries++;
+        if (document.querySelector('iframe.giscus-frame')) {
+          setGiscusTheme(currentTheme());
+          clearInterval(iv);
+        } else if (tries > 40) {
+          clearInterval(iv);
+        }
+      }, 250);
+    })();
+  </script>
 </BaseLayout>
 
 <style>
-  .post {
-    max-width: 100%;
+  .post-page {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 820px) 260px;
+    gap: 40px;
+    justify-content: center;
+    align-items: stretch;
   }
 
-  .read-progress {
+  .post-rail-left { grid-column: 1; }
+  .post { grid-column: 2; }
+  .post-rail-right { grid-column: 3; }
+
+  .rail-sticky {
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  .rail-label {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .giscus-mount { min-height: 40px; }
+
+  .recap-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--text-strong);
+    margin-bottom: 14px;
+    text-wrap: pretty;
+  }
+
+  .recap-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .recap-meta time,
+  .recap-meta .readtime {
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 1360px) {
+    .post-page {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .post {
+      order: 1;
+      width: 100%;
+      max-width: var(--post-width);
+      margin: 0 auto;
+    }
+    .post-rail-left {
+      order: 2;
+      width: 100%;
+      max-width: var(--post-width);
+      margin: var(--space-xl) auto 0;
+    }
+    .post-rail-right { display: none; }
+    .rail-sticky {
+      position: static;
+      max-height: none;
+      overflow: visible;
+    }
+  }
+
+  .post {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 40px 48px;
+  }
+
+  @media (max-width: 640px) {
+    .post { padding: 28px 20px; border-radius: 8px; }
+  }
+
+  .back-to-top {
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 3px;
-    width: 0;
-    background: var(--accent);
+    right: 24px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-card);
+    color: var(--text-strong);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
     z-index: 101;
-    transition: width 0.05s linear;
+  }
+  .back-to-top.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .btt-ring {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+  }
+  .btt-ring-bg { stroke: var(--border-subtle); }
+  .btt-ring-progress {
+    stroke: var(--text-strong);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.05s linear;
+  }
+  .btt-arrow { position: relative; z-index: 1; }
+
+  @media (max-width: 640px) {
+    .back-to-top { right: 16px; bottom: 16px; }
   }
 
   .post-header {
@@ -98,15 +312,15 @@ const readMin = Math.max(
 
   .stat-cmd {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    font-size: 0.82rem;
+    color: var(--text-body);
     margin-bottom: var(--space-md);
   }
-  .stat-cmd .p { color: var(--color-teal-mid); font-weight: 700; }
+  .stat-cmd .p { color: var(--text-strong); font-weight: 700; }
 
   .readtime {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -121,8 +335,8 @@ const readMin = Math.max(
   }
 
   time {
+    font-family: var(--font-mono);
     font-size: 0.85rem;
-    font-weight: var(--font-weight-light);
     color: var(--text-muted);
   }
 
@@ -133,9 +347,9 @@ const readMin = Math.max(
   }
 
   h1 {
-    font-family: var(--font-sans);
-    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+    font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.08;
     color: var(--text-strong);
@@ -144,24 +358,25 @@ const readMin = Math.max(
 
   .author {
     font-size: 0.9rem;
-    font-weight: var(--font-weight-light);
-    color: var(--text-muted);
+    color: var(--text-body);
   }
 
   .post-content :global(h1),
   .post-content :global(h2),
   .post-content :global(h3),
   .post-content :global(h4) {
-    font-weight: var(--font-weight-bold);
+    font-family: var(--font-display);
+    font-weight: 600;
     margin: var(--space-xl) 0 var(--space-md);
     color: var(--text-strong);
+    letter-spacing: -0.02em;
   }
 
   .post-content :global(h1) { font-size: 1.75rem; }
   .post-content :global(h2) { font-size: 1.4rem; }
   .post-content :global(h3) { font-size: 1.15rem; }
 
-  /* prefixo markdown ## nas headings de conteúdo */
+  /* prefixo markdown ## nas headings de conteúdo - mantido */
   .post-content :global(h2),
   .post-content :global(h3) {
     display: flex;
@@ -173,71 +388,84 @@ const readMin = Math.max(
   .post-content :global(h2)::before,
   .post-content :global(h3)::before {
     font-family: var(--font-mono);
-    color: var(--accent-ink);
+    color: var(--text-muted);
     font-weight: 700;
     font-size: 0.7em;
   }
 
   .post-content :global(p) {
+    font-family: var(--font-sans);
     margin-bottom: var(--space-md);
     line-height: 1.75;
+    color: var(--text-body);
   }
 
   .post-content :global(ul),
   .post-content :global(ol) {
     margin: var(--space-md) 0 var(--space-md) var(--space-lg);
     line-height: 1.75;
+    color: var(--text-body);
   }
 
   .post-content :global(li) {
     margin-bottom: var(--space-xs);
   }
 
+  /* Blocos de código - P&B sem terminal */
   .post-content :global(pre) {
-    position: relative;
-    background-color: var(--color-dark);
-    color: var(--color-teal-light);
-    border: 1px solid rgba(65, 186, 255, 0.18);
-    padding: 2.7rem var(--space-md) var(--space-md);
-    border-radius: var(--radius-md);
+    background-color: var(--code-bg) !important;
+    color: var(--code-fg);
+    border: 1px solid var(--border-subtle);
+    padding: 16px;
+    border-radius: 8px;
     overflow-x: auto;
     margin: var(--space-lg) 0;
     font-size: 0.875rem;
     line-height: 1.6;
   }
 
-  /* barra de "janela de terminal" no topo do bloco de código */
+  /* Remove barra de terminal com bolinhas */
   .post-content :global(pre)::before {
-    content: '\25CF \25CF \25CF';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 0.5rem 0.9rem;
-    font-size: 0.5rem;
-    letter-spacing: 0.35em;
-    color: rgba(178, 228, 255, 0.42);
-    background: rgba(65, 186, 255, 0.06);
-    border-bottom: 1px solid rgba(65, 186, 255, 0.14);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    content: none !important;
+    display: none !important;
+  }
+
+  /* Shiki dual theme: troca por [data-theme] */
+  .post-content :global(pre.astro-code),
+  .post-content :global(pre.astro-code span) {
+    background-color: var(--shiki-light-bg, var(--code-bg)) !important;
+    color: var(--shiki-light, var(--code-fg)) !important;
+  }
+  :global(html[data-theme='dark']) .post-content :global(pre.astro-code),
+  :global(html[data-theme='dark']) .post-content :global(pre.astro-code span) {
+    background-color: var(--shiki-dark-bg, var(--code-bg)) !important;
+    color: var(--shiki-dark, var(--code-fg)) !important;
+  }
+  /* Fallback se Shiki não usar variáveis: força fundo P&B e mantém cores de tokens quando possível */
+  :global(html[data-theme='dark']) .post-content :global(pre) {
+    background-color: var(--code-bg) !important;
   }
 
   .post-content :global(code) {
-    background-color: var(--color-blue-light);
-    color: var(--color-teal-dark);
+    font-family: var(--font-mono);
+    background-color: var(--code-bg);
+    color: var(--text-strong);
     padding: 2px 6px;
-    border-radius: var(--radius-sm);
+    border-radius: 4px;
     font-size: 0.875em;
+    border: 1px solid var(--border-subtle);
   }
 
   .post-content :global(pre code) {
-    background: none;
+    background: transparent;
     color: inherit;
     padding: 0;
+    border: none;
+    border-radius: 0;
   }
 
   .post-content :global(blockquote) {
-    border-left: 3px solid var(--accent-highlight);
+    border-left: 3px solid var(--text-strong);
     padding-left: var(--space-md);
     margin: var(--space-md) 0;
     color: var(--text-muted);
@@ -245,19 +473,49 @@ const readMin = Math.max(
   }
 
   .post-content :global(img) {
-    border-radius: var(--radius-md);
+    border-radius: 8px;
     margin: var(--space-md) 0;
+    border: 1px solid var(--border-subtle);
   }
 
   .post-content :global(a) {
-    color: var(--color-blue-deep);
+    color: var(--text-strong);
     text-decoration: underline;
+    text-decoration-color: var(--text-muted);
+    text-underline-offset: 3px;
+  }
+  .post-content :global(a:hover) {
+    text-decoration-color: var(--text-strong);
   }
 
   .post-content :global(iframe) {
-    border-radius: var(--radius-md);
+    border-radius: 8px;
     margin: var(--space-lg) 0;
     max-width: 100%;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .post-content :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    margin: var(--space-xl) 0;
+  }
+
+  .post-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-lg) 0;
+    font-size: 0.9rem;
+  }
+  .post-content :global(th),
+  .post-content :global(td) {
+    border: 1px solid var(--border-subtle);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  .post-content :global(th) {
+    background: var(--surface-raised);
+    font-weight: 600;
   }
 
   .post-tags {
@@ -270,8 +528,8 @@ const readMin = Math.max(
   }
 
   .tag {
+    font-family: var(--font-mono);
     font-size: 0.8rem;
-    font-weight: var(--font-weight-light);
     color: var(--text-muted);
   }
 </style>

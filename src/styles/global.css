@@ -1,42 +1,48 @@
 :root {
-  --color-primary: #41BAFF;
-  --color-bg: #FCFFFE;
-  --color-dark: #061736;
-  --color-blue-deep: #005CFE;
-  --color-teal-dark: #014144;
-  --color-teal-mid: #077E7D;
-  --color-teal-light: #92FDEF;
-  --color-blue-light: #B2E4FF;
-  --color-gray: #595959;
-  --color-gray-dark: #333F52;
-  --color-gray-light: #8FA9BD;
-  --color-surface: #EFFEFC;
-  --color-surface-dark: #0d2347;
-
-  /* Tokens semânticos - marca pessoal Roveda (alto contraste) */
+  /* Paleta P&B - light */
   color-scheme: light;
   --surface-page: #FFFFFF;
   --surface-card: #FFFFFF;
-  --surface-raised: #E6FFF8;
-  --surface-highlight: #E6FFF8;
-  --text-strong: #061736;
-  --text-muted: #3F4A5A;
-  --text-body: #1E2B3A;
-  --border-subtle: rgba(6, 23, 54, 0.16);
-  --border-card: rgba(6, 23, 54, 0.13);
-  --accent: #014144;
-  --accent-highlight: #92FDEF;
-  --accent-ink: #014144;
-  --accent-mint: #92FDEF;
+  --surface-raised: #F5F5F5;
+  --surface-highlight: #FAFAFA;
+  --text-strong: #0A0A0A;
+  --text-muted: #666666;
+  --text-body: #1A1A1A;
+  --border-subtle: #E5E5E5;
+  --border-card: #E5E5E5;
+  --border-control: #8E8E8E;
+  --border-strong: #0A0A0A;
+  --accent: #0A0A0A;
+  --accent-highlight: #E5E5E5;
+  --accent-ink: #0A0A0A;
+  --accent-mint: #F5F5F5;
   --chrome-bg: #FFFFFF;
-  --chrome-fg: #061736;
-  --chrome-line: rgba(6, 23, 54, 0.16);
+  --chrome-fg: #0A0A0A;
+  --chrome-line: #E5E5E5;
+  --code-bg: #F6F6F6;
+  --code-fg: #0A0A0A;
 
-  --font-sans: 'Poppins', 'Poppins-fallback', sans-serif;
-  --font-mono: 'JetBrains Mono', 'JBMono-fallback', 'Fira Code', monospace;
+  /* Compat / legacy tokens neutralizados (evita quebra) */
+  --color-primary: #0A0A0A;
+  --color-bg: #FFFFFF;
+  --color-dark: #0A0A0A;
+  --color-blue-deep: #0A0A0A;
+  --color-teal-dark: #0A0A0A;
+  --color-teal-mid: #0A0A0A;
+  --color-teal-light: #E5E5E5;
+  --color-blue-light: #F5F5F5;
+  --color-gray: #666666;
+  --color-gray-dark: #333333;
+  --color-gray-light: #999999;
+  --color-surface: #FAFAFA;
+  --color-surface-dark: #111111;
+
+  --font-sans: 'Geist Variable', 'Geist Variable-fallback', sans-serif;
+  --font-display: 'Poppins', 'Poppins-fallback', sans-serif;
+  --font-mono: 'JetBrains Mono', 'JBMono-fallback', monospace;
   --font-weight-light: 300;
   --font-weight-regular: 400;
-  --font-weight-bold: 700;
+  --font-weight-bold: 600;
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -46,48 +52,64 @@
 
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 16px;
+  --radius-lg: 12px;
 
-  --max-width: 1200px;
-  --content-width: 760px;
+  --max-width: 720px;
+  --content-width: 720px;
+  --post-width: 820px;
 
-  --gradient-primary: linear-gradient(135deg, var(--color-blue-deep) 0%, var(--color-teal-mid) 100%);
-  --gradient-hero: linear-gradient(160deg, var(--color-dark) 0%, #0a2850 60%, #083a3a 100%);
+  --gradient-primary: none;
+  --gradient-hero: none;
 }
 
-/* ─── Tema escuro - marca: trilha mint em fundo navio ─── */
+/* Tema escuro - P&B */
 [data-theme='dark'] {
   color-scheme: dark;
-  --surface-page: #061736;
-  --surface-card: #0d2347;
-  --surface-raised: #0e2a4a;
-  --surface-highlight: #0e2a4a;
-  --text-strong: #EFFEFC;
-  --text-muted: #8fb3c2;
-  --text-body: #c8d6e0;
-  --border-subtle: rgba(146, 253, 239, 0.14);
-  --border-card: rgba(146, 253, 239, 0.14);
-  --chrome-bg: #061736;
-  --chrome-fg: #EFFEFC;
-  --chrome-line: rgba(146, 253, 239, 0.12);
+  /* Base levemente acima do preto puro: reduz halation e deixa
+     superfícies/bordas legíveis em telas OLED. */
+  --surface-page: #111111;
+  --surface-card: #181818;
+  --surface-raised: #212121;
+  --surface-highlight: #1C1C1C;
+  --text-strong: #F5F5F5;
+  --text-muted: #ADADAD;
+  --text-body: #D6D6D6;
+  --border-subtle: #333333;
+  --border-card: #3A3A3A;
+  --border-control: #6E6E6E;
+  --border-strong: #F5F5F5;
+  --accent: #F5F5F5;
+  --accent-highlight: #4D4D4D;
+  --accent-ink: #F5F5F5;
+  --accent-mint: #212121;
+  --chrome-bg: #111111;
+  --chrome-fg: #F5F5F5;
+  --chrome-line: #333333;
+  --code-bg: #181818;
+  --code-fg: #F5F5F5;
 
-  --color-teal-mid: #5fd1c4;
-  --color-blue-deep: #5aa6ff;
-  --accent: #92FDEF;
-  --accent-highlight: #92FDEF;
-  --accent-ink: #92FDEF;
-  --accent-mint: #92FDEF;
-  --gradient-hero: linear-gradient(160deg, #0d2036 0%, #0a2850 55%, #08323a 100%);
+  --color-primary: #F5F5F5;
+  --color-dark: #111111;
+  --color-teal-mid: #F5F5F5;
+  --color-blue-deep: #F5F5F5;
+  --gradient-hero: none;
 }
 
-/* Fallbacks com métricas ajustadas - reduzem o reflow (CLS) quando as
-   webfonts trocam pela fonte real. O fallback ocupa ~o mesmo espaço. */
+/* Fallbacks com métricas ajustadas */
 @font-face {
   font-family: 'Poppins-fallback';
   src: local('Arial'), local('Liberation Sans'), local('Helvetica Neue'), local('Roboto');
-  size-adjust: 112%;
-  ascent-override: 94%;
-  descent-override: 31%;
+  size-adjust: 108%;
+  ascent-override: 96%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Geist Variable-fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Roboto');
+  size-adjust: 107%;
+  ascent-override: 95%;
+  descent-override: 30%;
   line-gap-override: 0%;
 }
 @font-face {
@@ -113,6 +135,13 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
+/* No escuro, o antialiasing "antialiased" afina demais o texto claro.
+   Voltar ao padrão engorda o traço e melhora a leitura de fontes pequenas. */
+html[data-theme='dark'] {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
 body {
   min-height: 100vh;
   display: flex;
@@ -120,12 +149,21 @@ body {
 }
 
 a {
-  color: var(--color-primary);
-  text-decoration: none;
+  color: var(--text-strong);
+  text-decoration: underline;
+  text-decoration-color: var(--border-subtle);
+  text-underline-offset: 3px;
 }
 
 a:hover {
+  text-decoration-color: var(--text-strong);
+}
+
+/* Articles: links com sublinhado discreto por padrão */
+.post-content :global(a),
+.page-content a {
   text-decoration: underline;
+  text-decoration-thickness: 1.5px;
 }
 
 img {
@@ -134,28 +172,28 @@ img {
   display: block;
 }
 
-/* Tech label - monospace pill style */
+/* Tech label - neutra */
 .tech-label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 2px 8px;
   border-radius: var(--radius-sm);
-  background-color: var(--color-dark);
-  color: var(--color-teal-light);
-  border: 1px solid var(--color-teal-mid);
+  background-color: var(--surface-raised);
+  color: var(--text-strong);
+  border: 1px solid var(--border-subtle);
 }
 
-/* Section heading with accent bar */
+/* Section heading com accent P&B */
 .section-heading {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-teal-mid);
+  color: var(--text-muted);
   margin-bottom: var(--space-lg);
   display: flex;
   align-items: center;
@@ -164,17 +202,17 @@ img {
 
 .section-heading::before {
   content: '//';
-  color: var(--color-primary);
+  color: var(--text-muted);
 }
 
-/* ─── Page header (inner pages) ─── */
+/* Page header (inner pages) */
 .page-header {
   margin-bottom: var(--space-xl);
 }
 
 .page-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -184,13 +222,13 @@ img {
 
 .page-eyebrow::before {
   content: '// ';
-  color: var(--accent-ink);
+  color: var(--text-muted);
 }
 
 .page-header h1 {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4.5vw, 3.2rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text-strong);
   line-height: 1.06;
@@ -198,28 +236,24 @@ img {
 
 .page-subtitle {
   margin-top: var(--space-sm);
-  color: var(--text-muted);
-  font-weight: var(--font-weight-light);
+  color: var(--text-body);
+  font-weight: 400;
   max-width: var(--content-width);
 }
 
-/* ─── Card (shared base) ─── */
+/* Card (shared base) - P&B sutil */
 .card {
   background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  box-shadow: 0 2px 8px rgba(6, 23, 54, 0.05);
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  box-shadow: none;
+  transition: border-color 0.15s;
 }
 
 .card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 6px 20px rgba(6, 23, 54, 0.08);
-  transform: translateY(-2px);
-}
-:global(html[data-theme='dark']) .card:hover {
-  border-color: var(--accent-highlight);
-  box-shadow: 0 6px 20px rgba(146, 253, 239, 0.12);
+  border-color: var(--border-strong);
+  box-shadow: none;
+  transform: none;
 }
 
 a.card {
@@ -232,22 +266,22 @@ a.card:hover {
   text-decoration: none;
 }
 
-/* ─── Category tag (monospace pill) ─── */
+/* Category tag (monospace pill) - neutra */
 .cat-tag {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-teal-mid);
-  background: rgba(7, 126, 125, 0.08);
-  border: 1px solid rgba(7, 126, 125, 0.2);
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
   padding: 1px 6px;
   border-radius: var(--radius-sm);
   white-space: nowrap;
 }
 
-/* ─── Posts grid + card ─── */
+/* Posts grid + card */
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -270,21 +304,23 @@ a.card:hover {
 
 .post-card time {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   white-space: nowrap;
 }
 
 .post-card .post-title {
-  font-size: 0.9rem;
-  font-weight: var(--font-weight-bold);
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--text-strong);
   line-height: 1.45;
   transition: color 0.15s;
 }
 
 .post-card:hover .post-title {
-  color: var(--color-primary);
+  color: var(--text-strong);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 @media (max-width: 900px) {
@@ -295,30 +331,24 @@ a.card:hover {
   .posts-grid { grid-template-columns: 1fr; }
 }
 
-/* ─── Button (outline) ─── */
+/* Button (outline) - P&B */
 .btn-outline {
   display: inline-block;
   padding: var(--space-sm) var(--space-md);
-  border: 1px solid var(--accent);
+  border: 1px solid var(--text-strong);
   border-radius: var(--radius-md);
-  color: var(--accent);
+  color: var(--text-strong);
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.03em;
   text-decoration: none;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .btn-outline:hover {
-  background-color: #014144;
-  border-color: #014144;
-  color: #EFFEFC;
+  background-color: var(--text-strong);
+  border-color: var(--text-strong);
+  color: var(--surface-page);
   text-decoration: none;
-}
-
-:global(html[data-theme='dark']) .btn-outline:hover {
-  background-color: #92FDEF;
-  border-color: #92FDEF;
-  color: #061736;
 }

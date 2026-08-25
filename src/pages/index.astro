@@ -25,36 +25,40 @@ const readMin = (body?: string) =>
   fullTitleOverride="Roveda: Tutoriais, ideias e ferramentas"
   description="Por Mateus Roveda, escrevo e gravo sobre DevOps, GNU/Linux e software livre. Tutoriais e ferramentas em português, abertos para todas as pessoas."
 >
-  <!-- Hero editorial - marca pessoal em primeira pessoa -->
-  <section class="hero">
-    <div class="hero-watermark" aria-hidden="true">
-      <!-- light: watermark navio sutil -->
-      <svg viewBox="0 0 100 100" width="460" height="460" class="wm-light">
-        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="rgba(6,23,54,0.055)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
-        <circle cx="71" cy="31" r="7.5" fill="rgba(6,23,54,0.055)"></circle>
-        <circle cx="32" cy="86" r="8" fill="none" stroke="rgba(6,23,54,0.055)" stroke-width="5"></circle>
-        <circle cx="72" cy="86" r="8" fill="none" stroke="rgba(6,23,54,0.055)" stroke-width="5"></circle>
-      </svg>
-      <!-- dark: watermark mint sutil sobre navio -->
-      <svg viewBox="0 0 100 100" width="460" height="460" class="wm-dark">
-        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="rgba(146,253,239,0.07)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
-        <circle cx="71" cy="31" r="7.5" fill="rgba(146,253,239,0.07)"></circle>
-        <circle cx="32" cy="86" r="8" fill="none" stroke="rgba(146,253,239,0.07)" stroke-width="5"></circle>
-        <circle cx="72" cy="86" r="8" fill="none" stroke="rgba(146,253,239,0.07)" stroke-width="5"></circle>
-      </svg>
-    </div>
-    <div class="hero-inner">
-      <p class="hero-kicker">~/ blog &amp; canal · tecnologia descomplicada</p>
-      <h1>Tutoriais, ideias e ferramentas em português, <span>abertos para todas as pessoas</span>.</h1>
-      <p class="hero-sub">Por Mateus Roveda, engenheiro de software, professor e pesquisador. Escrevo aqui o que aprendo no dia a dia.</p>
-      <div class="hero-cta">
-        <a href="/posts" class="btn-primary">Ler os artigos</a>
-        <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="btn-ghost">Ver o canal ↗</a>
-      </div>
-    </div>
-  </section>
-
   <div class="stack">
+
+    <!-- Canal - dados reais via YouTube RSS (build-time) -->
+    <section id="canal" class="sec-canal">
+      <div class="sec-head">
+        <h2>~/canal</h2>
+        <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="sec-link">youtube.com/ROVEEb ↗</a>
+      </div>
+      <div class="canal-grid">
+        {videos.map((v, i) => (
+          <a
+            href={v.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class:list={['video-card', { 'video-card--featured': i === 0 }]}
+            data-video-id={v.id}
+            aria-label={`Assistir ${v.title} no YouTube`}
+          >
+            <div class="vc-thumb">
+              <img src={v.thumbnail} alt="" loading="lazy" class="vc-img" width="320" height="180" />
+              <div class="vc-overlay"></div>
+              <div class="vc-top">
+                <span>{fmtVideoDate(v.published)}</span>
+                <span class="vc-play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.9)" stroke-width="1"></circle><path d="M10 8.5 L16 12 L10 15.5 Z" fill="#FFFFFF"></path></svg>
+                </span>
+              </div>
+              <span class="vc-title">{v.title}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
     <!-- Artigos -->
     <section id="artigos" class="sec-articles">
       <div class="sec-head">
@@ -92,29 +96,6 @@ const readMin = (body?: string) =>
       </div>
     </section>
 
-    <!-- Canal - dados reais via YouTube RSS (build-time) -->
-    <section id="canal" class="sec-canal">
-      <div class="sec-head">
-        <h2>~/canal</h2>
-        <a href="https://youtube.com/ROVEEb" target="_blank" rel="noopener noreferrer" class="sec-link">youtube.com/ROVEEb ↗</a>
-      </div>
-      <div class="canal-grid">
-        {videos.map((v) => (
-          <a href={v.link} target="_blank" rel="noopener noreferrer" class="video-card">
-            <div class="vc-thumb">
-              <img src={v.thumbnail} alt="" loading="lazy" class="vc-img" width="320" height="180" />
-              <div class="vc-overlay"></div>
-              <div class="vc-top">
-                <span>{fmtVideoDate(v.published)}</span>
-                <span class="vc-play"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="rgba(146,253,239,0.16)"></circle><path d="M10 8.5 L16 12 L10 15.5 Z" fill="#92FDEF"></path></svg></span>
-              </div>
-              <span class="vc-title">{v.title}</span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
-
     <!-- Sobre - primeira pessoa -->
     <section id="sobre" class="sec-sobre">
       <div class="sobre-text">
@@ -126,10 +107,10 @@ const readMin = (body?: string) =>
       <div class="sobre-card">
         <div class="sc-head">
           <svg viewBox="0 0 100 100" width="40" height="40" aria-hidden="true">
-            <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
-            <circle cx="71" cy="31" r="7.5" fill="#92FDEF"></circle>
-            <circle cx="32" cy="86" r="8" fill="#061736" stroke="#92FDEF" stroke-width="5"></circle>
-            <circle cx="72" cy="86" r="8" fill="#061736" stroke="#EFFEFC" stroke-width="5"></circle>
+            <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="71" cy="31" r="7.5" fill="currentColor"></circle>
+            <circle cx="32" cy="86" r="8" fill="none" stroke="currentColor" stroke-width="5"></circle>
+            <circle cx="72" cy="86" r="8" fill="none" stroke="currentColor" stroke-width="5"></circle>
           </svg>
           <div>
             <strong>Mateus Roveda</strong>
@@ -147,102 +128,59 @@ const readMin = (body?: string) =>
   </div>
 </BaseLayout>
 
-<style>
-  /* Hero */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    margin: 0 calc(-1 * var(--space-lg));
-    padding: 0 var(--space-lg);
-    border-bottom: 1px solid transparent;
-  }
-  .hero-watermark {
-    position: absolute;
-    right: -60px;
-    top: -30px;
-    width: 460px;
-    height: 460px;
-    pointer-events: none;
-    opacity: 1;
-  }
-  .hero-watermark svg { width: 100%; height: 100%; }
-  .wm-dark { display: none; }
-  :global(html[data-theme='dark']) .wm-light { display: none; }
-  :global(html[data-theme='dark']) .wm-dark { display: block; }
-  .hero-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 96px 0 72px;
-    position: relative;
-  }
-  .hero-kicker {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 20px;
-  }
-  .hero h1 {
-    margin: 0 0 22px;
-    font-weight: 300;
-    font-size: clamp(2rem, 5vw, 54px);
-    line-height: 1.12;
-    letter-spacing: -0.025em;
-    max-width: 780px;
-    text-wrap: pretty;
-    color: var(--text-strong);
-  }
-  .hero h1 span {
-    font-weight: 700;
-    box-shadow: inset 0 -14px 0 var(--accent-highlight);
-  }
-  :global(html[data-theme='dark']) .hero h1 span {
-    box-shadow: inset 0 -14px 0 rgba(146, 253, 239, 0.22);
-  }
-  .hero-sub {
-    margin: 0 0 34px;
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--text-muted);
-    max-width: 560px;
-  }
-  .hero-cta {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-  .btn-primary {
-    background: var(--text-strong);
-    color: var(--surface-page);
-    font-weight: 600;
-    font-size: 15px;
-    padding: 13px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background 0.15s, color 0.15s;
-  }
-  .btn-primary:hover { background: var(--color-teal-dark); color: var(--surface-page); text-decoration: none; }
-  :global(html[data-theme='dark']) .btn-primary { background: #EFFEFC; color: #061736; }
-  :global(html[data-theme='dark']) .btn-primary:hover { background: var(--accent-highlight); }
-  .btn-ghost {
-    font-weight: 600;
-    font-size: 15px;
-    padding: 13px 20px;
-    border-radius: 8px;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-strong);
-    text-decoration: none;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .btn-ghost:hover { border-color: var(--text-strong); background: var(--surface-raised); text-decoration: none; }
+<script is:inline>
+  (function () {
+    var cards = document.querySelectorAll('[data-video-id]');
+    if (!cards.length) return;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (reduceMotion || isTouch) return;
 
-  /* Stack */
+    cards.forEach(function (card) {
+      var videoId = card.getAttribute('data-video-id');
+      if (!videoId) return;
+      var thumb = card.querySelector('.vc-thumb');
+      if (!thumb) return;
+      var timer = null;
+      var iframe = null;
+
+      function createPreview() {
+        if (iframe) return;
+        iframe = document.createElement('iframe');
+        iframe.className = 'vc-preview';
+        iframe.setAttribute('title', 'Prévia do vídeo');
+        iframe.setAttribute('allow', 'autoplay; encrypted-media');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('loading', 'eager');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + videoId + '&modestbranding=1&playsinline=1&rel=0';
+        iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+        thumb.appendChild(iframe);
+      }
+
+      function removePreview() {
+        if (timer) { clearTimeout(timer); timer = null; }
+        if (iframe && iframe.parentNode) {
+          iframe.parentNode.removeChild(iframe);
+          iframe = null;
+        }
+      }
+
+      card.addEventListener('mouseenter', function () {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(createPreview, 200);
+      });
+      card.addEventListener('mouseleave', removePreview);
+      card.addEventListener('focusin', function () { if (timer) clearTimeout(timer); timer = setTimeout(createPreview, 200); });
+      card.addEventListener('focusout', removePreview);
+    });
+  })();
+</script>
+
+<style>
   .stack {
-    max-width: var(--max-width);
+    max-width: 720px;
     margin: 0 auto;
-    padding: 0 0 96px;
+    padding: 32px 0 96px;
     display: flex;
     flex-direction: column;
     gap: 88px;
@@ -265,20 +203,20 @@ const readMin = (body?: string) =>
   }
   .sec-link {
     font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--accent);
+    font-size: 13.5px;
+    color: var(--text-body);
     text-decoration: none;
     white-space: nowrap;
   }
-  .sec-link:hover { color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--accent-highlight); text-decoration-thickness: 2px; }
+  .sec-link:hover { color: var(--text-strong); text-decoration: underline; text-underline-offset: 3px; }
 
-  /* Featured */
+  /* Featured - P&B caixa branca borda fina */
   .feat-card {
     display: block;
-    background: var(--surface-highlight);
-    border: 1px solid var(--border-card);
-    border-radius: 14px;
-    padding: 30px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 28px 28px;
     color: var(--text-strong);
     text-decoration: none;
     margin-bottom: 34px;
@@ -287,26 +225,28 @@ const readMin = (body?: string) =>
   .feat-card:hover { border-color: var(--text-strong); text-decoration: none; }
   .feat-meta {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--text-muted);
     margin-bottom: 12px;
   }
   .feat-title {
-    font-weight: 700;
-    font-size: 27px;
-    line-height: 1.25;
-    letter-spacing: -0.015em;
-    max-width: 720px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    max-width: 680px;
     text-wrap: pretty;
     color: var(--text-strong);
     margin-bottom: 10px;
   }
   .feat-desc {
+    font-family: var(--font-sans);
     font-size: 15px;
     line-height: 1.65;
-    color: var(--text-muted);
+    color: var(--text-body);
     max-width: 640px;
     margin-bottom: 18px;
   }
@@ -319,16 +259,17 @@ const readMin = (body?: string) =>
     color: var(--text-muted);
   }
   .mini-tag {
-    background: var(--surface-page);
+    background: var(--surface-raised);
     border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 11px;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--text-body);
   }
-  .feat-cta { margin-left: auto; color: var(--accent); font-weight: 700; }
-  .feat-card:hover .feat-cta { color: var(--text-strong); }
+  .feat-cta { margin-left: auto; color: var(--text-strong); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border-subtle); }
+  .feat-card:hover .feat-cta { text-decoration-color: var(--text-strong); }
 
-  /* Rows */
+  /* Rows - P&B */
   .post-rows { display: flex; flex-direction: column; }
   .row {
     display: grid;
@@ -344,41 +285,68 @@ const readMin = (body?: string) =>
   .row:hover { background: var(--surface-highlight); text-decoration: none; }
   .row-date {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--text-muted);
   }
   .row-main { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
   .row-title {
+    font-family: var(--font-display);
     font-weight: 600;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.4;
     letter-spacing: -0.01em;
     overflow-wrap: anywhere;
   }
   .row-tag {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--accent);
+    font-size: 12px;
+    color: var(--text-muted);
   }
-  .row-arrow { font-family: var(--font-mono); font-size: 14px; color: var(--accent); }
+  .row-arrow { font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); }
+  .row:hover .row-arrow { color: var(--text-strong); }
 
-  /* Canal - compacto */
+  /* Canal - featured 2col + 2 menores */
   .canal-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1.6fr 1fr;
+    grid-template-rows: auto auto;
     gap: 16px;
+  }
+  .video-card--featured {
+    grid-row: 1 / 3;
+  }
+  .video-card--featured .vc-thumb {
+    height: 100%;
+    min-height: 300px;
   }
   .video-card {
     display: flex;
     flex-direction: column;
-    gap: 8px;
     color: var(--text-strong);
     text-decoration: none;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    background: #0A0A0A;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s, box-shadow 0.32s ease, z-index 0s 0.32s;
   }
-  .video-card:hover { color: var(--accent); text-decoration: none; }
+  .video-card:hover {
+    transform: scale(1.09);
+    border-color: var(--text-strong);
+    box-shadow: 0 20px 44px -14px rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+    z-index: 5;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s, box-shadow 0.32s ease, z-index 0s;
+  }
+  .video-card:hover .vc-img { transform: scale(1.1); }
+  @media (prefers-reduced-motion: reduce) {
+    .video-card:hover { transform: none; }
+    .video-card:hover .vc-img { transform: none; }
+  }
   .vc-thumb {
     aspect-ratio: 16/9;
-    border-radius: 10px;
     padding: 12px;
     display: flex;
     flex-direction: column;
@@ -386,19 +354,23 @@ const readMin = (body?: string) =>
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    background: #061736;
+    background: #0A0A0A;
+    flex: 1;
   }
+  .video-card--featured .vc-thumb { aspect-ratio: auto; }
   .vc-img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.35s ease;
+    will-change: transform;
   }
   .vc-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(6,23,54,0.08) 0%, rgba(6,23,54,0.72) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.68) 100%);
   }
   .vc-top,
   .vc-title {
@@ -410,14 +382,14 @@ const readMin = (body?: string) =>
     align-items: center;
     justify-content: space-between;
     font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 0.16em;
+    font-size: 10px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #92FDEF;
+    color: #F5F5F5;
   }
   .vc-top span:first-child {
-    background: rgba(6, 23, 54, 0.62);
-    border: 1px solid rgba(146, 253, 239, 0.18);
+    background: rgba(0, 0, 0, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     padding: 3px 7px;
@@ -428,23 +400,26 @@ const readMin = (body?: string) =>
     line-height: 0;
     filter: drop-shadow(0 1px 6px rgba(0,0,0,0.45));
   }
+  .vc-preview { z-index: 2; }
   .vc-title {
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-weight: 600;
     font-size: 14px;
-    color: #EFFEFC;
+    color: #FFFFFF;
     line-height: 1.3;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.6);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .video-card--featured .vc-title { font-size: 18px; -webkit-line-clamp: 3; }
 
-  /* Sobre */
+  /* Sobre - P&B */
   .sec-sobre {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 56px;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
     align-items: start;
   }
   .sobre-text h2 {
@@ -457,10 +432,11 @@ const readMin = (body?: string) =>
   }
   .sobre-text p {
     margin: 0 0 14px;
-    font-size: 16px;
+    font-family: var(--font-sans);
+    font-size: 15px;
     line-height: 1.75;
     color: var(--text-body);
-    max-width: 560px;
+    max-width: 60ch;
     text-wrap: pretty;
   }
   .more-link {
@@ -468,57 +444,69 @@ const readMin = (body?: string) =>
     margin-top: 8px;
     font-family: var(--font-mono);
     font-size: 13px;
-    color: var(--accent);
-    text-decoration: none;
+    color: var(--text-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border-subtle);
     font-weight: 700;
   }
-  .more-link:hover { color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--accent-highlight); text-decoration-thickness: 2px; }
+  .more-link:hover { text-decoration-color: var(--text-strong); }
 
   .sobre-card {
-    background: #061736;
-    border-radius: 14px;
+    background: #0A0A0A;
+    color: #EDEDED;
+    border: 1px solid #0A0A0A;
+    border-radius: 12px;
     padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
+  :global(html[data-theme='dark']) .sobre-card {
+    background: #1C1C1C;
+    border-color: #383838;
+  }
   .sc-head {
     display: flex;
     align-items: center;
     gap: 14px;
+    color: #EDEDED;
   }
-  .sc-head strong { display: block; font-weight: 700; font-size: 17px; color: #EFFEFC; }
-  .sc-head span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--accent-highlight); text-transform: uppercase; }
+  .sc-head strong { display: block; font-family: var(--font-display); font-weight: 600; font-size: 17px; color: #FFFFFF; }
+  .sc-head span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: #B8B8B8; text-transform: uppercase; }
   .sobre-card > .sc-links {
     display: flex;
     flex-direction: column;
     gap: 0;
-    border-top: 1px solid rgba(239,254,252,0.12);
+    border-top: 1px solid rgba(255,255,255,0.12);
     padding-top: 12px;
   }
+  :global(html[data-theme='dark']) .sobre-card > .sc-links { border-top-color: #3A3A3A; }
   .sc-links a {
     display: flex;
     justify-content: space-between;
     font-family: var(--font-mono);
     font-size: 13px;
-    color: #EFFEFC;
+    color: #EDEDED;
     text-decoration: none;
     padding: 6px 0;
+    border-bottom: 1px solid transparent;
   }
-  .sc-links a span:last-child { color: var(--accent-highlight); }
-  .sc-links a:hover { color: var(--accent-highlight); }
+  .sc-links a span:last-child { color: #B8B8B8; }
+  .sc-links a:hover { color: #FFFFFF; }
+  .sc-links a:hover span:last-child { color: #FFFFFF; text-decoration: underline; text-underline-offset: 2px; }
 
   @media (max-width: 900px) {
-    .canal-grid { grid-template-columns: 1fr; }
+    .canal-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .video-card--featured { grid-row: auto; }
+    .video-card--featured .vc-thumb { min-height: auto; aspect-ratio: 16/9; }
     .sec-sobre { grid-template-columns: 1fr; gap: 32px; }
   }
   @media (max-width: 640px) {
-    .hero-inner { padding: 56px 0 48px; }
-    .hero-watermark { width: 300px; height: 300px; right: -40px; top: -20px; }
-    .stack { gap: 56px; padding-bottom: 48px; }
+    .stack { gap: 56px; padding-top: 16px; padding-bottom: 48px; }
     .row { grid-template-columns: 1fr auto; gap: 12px; }
     .row-date { grid-column: 1 / -1; }
     .feat-card { padding: 22px 20px; }
-    .feat-title { font-size: 22px; }
+    .feat-title { font-size: 21px; }
   }
 </style>

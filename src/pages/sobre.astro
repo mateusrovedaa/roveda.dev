@@ -206,17 +206,18 @@ const highlightedProjects = [
   }
 
   .hero-text h1 {
-    font-family: var(--font-sans);
+    font-family: var(--font-display);
     font-size: clamp(2rem, 4.5vw, 3rem);
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: -0.03em;
     color: var(--text-strong);
     margin-bottom: var(--space-xs);
   }
 
   .tagline {
+    font-family: var(--font-sans);
     font-size: 0.95rem;
-    font-weight: var(--font-weight-light);
+    font-weight: 400;
     color: var(--text-muted);
     margin-bottom: var(--space-md);
   }
@@ -231,20 +232,20 @@ const highlightedProjects = [
     display: inline-block;
     padding: var(--space-xs) var(--space-sm);
     border: 1px solid var(--border-subtle);
-    background: var(--surface-raised);
+    background: var(--surface-card);
     border-radius: 6px;
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-strong);
     text-decoration: none;
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: border-color 0.15s, background 0.15s;
     font-family: var(--font-mono);
   }
 
   .quick-link:hover {
-    background-color: var(--accent-highlight);
-    border-color: #061736;
-    color: #061736;
+    background-color: var(--surface-raised);
+    border-color: var(--text-strong);
+    color: var(--text-strong);
     text-decoration: none;
   }
 
@@ -272,7 +273,7 @@ const highlightedProjects = [
 
   .section h2 {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     font-weight: 700;
     color: var(--text-strong);
     margin-bottom: var(--space-lg);
@@ -285,7 +286,7 @@ const highlightedProjects = [
 
   .section h2::before {
     content: '//';
-    color: var(--accent);
+    color: var(--text-muted);
   }
 
   .sobre-intro p {
@@ -308,7 +309,7 @@ const highlightedProjects = [
   }
 
   .timeline-item {
-    border-left: 3px solid var(--accent-highlight);
+    border-left: 2px solid var(--text-strong);
     padding-left: var(--space-md);
   }
 
@@ -321,19 +322,21 @@ const highlightedProjects = [
   }
 
   .timeline-header strong {
-    font-weight: var(--font-weight-bold);
+    font-family: var(--font-display);
+    font-weight: 600;
     color: var(--text-strong);
   }
 
   .company {
-    color: var(--color-teal-mid);
+    color: var(--text-muted);
     font-size: 0.9rem;
   }
 
   .period {
+    font-family: var(--font-mono);
     color: var(--text-muted);
     font-size: 0.8rem;
-    font-weight: var(--font-weight-light);
+    font-weight: 400;
   }
 
   .timeline-item p {

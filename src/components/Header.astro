@@ -18,19 +18,19 @@ const isActive = (href: string) => {
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="logo" aria-label="Roveda, página inicial">
-      <!-- Light: simbolo-claro (R navio #061736 em fundo claro) -->
+      <!-- Light: simbolo em preto -->
       <svg viewBox="0 0 100 100" width="34" height="34" aria-hidden="true" class="logo-mark mark-light">
-        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#061736" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
-        <circle cx="71" cy="31" r="7.5" fill="#061736"></circle>
-        <circle cx="32" cy="86" r="8" fill="#FCFFFE" stroke="#061736" stroke-width="5"></circle>
-        <circle cx="72" cy="86" r="8" fill="#FCFFFE" stroke="#077E7D" stroke-width="5"></circle>
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#0A0A0A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="7.5" fill="#0A0A0A"></circle>
+        <circle cx="32" cy="86" r="8" fill="#FFFFFF" stroke="#0A0A0A" stroke-width="5"></circle>
+        <circle cx="72" cy="86" r="8" fill="#FFFFFF" stroke="#0A0A0A" stroke-width="5"></circle>
       </svg>
-      <!-- Dark: simbolo-navio (R mint #92FDEF em fundo navio #061736) -->
+      <!-- Dark: simbolo em cinza claro -->
       <svg viewBox="0 0 100 100" width="34" height="34" aria-hidden="true" class="logo-mark mark-dark">
-        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
-        <circle cx="71" cy="31" r="7.5" fill="#92FDEF"></circle>
-        <circle cx="32" cy="86" r="8" fill="#061736" stroke="#92FDEF" stroke-width="5"></circle>
-        <circle cx="72" cy="86" r="8" fill="#061736" stroke="#EFFEFC" stroke-width="5"></circle>
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#EDEDED" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="7.5" fill="#EDEDED"></circle>
+        <circle cx="32" cy="86" r="8" fill="#0A0A0A" stroke="#EDEDED" stroke-width="5"></circle>
+        <circle cx="72" cy="86" r="8" fill="#0A0A0A" stroke="#EDEDED" stroke-width="5"></circle>
       </svg>
       <span class="logo-type">Roveda</span>
       <span class="logo-tagline">liberdade de conhecimentos</span>
@@ -79,18 +79,17 @@ const isActive = (href: string) => {
 <style>
   .site-header {
     background: var(--surface-page);
+    background: color-mix(in srgb, var(--surface-page) 86%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
     border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 100;
   }
-  :global(html[data-theme='dark']) .site-header {
-    background: #061736;
-    border-bottom-color: rgba(146, 253, 239, 0.12);
-  }
 
   .header-inner {
-    max-width: var(--max-width);
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 32px;
     height: 76px;
@@ -122,27 +121,23 @@ const isActive = (href: string) => {
     font-weight: 700;
     font-size: 20px;
     letter-spacing: -0.02em;
-    color: #061736;
+    color: var(--text-strong);
     line-height: 1;
-  }
-  :global(html[data-theme='dark']) .logo-type {
-    color: #EFFEFC;
   }
 
   .logo-tagline {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    letter-spacing: 0.1em;
     text-transform: lowercase;
-    color: #014144;
+    color: var(--text-muted);
     margin-left: 2px;
     line-height: 1;
     display: block;
     /* hide on narrow, show on wide */
   }
   :global(html[data-theme='dark']) .logo-tagline {
-    color: #92FDEF;
-    opacity: 0.85;
+    color: var(--text-body);
   }
   @media (max-width: 1100px) {
     .logo-tagline { display: none; }
@@ -157,26 +152,19 @@ const isActive = (href: string) => {
 
   .nav-link {
     font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-body);
     text-decoration: none;
     padding-bottom: 2px;
     border-bottom: 2px solid transparent;
     transition: color 0.15s, border-color 0.15s;
   }
-  :global(html[data-theme='dark']) .nav-link {
-    color: rgba(239, 254, 252, 0.72);
-  }
   .nav-link:hover,
   .nav-link.active {
     color: var(--text-strong);
-    border-bottom-color: var(--accent-highlight);
+    border-bottom-color: currentColor;
     text-decoration: none;
-  }
-  :global(html[data-theme='dark']) .nav-link:hover,
-  :global(html[data-theme='dark']) .nav-link.active {
-    color: #EFFEFC;
-    border-bottom-color: #92FDEF;
   }
 
   .header-actions {
@@ -188,31 +176,21 @@ const isActive = (href: string) => {
 
   .contact-btn {
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--text-strong);
     background: var(--surface-raised);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-control);
     border-radius: 7px;
     padding: 8px 14px;
     text-decoration: none;
     transition: background 0.15s, border-color 0.15s;
     white-space: nowrap;
   }
-  :global(html[data-theme='dark']) .contact-btn {
-    color: #EFFEFC;
-    background: rgba(146, 253, 239, 0.08);
-    border-color: rgba(146, 253, 239, 0.18);
-  }
   .contact-btn:hover {
     background: var(--accent-highlight);
     border-color: var(--text-strong);
     color: var(--text-strong);
     text-decoration: none;
-  }
-  :global(html[data-theme='dark']) .contact-btn:hover {
-    background: #92FDEF;
-    color: #061736;
-    border-color: #92FDEF;
   }
 
   .theme-toggle {
@@ -223,25 +201,16 @@ const isActive = (href: string) => {
     height: 32px;
     padding: 0;
     background: var(--surface-raised);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-control);
     border-radius: 7px;
-    color: var(--text-muted);
+    color: var(--text-body);
     cursor: pointer;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
     flex-shrink: 0;
   }
-  :global(html[data-theme='dark']) .theme-toggle {
-    background: rgba(146, 253, 239, 0.08);
-    border-color: rgba(146, 253, 239, 0.14);
-    color: rgba(239,254,252,0.7);
-  }
   .theme-toggle:hover {
     border-color: var(--text-strong);
     color: var(--text-strong);
-  }
-  :global(html[data-theme='dark']) .theme-toggle:hover {
-    border-color: #92FDEF;
-    color: #92FDEF;
   }
 
   .theme-toggle svg { display: block; }
@@ -266,7 +235,7 @@ const isActive = (href: string) => {
   @media (max-width: 520px) {
     .header-inner { padding: 12px 16px; }
     .nav ul { justify-content: space-between; width: 100%; }
-    .contact-btn { padding: 6px 10px; font-size: 12px; }
+    .contact-btn { padding: 6px 10px; font-size: 12.5px; }
   }
 </style>
 
@@ -281,7 +250,8 @@ const isActive = (href: string) => {
       root.style.setProperty('color-scheme', next);
       try { localStorage.setItem('theme', next); } catch (e) {}
       const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute('content', next === 'dark' ? '#061736' : '#FCFFFE');
+      if (meta) meta.setAttribute('content', next === 'dark' ? '#111111' : '#FFFFFF');
+      document.dispatchEvent(new CustomEvent('site-theme-change', { detail: next }));
     });
   })();
 </script>

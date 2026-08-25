@@ -5,19 +5,19 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-left">
-      <!-- Light: R navio escuro -->
+      <!-- Light: R em preto -->
       <svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true" class="footer-mark mark-light">
-        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#061736" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"></path>
-        <circle cx="71" cy="31" r="8.5" fill="#061736"></circle>
-        <circle cx="32" cy="86" r="9" fill="#FCFFFE" stroke="#061736" stroke-width="6"></circle>
-        <circle cx="72" cy="86" r="9" fill="#FCFFFE" stroke="#077E7D" stroke-width="6"></circle>
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#0A0A0A" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="8.5" fill="#0A0A0A"></circle>
+        <circle cx="32" cy="86" r="9" fill="#FFFFFF" stroke="#0A0A0A" stroke-width="6"></circle>
+        <circle cx="72" cy="86" r="9" fill="#FFFFFF" stroke="#0A0A0A" stroke-width="6"></circle>
       </svg>
-      <!-- Dark: R mint -->
+      <!-- Dark: R em cinza claro -->
       <svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true" class="footer-mark mark-dark">
-        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"></path>
-        <circle cx="71" cy="31" r="8.5" fill="#92FDEF"></circle>
-        <circle cx="32" cy="86" r="9" fill="#061736" stroke="#92FDEF" stroke-width="6"></circle>
-        <circle cx="72" cy="86" r="9" fill="#061736" stroke="#EFFEFC" stroke-width="6"></circle>
+        <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#EDEDED" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle cx="71" cy="31" r="8.5" fill="#EDEDED"></circle>
+        <circle cx="32" cy="86" r="9" fill="#0A0A0A" stroke="#EDEDED" stroke-width="6"></circle>
+        <circle cx="72" cy="86" r="9" fill="#0A0A0A" stroke="#EDEDED" stroke-width="6"></circle>
       </svg>
       <span>© {year} Mateus Roveda · conteúdo sob CC BY-SA</span>
     </div>
@@ -31,13 +31,9 @@ const year = new Date().getFullYear();
     margin-top: auto;
     background: var(--surface-page);
   }
-  :global(html[data-theme='dark']) .site-footer {
-    background: #061736;
-    border-top-color: rgba(146, 253, 239, 0.12);
-  }
 
   .footer-inner {
-    max-width: var(--max-width);
+    max-width: 1200px;
     margin: 0 auto;
     padding: 28px 32px;
     display: flex;
@@ -45,11 +41,8 @@ const year = new Date().getFullYear();
     justify-content: space-between;
     gap: 24px;
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-  :global(html[data-theme='dark']) .footer-inner {
-    color: rgba(239,254,252,0.62);
+    font-size: 12.5px;
+    color: var(--text-body);
   }
 
   .footer-left {

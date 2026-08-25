@@ -136,7 +136,7 @@ const projects = [
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--text-strong);
-    background: var(--surface-raised);
+    background: var(--surface-card);
     border: 1px solid var(--border-subtle);
     padding: 4px 10px;
     border-radius: 6px;
@@ -145,9 +145,9 @@ const projects = [
   }
 
   .quick-links a:hover {
-    color: #061736;
-    background: var(--accent-highlight);
-    border-color: #061736;
+    color: var(--text-strong);
+    background: var(--surface-raised);
+    border-color: var(--text-strong);
     text-decoration: none;
   }
 
@@ -178,13 +178,14 @@ const projects = [
     font-family: var(--font-mono);
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--accent-ink);
+    color: var(--text-muted);
     flex-shrink: 0;
   }
 
   .project h2 {
+    font-family: var(--font-display);
     font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: -0.02em;
     margin-bottom: 0;
   }
@@ -196,7 +197,9 @@ const projects = [
   }
 
   .project h2 a:hover {
-    color: var(--accent);
+    color: var(--text-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .project img {
@@ -220,13 +223,13 @@ const projects = [
   .media-title {
     font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 0.7rem;
+    font-size: 0.76rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-teal-mid);
+    color: var(--text-muted);
     margin-bottom: var(--space-sm);
   }
-  .media-title::before { content: '// '; color: var(--accent-ink); }
+  .media-title::before { content: '// '; color: var(--text-muted); }
 
   .media ul {
     list-style: none;
@@ -236,18 +239,20 @@ const projects = [
   }
 
   .media a {
+    font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: var(--color-blue-deep);
-    background: rgba(0, 92, 254, 0.05);
-    border: 1px solid rgba(0, 92, 254, 0.15);
+    color: var(--text-muted);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
     padding: 2px 8px;
     border-radius: var(--radius-sm);
     text-decoration: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, color 0.15s;
   }
 
   .media a:hover {
-    border-color: var(--color-blue-deep);
+    border-color: var(--text-strong);
+    color: var(--text-strong);
     text-decoration: none;
   }
 </style>

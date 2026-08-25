@@ -63,7 +63,7 @@ function fmtDate(iso: string) {
     background: var(--surface-highlight);
   }
   .empty p { color: var(--text-muted); }
-  .empty-hint { margin-top: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+  .empty-hint { margin-top: 8px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-body); }
   .empty-hint code { font-size: 12px; background: var(--surface-page); border: 1px solid var(--border-subtle); padding: 1px 5px; border-radius: 4px; }
 
   .mat-grid {
@@ -84,8 +84,7 @@ function fmtDate(iso: string) {
     transition: border-color 0.15s, transform 0.15s;
   }
   .mat-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
+    border-color: var(--text-strong);
     text-decoration: none;
   }
   .mat-top {
@@ -93,7 +92,7 @@ function fmtDate(iso: string) {
     align-items: center;
     justify-content: space-between;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
   }
   .mat-ext {
     background: var(--surface-raised);
@@ -101,16 +100,13 @@ function fmtDate(iso: string) {
     padding: 2px 7px;
     border-radius: 999px;
     font-weight: 700;
-    color: var(--text-strong);
+    color: var(--text-muted);
     letter-spacing: 0.06em;
   }
-  .mat-card[data-ext=".pdf"] .mat-ext { background: rgba(220, 38, 38, 0.08); color: #dc2626; border-color: rgba(220,38,38,0.18); }
-  :global(html[data-theme='dark']) .mat-card[data-ext=".pdf"] .mat-ext { background: rgba(248,113,113,0.12); color: #f87171; }
-  .mat-card[data-ext=".html"] .mat-ext,
-  .mat-card[data-ext=".htm"] .mat-ext { background: rgba(0,92,254,0.08); color: var(--color-blue-deep); border-color: rgba(0,92,254,0.15); }
   .mat-size { color: var(--text-muted); letter-spacing: 0.04em; }
   .mat-name {
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-weight: 600;
     font-size: 14px;
     line-height: 1.3;
     color: var(--text-strong);
@@ -118,7 +114,7 @@ function fmtDate(iso: string) {
   }
   .mat-date {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-muted);
   }
 </style>

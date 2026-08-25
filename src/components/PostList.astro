@@ -48,10 +48,10 @@ const rest = featured ? others : posts;
 <style>
   .feat-card {
     display: block;
-    background: var(--surface-highlight);
-    border: 1px solid var(--border-card);
-    border-radius: 14px;
-    padding: 30px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 28px 28px;
     color: var(--text-strong);
     text-decoration: none;
     margin-bottom: 34px;
@@ -60,26 +60,28 @@ const rest = featured ? others : posts;
   .feat-card:hover { border-color: var(--text-strong); text-decoration: none; }
   .feat-meta {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--text-muted);
     margin-bottom: 12px;
   }
   .feat-title {
-    font-weight: 700;
-    font-size: 27px;
-    line-height: 1.25;
-    letter-spacing: -0.015em;
-    max-width: 720px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    max-width: 680px;
     text-wrap: pretty;
     color: var(--text-strong);
     margin-bottom: 10px;
   }
   .feat-desc {
+    font-family: var(--font-sans);
     font-size: 15px;
     line-height: 1.65;
-    color: var(--text-muted);
+    color: var(--text-body);
     max-width: 640px;
     margin-bottom: 18px;
   }
@@ -89,16 +91,17 @@ const rest = featured ? others : posts;
     gap: 10px;
     font-family: var(--font-mono);
     font-size: 12px;
-  }
-  .mini-tag {
-    background: var(--surface-page);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 11px;
     color: var(--text-muted);
   }
-  .feat-cta { margin-left: auto; color: var(--accent); font-weight: 700; }
+  .mini-tag {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--text-body);
+  }
+  .feat-cta { margin-left: auto; color: var(--text-strong); font-weight: 700; text-decoration: underline; text-decoration-color: var(--border-subtle); text-underline-offset: 3px; }
 
   .rows { display: flex; flex-direction: column; }
   .row {
@@ -115,19 +118,21 @@ const rest = featured ? others : posts;
   .row:hover { background: var(--surface-highlight); text-decoration: none; }
   .row-date {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--text-muted);
   }
   .row-main { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
   .row-title {
+    font-family: var(--font-display);
     font-weight: 600;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.4;
     letter-spacing: -0.01em;
     overflow-wrap: anywhere;
   }
-  .row-tag { font-family: var(--font-mono); font-size: 11px; color: var(--accent); }
-  .row-arrow { font-family: var(--font-mono); font-size: 14px; color: var(--accent); }
+  .row-tag { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+  .row-arrow { font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); }
+  .row:hover .row-arrow { color: var(--text-strong); }
 
   @media (max-width: 640px) {
     .row { grid-template-columns: 1fr auto; gap: 12px; }

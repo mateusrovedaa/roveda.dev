@@ -12,7 +12,6 @@ const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTim
   <PageHeader
     eyebrow="~/artigos"
     title="Artigos"
-    subtitle={`${posts.length} textos que escrevi sobre infraestrutura, automação e software livre em português, sem paywall.`}
   />
   <PostList posts={posts} />
 </BaseLayout>

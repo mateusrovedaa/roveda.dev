@@ -7,7 +7,14 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   output: 'static',
   site: 'https://roveeb.com',
-  // Inlina CSS no HTML — remove os requests render-blocking de CSS no critical path
   build: { inlineStylesheets: 'always' },
   integrations: [pagefind(), sitemap()],
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+    },
+  },
 });

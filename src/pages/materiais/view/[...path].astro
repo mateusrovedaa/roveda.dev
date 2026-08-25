@@ -92,7 +92,8 @@ const isHtml = file.ext === '.html' || file.ext === '.htm';
     gap: 6px;
     align-items: center;
   }
-  .crumb a { color: var(--accent); text-decoration: none; }
+  .crumb a { color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--border-subtle); text-underline-offset: 2px; }
+  .crumb a:hover { text-decoration-color: var(--text-strong); }
   .crumb a:hover { text-decoration: underline; }
   .crumb span:last-child { color: var(--text-strong); overflow-wrap: anywhere; }
 
@@ -106,7 +107,7 @@ const isHtml = file.ext === '.html' || file.ext === '.htm';
     gap: 10px;
     align-items: center;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-muted);
     margin-bottom: 10px;
   }
@@ -116,14 +117,16 @@ const isHtml = file.ext === '.html' || file.ext === '.htm';
     padding: 2px 7px;
     border-radius: 999px;
     font-weight: 700;
-    color: var(--text-strong);
+    color: var(--text-muted);
   }
   .mat-header h1 {
+    font-family: var(--font-display);
     font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.2;
     overflow-wrap: anywhere;
+    color: var(--text-strong);
   }
   .path {
     font-family: var(--font-mono);
@@ -148,9 +151,9 @@ const isHtml = file.ext === '.html' || file.ext === '.htm';
     font-weight: 700;
     text-decoration: none;
   }
-  .btn:hover { background: #014144; color: #EFFEFC; text-decoration: none; }
-  :global(html[data-theme='dark']) .btn { background: #EFFEFC; color: #061736; }
-  :global(html[data-theme='dark']) .btn:hover { background: #92FDEF; }
+  .btn:hover { background: #000000; color: #FFFFFF; text-decoration: none; }
+  :global(html[data-theme='dark']) .btn { background: #EDEDED; color: #0A0A0A; }
+  :global(html[data-theme='dark']) .btn:hover { background: #FFFFFF; color: #0A0A0A; }
   .btn-ghost {
     display: inline-block;
     padding: 8px 14px;
@@ -187,8 +190,8 @@ const isHtml = file.ext === '.html' || file.ext === '.htm';
     margin: 1em 0 0.5em;
   }
   .html-frame :global(p) { margin: 0.8em 0; line-height: 1.7; color: var(--text-body); }
-  .html-frame :global(a) { color: var(--accent); }
-  .html-frame :global(pre) { background: #061736; color: #92FDEF; padding: 14px; border-radius: 8px; overflow: auto; }
+  .html-frame :global(a) { color: var(--text-strong); text-decoration: underline; text-underline-offset: 2px; }
+  .html-frame :global(pre) { background: var(--code-bg); color: var(--code-fg); border: 1px solid var(--border-subtle); padding: 14px; border-radius: 8px; overflow: auto; }
   .html-frame :global(img) { max-width: 100%; height: auto; border-radius: 8px; }
   .generic p { color: var(--text-muted); margin-bottom: 12px; }
 </style>
