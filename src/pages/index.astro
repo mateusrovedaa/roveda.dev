@@ -41,23 +41,36 @@ const readMin = (body?: string) =>
             rel="noopener noreferrer"
             class:list={['video-card', { 'video-card--featured': i === 0 }]}
             data-video-id={v.id}
+            data-video-title={v.title}
             aria-label={`Assistir ${v.title} no YouTube`}
           >
             <div class="vc-thumb">
               <img src={v.thumbnail} alt="" loading="lazy" class="vc-img" width="320" height="180" />
               <div class="vc-overlay"></div>
-              <div class="vc-top">
-                <span>{fmtVideoDate(v.published)}</span>
-                <span class="vc-play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.9)" stroke-width="1"></circle><path d="M10 8.5 L16 12 L10 15.5 Z" fill="#FFFFFF"></path></svg>
-                </span>
+              <span class="vc-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.9)" stroke-width="1"></circle><path d="M10 8.5 L16 12 L10 15.5 Z" fill="#FFFFFF"></path></svg>
+              </span>
+              <div class="vc-info">
+                <span class="vc-title">{v.title}</span>
+                <span class="vc-date">{fmtVideoDate(v.published)}</span>
               </div>
-              <span class="vc-title">{v.title}</span>
             </div>
           </a>
         ))}
       </div>
     </section>
+
+    <div id="video-modal" class="video-modal">
+      <div class="vm-backdrop" data-close></div>
+      <div class="vm-dialog" role="dialog" aria-modal="true" aria-label="Reprodutor de vídeo">
+        <button type="button" class="vm-close" data-close aria-label="Fechar vídeo">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+        </button>
+        <div class="vm-frame-wrap">
+          <iframe id="video-modal-iframe" class="vm-iframe" src="" title="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
 
     <!-- Artigos -->
     <section id="artigos" class="sec-articles">
@@ -107,15 +120,12 @@ const readMin = (body?: string) =>
       <div class="sobre-card">
         <div class="sc-head">
           <svg viewBox="0 0 100 100" width="40" height="40" aria-hidden="true">
-            <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
-            <circle cx="71" cy="31" r="7.5" fill="currentColor"></circle>
-            <circle cx="32" cy="86" r="8" fill="none" stroke="currentColor" stroke-width="5"></circle>
-            <circle cx="72" cy="86" r="8" fill="none" stroke="currentColor" stroke-width="5"></circle>
+            <path d="M32 86 V14 H54 A17 17 0 0 1 54 48 H32 M52 48 L72 86" fill="none" stroke="#92FDEF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="71" cy="31" r="7.5" fill="#92FDEF"></circle>
+            <circle cx="32" cy="86" r="8" class="sc-ring" stroke="#92FDEF" stroke-width="5"></circle>
+            <circle cx="72" cy="86" r="8" class="sc-ring" stroke="#EFFEFC" stroke-width="5"></circle>
           </svg>
-          <div>
-            <strong>Mateus Roveda</strong>
-            <span>liberdade de conhecimentos</span>
-          </div>
+          <strong class="sc-name">Roveda</strong>
         </div>
         <div class="sc-links">
           <a href="https://github.com/mateusrovedaa" target="_blank" rel="noopener noreferrer"><span>github</span><span>mateusrovedaa ↗</span></a>
@@ -130,48 +140,44 @@ const readMin = (body?: string) =>
 
 <script is:inline>
   (function () {
+    var modal = document.getElementById('video-modal');
     var cards = document.querySelectorAll('[data-video-id]');
-    if (!cards.length) return;
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    if (reduceMotion || isTouch) return;
+    if (!modal || !cards.length) return;
+    var iframe = document.getElementById('video-modal-iframe');
+    var closeBtn = modal.querySelector('.vm-close');
+    var lastTrigger = null;
+
+    function openModal(videoId, title) {
+      lastTrigger = document.activeElement;
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      iframe.title = title || 'Vídeo do YouTube';
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeModal() {
+      if (!modal.classList.contains('is-open')) return;
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      iframe.src = '';
+      if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
+    }
+
+    modal.querySelectorAll('[data-close]').forEach(function (el) {
+      el.addEventListener('click', closeModal);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
 
     cards.forEach(function (card) {
-      var videoId = card.getAttribute('data-video-id');
-      if (!videoId) return;
-      var thumb = card.querySelector('.vc-thumb');
-      if (!thumb) return;
-      var timer = null;
-      var iframe = null;
-
-      function createPreview() {
-        if (iframe) return;
-        iframe = document.createElement('iframe');
-        iframe.className = 'vc-preview';
-        iframe.setAttribute('title', 'Prévia do vídeo');
-        iframe.setAttribute('allow', 'autoplay; encrypted-media');
-        iframe.setAttribute('allowfullscreen', '');
-        iframe.setAttribute('loading', 'eager');
-        iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + videoId + '&modestbranding=1&playsinline=1&rel=0';
-        iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
-        thumb.appendChild(iframe);
-      }
-
-      function removePreview() {
-        if (timer) { clearTimeout(timer); timer = null; }
-        if (iframe && iframe.parentNode) {
-          iframe.parentNode.removeChild(iframe);
-          iframe = null;
-        }
-      }
-
-      card.addEventListener('mouseenter', function () {
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(createPreview, 200);
+      card.addEventListener('click', function (e) {
+        var videoId = card.getAttribute('data-video-id');
+        if (!videoId) return;
+        e.preventDefault();
+        openModal(videoId, card.getAttribute('data-video-title'));
       });
-      card.addEventListener('mouseleave', removePreview);
-      card.addEventListener('focusin', function () { if (timer) clearTimeout(timer); timer = setTimeout(createPreview, 200); });
-      card.addEventListener('focusout', removePreview);
     });
   })();
 </script>
@@ -324,25 +330,29 @@ const readMin = (body?: string) =>
     flex-direction: column;
     color: var(--text-strong);
     text-decoration: none;
+    cursor: pointer;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid var(--border-subtle);
     background: #0A0A0A;
     position: relative;
-    z-index: 1;
-    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s, box-shadow 0.32s ease, z-index 0s 0.32s;
+    transition: border-color 0.15s;
   }
-  .video-card:hover {
-    transform: scale(1.09);
+  .video-card:hover,
+  .video-card:focus-visible {
     border-color: var(--text-strong);
-    box-shadow: 0 20px 44px -14px rgba(0, 0, 0, 0.4);
     text-decoration: none;
-    z-index: 5;
-    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s, box-shadow 0.32s ease, z-index 0s;
   }
-  .video-card:hover .vc-img { transform: scale(1.1); }
+  .video-card:hover .vc-img,
+  .video-card:focus-visible .vc-img {
+    transform: scale(1.06);
+  }
+  .video-card:hover .vc-play,
+  .video-card:focus-visible .vc-play {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
   @media (prefers-reduced-motion: reduce) {
-    .video-card:hover { transform: none; }
     .video-card:hover .vc-img { transform: none; }
   }
   .vc-thumb {
@@ -350,7 +360,7 @@ const readMin = (body?: string) =>
     padding: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -372,35 +382,27 @@ const readMin = (body?: string) =>
     inset: 0;
     background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.68) 100%);
   }
-  .vc-top,
-  .vc-title {
-    position: relative;
-    z-index: 1;
-  }
-  .vc-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #F5F5F5;
-  }
-  .vc-top span:first-child {
-    background: rgba(0, 0, 0, 0.62);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    padding: 3px 7px;
-    border-radius: 999px;
-    line-height: 1;
-  }
   .vc-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
     line-height: 0;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: opacity 0.2s ease, transform 0.2s ease;
     filter: drop-shadow(0 1px 6px rgba(0,0,0,0.45));
   }
-  .vc-preview { z-index: 2; }
+  @media (prefers-reduced-motion: reduce) {
+    .vc-play { transition: opacity 0.2s ease; transform: translate(-50%, -50%) scale(1); }
+  }
+  .vc-info {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
   .vc-title {
     font-family: var(--font-display);
     font-weight: 600;
@@ -414,6 +416,74 @@ const readMin = (body?: string) =>
     overflow: hidden;
   }
   .video-card--featured .vc-title { font-size: 18px; -webkit-line-clamp: 3; }
+  .vc-date {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(237, 237, 237, 0.68);
+  }
+
+  /* Modal do player de vídeo */
+  .video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .video-modal.is-open { opacity: 1; pointer-events: auto; }
+  .vm-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  .vm-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+  }
+  .vm-close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .vm-close:hover { border-color: #FFFFFF; }
+  .vm-frame-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000000;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .vm-iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  @media (max-width: 640px) {
+    .video-modal { padding: 16px; }
+    .vm-close { top: -40px; }
+  }
 
   /* Sobre - P&B */
   .sec-sobre {
@@ -469,11 +539,17 @@ const readMin = (body?: string) =>
   .sc-head {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     color: #EDEDED;
   }
-  .sc-head strong { display: block; font-family: var(--font-display); font-weight: 600; font-size: 17px; color: #FFFFFF; }
-  .sc-head span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: #B8B8B8; text-transform: uppercase; }
+  .sc-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 17px;
+    color: #FFFFFF;
+  }
+  .sc-ring { fill: #0A0A0A; }
+  :global(html[data-theme='dark']) .sc-ring { fill: #1C1C1C; }
   .sobre-card > .sc-links {
     display: flex;
     flex-direction: column;

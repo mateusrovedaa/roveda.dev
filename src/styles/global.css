@@ -1,3 +1,12 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* O tema aqui é alternado via atributo (html[data-theme="dark"]), não via
+   classe .dark — ajusta o variant do Tailwind pra bater com o mecanismo
+   já existente no Header (theme-toggle). */
+@custom-variant dark (&:is([data-theme='dark'] *));
+
 :root {
   /* Paleta P&B - light */
   color-scheme: light;
@@ -12,7 +21,6 @@
   --border-card: #E5E5E5;
   --border-control: #8E8E8E;
   --border-strong: #0A0A0A;
-  --accent: #0A0A0A;
   --accent-highlight: #E5E5E5;
   --accent-ink: #0A0A0A;
   --accent-mint: #F5F5F5;
@@ -56,10 +64,45 @@
 
   --max-width: 720px;
   --content-width: 720px;
-  --post-width: 820px;
+  --post-width: 670px;
 
   --gradient-primary: none;
   --gradient-hero: none;
+
+  /* shadcn/ui - tokens semânticos mapeados pra paleta P&B já existente
+     (não usa a paleta oklch neutra padrão do shadcn). */
+  --background: var(--surface-page);
+  --foreground: var(--text-strong);
+  --card: var(--surface-card);
+  --card-foreground: var(--text-strong);
+  --popover: var(--surface-card);
+  --popover-foreground: var(--text-strong);
+  --primary: var(--text-strong);
+  --primary-foreground: var(--surface-page);
+  --secondary: var(--surface-raised);
+  --secondary-foreground: var(--text-strong);
+  --muted: var(--surface-raised);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--surface-highlight);
+  --accent-foreground: var(--text-strong);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--border-subtle);
+  --input: var(--border-control);
+  --ring: var(--border-strong);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: var(--radius-md);
+  --sidebar: var(--surface-raised);
+  --sidebar-foreground: var(--text-strong);
+  --sidebar-primary: var(--text-strong);
+  --sidebar-primary-foreground: var(--surface-page);
+  --sidebar-accent: var(--surface-highlight);
+  --sidebar-accent-foreground: var(--text-strong);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-ring: var(--border-strong);
 }
 
 /* Tema escuro - P&B */
@@ -78,7 +121,6 @@
   --border-card: #3A3A3A;
   --border-control: #6E6E6E;
   --border-strong: #F5F5F5;
-  --accent: #F5F5F5;
   --accent-highlight: #4D4D4D;
   --accent-ink: #F5F5F5;
   --accent-mint: #212121;
@@ -87,6 +129,10 @@
   --chrome-line: #333333;
   --code-bg: #181818;
   --code-fg: #F5F5F5;
+
+  /* shadcn/ui - único token semântico sem equivalente na paleta P&B
+     (o resto herda de --surface, --text e --border via var()). */
+  --destructive: oklch(0.704 0.191 22.216);
 
   --color-primary: #F5F5F5;
   --color-dark: #111111;
@@ -351,4 +397,56 @@ a.card:hover {
   border-color: var(--text-strong);
   color: var(--surface-page);
   text-decoration: none;
+}
+
+@theme inline {
+  --font-heading: var(--font-display);
+  --font-sans: 'Geist Variable', 'Geist Variable-fallback', sans-serif;
+  --font-mono: 'JetBrains Mono', 'JBMono-fallback', monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  /* --radius-sm/-md/-lg NÃO são redeclarados aqui de propósito: já existem
+     em :root (4px/8px/12px) e são usados por todo o CSS do site. Deixar o
+     shadcn derivar esses nomes de --radius via calc() colidiria com eles. */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }

@@ -9,7 +9,7 @@
     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
   </svg>
   <span class="search-trigger-label">Buscar</span>
-  <kbd>/</kbd>
+  <kbd data-search-kbd>Ctrl K</kbd>
 </button>
 
 <dialog class="search-dialog" data-search-dialog>
@@ -68,8 +68,14 @@
     openBtn?.addEventListener('click', openSearch);
 
     document.addEventListener('keydown', function (e) {
+      if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        openSearch();
+        return;
+      }
       const tag = e.target && e.target.tagName;
-      if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      const isEditable = e.target && e.target.isContentEditable;
+      if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA' && !isEditable) {
         e.preventDefault();
         openSearch();
       }
@@ -79,6 +85,10 @@
     dialog?.addEventListener('click', function (e) {
       if (e.target === dialog) dialog.close();
     });
+
+    const kbdEl = document.querySelector('[data-search-kbd]');
+    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '');
+    if (kbdEl && isMac) kbdEl.textContent = '⌘K';
   })();
 </script>
 
@@ -89,8 +99,8 @@
     gap: 0.5rem;
     flex-shrink: 0;
     padding: 6px 10px;
-    background: var(--surface-raised);
-    border: 1px solid var(--border-control);
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: 7px;
     color: var(--text-body);
     font-family: var(--font-mono);
@@ -99,20 +109,21 @@
     transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
 
-  .search-trigger:hover {
-    border-color: var(--text-strong);
-    color: var(--text-strong);
+  .search-trigger:hover,
+  .search-trigger:focus-visible {
     background: var(--surface-raised);
+    border-color: var(--border-control);
+    color: var(--text-strong);
   }
 
   .search-trigger kbd {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     background: var(--surface-page);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-control);
     border-radius: 3px;
     padding: 0 5px;
-    color: var(--text-muted);
+    color: var(--text-body);
   }
 
   .search-dialog {

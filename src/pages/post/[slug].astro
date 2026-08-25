@@ -141,6 +141,56 @@ const readMin = Math.max(
 
   <script is:inline>
     (function () {
+      var blocks = document.querySelectorAll('.post-content pre');
+      if (!blocks.length) return;
+
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+
+      blocks.forEach(function (pre) {
+        var code = pre.querySelector('code');
+        if (!code) return;
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'copy-btn';
+        btn.setAttribute('aria-label', 'Copiar código');
+        btn.innerHTML =
+          '<svg class="copy-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M4 16 V6 a2 2 0 0 1 2 -2 H14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>' +
+          '<svg class="check-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 12 L10 18 L20 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+        pre.appendChild(btn);
+        pre.classList.add('has-copy');
+
+        var timer = null;
+        btn.addEventListener('click', function () {
+          var text = code.textContent || '';
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).catch(function () { fallbackCopy(text); });
+          } else {
+            fallbackCopy(text);
+          }
+          btn.classList.add('is-copied');
+          btn.setAttribute('aria-label', 'Copiado');
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(function () {
+            btn.classList.remove('is-copied');
+            btn.setAttribute('aria-label', 'Copiar código');
+          }, 1600);
+        });
+      });
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
       function currentTheme() {
         return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
       }
@@ -152,19 +202,22 @@ const readMin = Math.max(
           'https://giscus.app'
         );
       }
+      // O iframe do giscus existe no DOM antes do script interno dele
+      // registrar o listener de postMessage — mandar setConfig cedo demais
+      // é descartado em silêncio. Só sincroniza depois que o giscus emite
+      // sua primeira mensagem (prova de que já está ouvindo).
+      var ready = false;
+      window.addEventListener('message', function (event) {
+        if (event.origin !== 'https://giscus.app') return;
+        if (!event.data || typeof event.data !== 'object' || !event.data.giscus) return;
+        if (ready) return;
+        ready = true;
+        setGiscusTheme(currentTheme());
+      });
       document.addEventListener('site-theme-change', function (e) {
+        if (!ready) return;
         setGiscusTheme(e.detail === 'dark' ? 'dark' : 'light');
       });
-      var tries = 0;
-      var iv = setInterval(function () {
-        tries++;
-        if (document.querySelector('iframe.giscus-frame')) {
-          setGiscusTheme(currentTheme());
-          clearInterval(iv);
-        } else if (tries > 40) {
-          clearInterval(iv);
-        }
-      }, 250);
     })();
   </script>
 </BaseLayout>
@@ -172,7 +225,7 @@ const readMin = Math.max(
 <style>
   .post-page {
     display: grid;
-    grid-template-columns: 300px minmax(0, 820px) 260px;
+    grid-template-columns: 300px minmax(0, var(--post-width)) 260px;
     gap: 40px;
     justify-content: center;
     align-items: stretch;
@@ -224,7 +277,7 @@ const readMin = Math.max(
     font-size: 0.78rem;
   }
 
-  @media (max-width: 1360px) {
+  @media (max-width: 1210px) {
     .post-page {
       display: flex;
       flex-direction: column;
@@ -413,6 +466,7 @@ const readMin = Math.max(
 
   /* Blocos de código - P&B sem terminal */
   .post-content :global(pre) {
+    position: relative;
     background-color: var(--code-bg) !important;
     color: var(--code-fg);
     border: 1px solid var(--border-subtle);
@@ -422,6 +476,38 @@ const readMin = Math.max(
     margin: var(--space-lg) 0;
     font-size: 0.875rem;
     line-height: 1.6;
+  }
+  .post-content :global(pre.has-copy) {
+    padding-right: 46px;
+  }
+  .post-content :global(.copy-btn) {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: var(--surface-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .post-content :global(.copy-btn:hover),
+  .post-content :global(.copy-btn:focus-visible) {
+    border-color: var(--text-strong);
+    color: var(--text-strong);
+  }
+  .post-content :global(.copy-btn .check-icon) { display: none; }
+  .post-content :global(.copy-btn.is-copied .copy-icon) { display: none; }
+  .post-content :global(.copy-btn.is-copied .check-icon) { display: block; }
+  .post-content :global(.copy-btn.is-copied) {
+    border-color: var(--text-strong);
+    color: var(--text-strong);
   }
 
   /* Remove barra de terminal com bolinhas */
