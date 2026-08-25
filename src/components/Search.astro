@@ -9,7 +9,7 @@
     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
   </svg>
   <span class="search-trigger-label">Buscar</span>
-  <kbd data-search-kbd>Ctrl K</kbd>
+  <kbd>Ctrl K</kbd>
 </button>
 
 <dialog class="search-dialog" data-search-dialog>
@@ -85,10 +85,6 @@
     dialog?.addEventListener('click', function (e) {
       if (e.target === dialog) dialog.close();
     });
-
-    const kbdEl = document.querySelector('[data-search-kbd]');
-    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '');
-    if (kbdEl && isMac) kbdEl.textContent = '⌘K';
   })();
 </script>
 
@@ -159,6 +155,13 @@
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-border-radius: var(--radius-md);
     --pagefind-ui-font: var(--font-sans);
+  }
+
+  /* Pagefind fixa opacity:.2 no placeholder do input (baixo contraste,
+     principalmente no dark) - sobrescreve com uma cor com contraste ok. */
+  #pagefind-ui .pagefind-ui__search-input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
   }
 
   /* Botão "Limpar" - só aparência; mantém a geometria default do Pagefind
