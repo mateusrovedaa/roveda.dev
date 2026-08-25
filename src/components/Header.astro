@@ -87,14 +87,14 @@ const isActive = (href: string) => {
   }
 
   .header-inner {
-    max-width: var(--max-width);
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 32px;
     height: 76px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    gap: 28px;
+    column-gap: 24px;
   }
 
   .logo {
@@ -103,6 +103,7 @@ const isActive = (href: string) => {
     gap: 10px;
     text-decoration: none;
     flex-shrink: 0;
+    justify-self: start;
   }
 
   .logo-mark {
@@ -121,6 +122,10 @@ const isActive = (href: string) => {
     letter-spacing: -0.02em;
     color: var(--text-strong);
     line-height: 1;
+  }
+
+  .nav {
+    justify-self: center;
   }
 
   .nav ul {
@@ -152,6 +157,7 @@ const isActive = (href: string) => {
     align-items: center;
     gap: 14px;
     flex-shrink: 0;
+    justify-self: end;
   }
 
   .theme-toggle {
@@ -184,13 +190,17 @@ const isActive = (href: string) => {
   @media (max-width: 860px) {
     .header-inner {
       padding: 0 20px;
-      gap: 16px;
       height: auto;
       min-height: 64px;
+      display: flex;
       flex-wrap: wrap;
+      gap: 16px;
       padding-top: 12px;
       padding-bottom: 12px;
     }
+    .logo,
+    .nav,
+    .header-actions { justify-self: auto; }
     .nav { order: 3; flex-basis: 100%; }
     .nav ul { gap: 18px; flex-wrap: wrap; }
   }
