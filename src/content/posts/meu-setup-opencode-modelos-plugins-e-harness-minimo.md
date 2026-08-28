@@ -1,7 +1,7 @@
 ---
 title: "Como uso o OpenCode: modelos, plugins e um harness mínimo"
 date: 2026-08-28T10:30:00-03:00
-draft: true
+draft: false
 author: Mateus Roveda
 categorias:
   - desenvolvimento
