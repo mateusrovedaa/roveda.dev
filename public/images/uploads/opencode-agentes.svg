@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 470" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <!-- janela -->
+  <rect x="0" y="0" width="860" height="470" rx="14" fill="#16181d"/>
+  <rect x="0" y="0" width="860" height="44" rx="14" fill="#22252c"/>
+  <rect x="0" y="30" width="860" height="14" fill="#22252c"/>
+  <circle cx="26" cy="22" r="6" fill="#ff5f57"/>
+  <circle cx="48" cy="22" r="6" fill="#febc2e"/>
+  <circle cx="70" cy="22" r="6" fill="#28c840"/>
+  <text x="430" y="27" text-anchor="middle" font-size="14" fill="#9aa0a6">opencode · um modelo para cada tarefa</text>
+
+  <!-- cabeçalho das colunas -->
+  <text x="60" y="82" font-size="13" fill="#6b7280">AGENTE</text>
+  <text x="300" y="82" font-size="13" fill="#6b7280">MODELO</text>
+  <text x="640" y="82" font-size="13" fill="#6b7280">PROVEDOR</text>
+  <line x1="40" y1="94" x2="820" y2="94" stroke="#2e323b" stroke-width="1"/>
+
+  <!-- plan -->
+  <circle cx="52" cy="122" r="5" fill="#4C6EF5"/>
+  <text x="68" y="127" font-size="15" fill="#e6e6e6">plan</text>
+  <text x="68" y="145" font-size="12" fill="#9aa0a6">planejamento</text>
+  <text x="300" y="127" font-size="14" fill="#c9d1d9">qwen3.8-max</text>
+  <text x="640" y="127" font-size="14" fill="#9aa0a6">OpenRouter</text>
+
+  <!-- build -->
+  <circle cx="52" cy="176" r="5" fill="#12B886"/>
+  <text x="68" y="181" font-size="15" fill="#e6e6e6">build</text>
+  <text x="68" y="199" font-size="12" fill="#9aa0a6">execução · 85–90% do uso</text>
+  <text x="300" y="181" font-size="14" fill="#c9d1d9">deepseek-v4-pro</text>
+  <text x="640" y="181" font-size="14" fill="#9aa0a6">OpenRouter</text>
+
+  <!-- frontend -->
+  <circle cx="52" cy="230" r="5" fill="#BE4BDB"/>
+  <text x="68" y="235" font-size="15" fill="#e6e6e6">frontend</text>
+  <text x="68" y="253" font-size="12" fill="#9aa0a6">ui, screenshots, multimodal</text>
+  <text x="300" y="235" font-size="14" fill="#c9d1d9">gemini-3.7-flash</text>
+  <text x="640" y="235" font-size="14" fill="#9aa0a6">OpenRouter</text>
+
+  <!-- bulk -->
+  <circle cx="52" cy="284" r="5" fill="#F59F00"/>
+  <text x="68" y="289" font-size="15" fill="#e6e6e6">bulk</text>
+  <text x="68" y="307" font-size="12" fill="#9aa0a6">volume mecânico</text>
+  <text x="300" y="289" font-size="14" fill="#c9d1d9">muse-spark-1.2</text>
+  <text x="640" y="289" font-size="14" fill="#9aa0a6">OpenCode · grátis</text>
+
+  <!-- review -->
+  <circle cx="52" cy="338" r="5" fill="#15AABF"/>
+  <text x="68" y="343" font-size="15" fill="#e6e6e6">review</text>
+  <text x="68" y="361" font-size="12" fill="#9aa0a6">revisão cruzada</text>
+  <text x="300" y="343" font-size="14" fill="#c9d1d9">gpt-5.6-sol</text>
+  <text x="640" y="343" font-size="14" fill="#9aa0a6">OpenRouter</text>
+
+  <!-- divisor -->
+  <line x1="40" y1="386" x2="820" y2="386" stroke="#2e323b" stroke-width="1"/>
+
+  <!-- ollama local -->
+  <circle cx="52" cy="416" r="5" fill="#6b7280"/>
+  <text x="68" y="421" font-size="15" fill="#e6e6e6">ollama · local</text>
+  <text x="68" y="439" font-size="12" fill="#9aa0a6">privado, custo zero</text>
+  <text x="300" y="421" font-size="14" fill="#c9d1d9">qwen3.5 · gemma4 · granite4.1 · lfm2.5</text>
+  <text x="640" y="421" font-size="14" fill="#9aa0a6">MacBook Air</text>
+</svg>
