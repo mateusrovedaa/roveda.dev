@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Duas Telas</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=JetBrains+Mono:wght@400;700&display=swap"
+        />
+
+        <style>
+            :root {
+                --papel: #f3f4f1;
+                --papel-fig: #fbfcfa;
+                --grade: #dee5de;
+                --grade-forte: #ccd8ce;
+                --tinta: #1b2a32;
+                --tinta-fraca: #5d6e75;
+                --tinta-tenue: #8a9aa0;
+                --principal: #b44f16;
+                --caneta: #b7302a;
+                --tela-fundo: #cfe0ec;
+                --tela-borda: #4a7fa5;
+                color-scheme: light;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root:not([data-theme="light"]) {
+                    --papel: #14181a;
+                    --papel-fig: #1a2023;
+                    --grade: #242c2e;
+                    --grade-forte: #2e393c;
+                    --tinta: #e5eae7;
+                    --tinta-fraca: #9babae;
+                    --tinta-tenue: #6e7e82;
+                    --principal: #ee9448;
+                    --caneta: #ef6a5e;
+                    --tela-fundo: #1e3a52;
+                    --tela-borda: #4a8fc4;
+                    color-scheme: dark;
+                }
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                background-color: var(--papel);
+                background-image:
+                    repeating-linear-gradient(
+                        to right,
+                        var(--grade) 0 1px,
+                        transparent 1px 28px
+                    ),
+                    repeating-linear-gradient(
+                        to bottom,
+                        var(--grade) 0 1px,
+                        transparent 1px 28px
+                    );
+                color: var(--tinta);
+                font-family: "Newsreader", Georgia, "Times New Roman", serif;
+                font-size: 19px;
+                line-height: 1.62;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            .folha {
+                max-width: 820px;
+                margin: 0 auto;
+                padding: 56px 24px 120px;
+            }
+
+            @media (min-width: 900px) {
+                .folha {
+                    border-left: 1px solid var(--caneta);
+                    padding-left: 56px;
+                    max-width: 852px;
+                }
+            }
+
+            h1,
+            h2,
+            h3,
+            .eyebrow,
+            button,
+            th {
+                font-family:
+                    "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+            }
+
+            h1 {
+                font-size: clamp(2.4rem, 7vw, 3.6rem);
+                line-height: 1.02;
+                font-weight: 800;
+                letter-spacing: -0.025em;
+                margin: 0;
+                text-wrap: balance;
+            }
+
+            h2 {
+                font-size: clamp(1.4rem, 3.6vw, 1.85rem);
+                font-weight: 700;
+                letter-spacing: -0.015em;
+                line-height: 1.15;
+                margin: 0;
+                text-wrap: balance;
+            }
+
+            h3 {
+                font-size: 1.02rem;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            p {
+                margin: 0;
+                max-width: 66ch;
+            }
+
+            .eyebrow {
+                font-size: 0.74rem;
+                font-weight: 600;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--tinta-fraca);
+            }
+
+            strong {
+                font-weight: 600;
+                color: var(--tinta);
+            }
+
+            code,
+            .mono {
+                font-family:
+                    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+                font-size: 0.84em;
+            }
+
+            p code,
+            li code,
+            td code {
+                background: color-mix(in srgb, var(--tinta) 8%, transparent);
+                padding: 0.1em 0.34em;
+                border-radius: 3px;
+            }
+
+            pre {
+                margin: 0;
+                padding: 16px 18px;
+                background: color-mix(in srgb, var(--tinta) 7%, transparent);
+                border-radius: 4px;
+                overflow-x: auto;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.78rem;
+                line-height: 1.75;
+                color: var(--tinta-fraca);
+            }
+
+            pre .v {
+                color: var(--tinta);
+                font-weight: 700;
+            }
+            pre .c {
+                color: var(--tinta-tenue);
+            }
+
+            ul {
+                margin: 0;
+                padding-left: 1.1em;
+                max-width: 66ch;
+            }
+            li {
+                margin-bottom: 6px;
+            }
+
+            /* hero */
+            .hero {
+                margin-bottom: 68px;
+            }
+
+            .hero-caixa {
+                position: relative;
+                margin-top: 22px;
+                padding: 30px 26px;
+                border: 2px solid var(--tinta);
+                background: var(--papel-fig);
+            }
+
+            .cota {
+                position: absolute;
+                top: -11px;
+                left: 22px;
+                background: var(--papel-fig);
+                padding: 0 8px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.66rem;
+                color: var(--principal);
+                white-space: nowrap;
+            }
+
+            .hero-sub {
+                margin-top: 18px;
+                font-size: 1.02rem;
+                color: var(--tinta-fraca);
+                max-width: 52ch;
+            }
+
+            .precisa {
+                margin-top: 20px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.74rem;
+                color: var(--tinta-fraca);
+                border: 1px dashed var(--grade-forte);
+                border-radius: 3px;
+                padding: 10px 14px;
+                display: inline-block;
+            }
+
+            /* seções */
+            .parte {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                margin: 0 0 46px;
+            }
+
+            .parte span {
+                font-family: "Bricolage Grotesque", Arial, sans-serif;
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--tinta-fraca);
+                white-space: nowrap;
+            }
+
+            .parte::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: var(--grade-forte);
+            }
+
+            .passo {
+                margin-bottom: 76px;
+            }
+
+            .passo-cabeca {
+                display: grid;
+                grid-template-columns: 46px 1fr;
+                gap: 16px;
+                align-items: start;
+                margin-bottom: 20px;
+            }
+
+            .passo-num {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.82rem;
+                font-weight: 700;
+                color: var(--papel);
+                background: var(--tinta);
+                width: 30px;
+                height: 30px;
+                display: grid;
+                place-items: center;
+                border-radius: 50%;
+                margin-top: 4px;
+            }
+
+            .passo-corpo {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                padding-left: 62px;
+            }
+
+            @media (max-width: 620px) {
+                .passo-corpo {
+                    padding-left: 0;
+                }
+                .passo-cabeca {
+                    grid-template-columns: 34px 1fr;
+                    gap: 12px;
+                }
+            }
+
+            /* figura */
+            .figura {
+                border: 1px solid var(--grade-forte);
+                background: var(--papel-fig);
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .figura-rotulo {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.66rem;
+                letter-spacing: 0.11em;
+                text-transform: uppercase;
+                color: var(--tinta-tenue);
+            }
+
+            .figura-nota {
+                font-size: 0.94rem;
+                color: var(--tinta-fraca);
+            }
+
+            .chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .chips button {
+                font-size: 0.74rem;
+                font-weight: 600;
+                padding: 7px 13px;
+                border-radius: 3px;
+                border: 1px solid var(--grade-forte);
+                background: var(--papel-fig);
+                color: var(--tinta-fraca);
+                cursor: pointer;
+                font-family: "JetBrains Mono", monospace;
+            }
+
+            .chips button[aria-pressed="true"] {
+                background: var(--tinta);
+                border-color: var(--tinta);
+                color: var(--papel);
+            }
+
+            /* aparelho */
+            .aparelho-linha {
+                display: flex;
+                gap: 26px;
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .aparelho {
+                position: relative;
+                width: 188px;
+                height: 340px;
+                flex-shrink: 0;
+                border: 2px solid var(--tinta);
+                border-radius: 22px;
+                background: var(--papel-fig);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .sistema-topo,
+            .sistema-baixo {
+                position: absolute;
+                left: 0;
+                right: 0;
+                background: repeating-linear-gradient(
+                    45deg,
+                    color-mix(in srgb, var(--caneta) 26%, transparent) 0 4px,
+                    transparent 4px 8px
+                );
+                z-index: 3;
+                pointer-events: none;
+            }
+
+            .sistema-topo {
+                top: 0;
+                height: 34px;
+            }
+            .sistema-baixo {
+                bottom: 0;
+                height: 20px;
+            }
+
+            .relogio {
+                position: absolute;
+                top: 9px;
+                left: 14px;
+                z-index: 4;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.6rem;
+                font-weight: 700;
+                color: var(--tinta);
+            }
+
+            .notch {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 66px;
+                height: 19px;
+                background: var(--tinta);
+                border-radius: 0 0 11px 11px;
+                z-index: 4;
+            }
+
+            .barra-gestos {
+                position: absolute;
+                bottom: 7px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 62px;
+                height: 4px;
+                border-radius: 2px;
+                background: var(--tinta);
+                z-index: 4;
+            }
+
+            .conteudo {
+                flex: 1;
+                background: var(--tela-fundo);
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                transition:
+                    padding-top 0.32s ease,
+                    padding-bottom 0.32s ease;
+            }
+
+            .conteudo.segura {
+                padding-top: 44px;
+                padding-bottom: 30px;
+            }
+
+            .barra-app {
+                background: var(--tela-borda);
+                color: #fff;
+                font-family: "Bricolage Grotesque", Arial, sans-serif;
+                font-size: 0.62rem;
+                font-weight: 700;
+                padding: 7px 9px;
+                border-radius: 3px;
+                flex-shrink: 0;
+            }
+
+            .bloco {
+                background: color-mix(in srgb, var(--tela-borda) 22%, #fff);
+                border: 1px solid var(--tela-borda);
+                border-radius: 3px;
+                height: 30px;
+                flex-shrink: 0;
+            }
+
+            .bloco.alto {
+                height: 46px;
+            }
+
+            .aparelho-legenda {
+                flex: 1;
+                min-width: 220px;
+            }
+
+            /* tabela */
+            .rolagem {
+                overflow-x: auto;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.92rem;
+                min-width: 460px;
+            }
+
+            th {
+                text-align: left;
+                font-size: 0.7rem;
+                letter-spacing: 0.11em;
+                text-transform: uppercase;
+                color: var(--tinta-tenue);
+                font-weight: 600;
+                padding: 0 12px 9px 0;
+                border-bottom: 1px solid var(--grade-forte);
+            }
+
+            td {
+                padding: 11px 12px 11px 0;
+                border-bottom: 1px solid var(--grade);
+                vertical-align: top;
+                color: var(--tinta-fraca);
+            }
+
+            td:first-child {
+                color: var(--tinta);
+                white-space: nowrap;
+            }
+
+            /* erros */
+            .erros {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .erro {
+                border-left: 3px solid var(--caneta);
+                padding: 3px 0 3px 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .erro .sintoma {
+                font-weight: 600;
+            }
+
+            .erro .causa {
+                color: var(--tinta-fraca);
+                font-size: 0.96rem;
+            }
+
+            /* links */
+            .links {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .link-item {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                padding-bottom: 14px;
+                border-bottom: 1px solid var(--grade);
+            }
+
+            .link-item:last-child {
+                border-bottom: 0;
+            }
+
+            .link-item a {
+                color: var(--tinta);
+                text-decoration: none;
+                border-bottom: 1px solid var(--caneta);
+                font-weight: 600;
+                align-self: flex-start;
+            }
+
+            .link-item span {
+                font-size: 0.94rem;
+                color: var(--tinta-fraca);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                * {
+                    transition: none !important;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="folha">
+            <header class="hero">
+                <div class="eyebrow">
+                    Univates &middot; Desenvolvimento mobile
+                </div>
+                <div class="hero-caixa">
+                    <div class="cota">← área segura →</div>
+                    <h1>Duas Telas</h1>
+                </div>
+                <p class="hero-sub">
+                    Um app de verdade respeita o formato do aparelho e tem mais
+                    de uma tela. Uma biblioteca resolve cada uma das duas.
+                </p>
+                <div class="precisa">
+                    projeto da aula: 6-aula1109 &middot; npm install && npm start
+                </div>
+            </header>
+
+            <div class="parte"><span>Parte 1 &middot; Área segura</span></div>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">1</div>
+                    <h2>O aparelho come um pedaço da tela</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>Até agora a gente acertava o topo no olho:</p>
+                    <pre>paddingTop: <span class="v">60</span>,</pre>
+                    <p>
+                        Funciona no seu aparelho. Em cada outro o número certo
+                        é diferente: 24 num Android antigo, 54 no Pixel 9 do
+                        emulador. E embaixo ninguém descontou a barra de
+                        gestos.
+                    </p>
+                    <p>
+                        <strong
+                            >Área segura é o pedaço da tela onde dá para
+                            desenhar sem nada do sistema em cima.</strong
+                        >
+                        O que sobra é do aparelho: relógio, bateria, notch,
+                        barra de gestos.
+                    </p>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">2</div>
+                    <h2>As duas peças</h2>
+                </div>
+                <div class="passo-corpo">
+                    <pre>npx expo install react-native-safe-area-context</pre>
+                    <p>
+                        Sempre <code>npx expo install</code>, nunca
+                        <code>npm install</code>: ele escolhe a versão que
+                        combina com o SDK do projeto. A
+                        <code>SafeAreaView</code> que vem dentro do
+                        <code>react-native</code> está depreciada e só funciona
+                        no iOS.
+                    </p>
+
+                    <h3>SafeAreaProvider, uma vez, na raiz</h3>
+                    <pre><span class="c">// src/app/_layout.js</span>
+&lt;<span class="v">SafeAreaProvider</span>&gt;
+  &lt;<span class="v">Stack</span> /&gt;
+&lt;/<span class="v">SafeAreaProvider</span>&gt;</pre>
+
+                    <h3>SafeAreaView, em cada tela</h3>
+                    <p>
+                        Lê quanto o sistema ocupa em cada borda e aplica como
+                        padding. Troca a View raiz da tela:
+                    </p>
+                    <pre>&lt;<span class="v">SafeAreaView</span> style={styles.tela}&gt;</pre>
+
+                    <figure class="figura">
+                        <div class="figura-rotulo">
+                            Figura 1 &middot; o mesmo app, com e sem
+                        </div>
+                        <div class="chips" id="chips-safe">
+                            <button data-modo="sem" aria-pressed="true">
+                                View comum
+                            </button>
+                            <button data-modo="com" aria-pressed="false">
+                                SafeAreaView
+                            </button>
+                        </div>
+                        <div class="aparelho-linha">
+                            <div class="aparelho">
+                                <div class="sistema-topo"></div>
+                                <div class="sistema-baixo"></div>
+                                <div class="notch"></div>
+                                <div class="relogio">9:41</div>
+                                <div class="barra-gestos"></div>
+                                <div class="conteudo" id="tela-demo">
+                                    <div class="barra-app">Painel</div>
+                                    <div class="bloco alto"></div>
+                                    <div class="bloco"></div>
+                                    <div class="bloco"></div>
+                                </div>
+                            </div>
+                            <div class="aparelho-legenda">
+                                <p class="figura-nota" id="texto-demo">
+                                    O hachurado é o que o sistema ocupa. Sem a
+                                    área segura, o título do app fica debaixo do
+                                    relógio e do notch.
+                                </p>
+                            </div>
+                        </div>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">3</div>
+                    <h2><code>edges</code></h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        Por padrão a <code>SafeAreaView</code> afasta das quatro
+                        bordas. Numa tela com cabeçalho o topo sobra: o
+                        cabeçalho já cuidou dele, e a
+                        <code>SafeAreaView</code> põe o mesmo espaço de novo,
+                        logo abaixo.
+                    </p>
+
+                    <figure class="figura">
+                        <div class="figura-rotulo">
+                            Medido &middot; Pixel 9, Android 16, tela com
+                            cabeçalho e <code>paddingTop: 16</code>
+                        </div>
+                        <div class="rolagem">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><code>edges</code></th>
+                                        <th>Vão abaixo do cabeçalho</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>["bottom"]</code></td>
+                                        <td>16 dp, só o seu</td>
+                                    </tr>
+                                    <tr>
+                                        <td>sem <code>edges</code></td>
+                                        <td>70 dp, o seu + 54 do aparelho</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <code>["bottom"]</code>, sem
+                                            <code>paddingTop</code>
+                                        </td>
+                                        <td>0 dp</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </figure>
+
+                    <p>
+                        <strong>Com cabeçalho, <code>edges={["bottom"]}</code>.
+                        Sem cabeçalho, sem <code>edges</code>.</strong>
+                    </p>
+                    <p>
+                        O <code>paddingTop</code> do seu estilo é outra coisa: é
+                        o respiro que você escolhe entre o cabeçalho e o
+                        primeiro elemento. Com <code>["bottom"]</code> a
+                        <code>SafeAreaView</code> não põe nada no topo, então
+                        tirar esse <code>paddingTop</code> cola o conteúdo no
+                        cabeçalho.
+                    </p>
+                    <p>
+                        E por que não uma <code>SafeAreaView</code> só, no
+                        <code>_layout.js</code>? Porque <code>perfil.js</code>
+                        não tem cabeçalho e quer o topo, e
+                        <code>notas.js</code> tem e não quer. Um valor só não
+                        serve para as duas.
+                    </p>
+                </div>
+            </section>
+
+            <div class="parte">
+                <span>Parte 2 &middot; Navegação</span>
+            </div>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">4</div>
+                    <h2>Preparar o projeto</h2>
+                </div>
+                <div class="passo-corpo">
+                    <pre>npx expo install expo-router react-native-screens expo-linking expo-constants expo-status-bar</pre>
+                    <p>Duas linhas de configuração:</p>
+                    <pre><span class="c">// package.json</span>
+"main": <span class="v">"expo-router/entry"</span>,
+
+<span class="c">// app.json</span>
+{ "expo": { "name": "aula1109", "slug": "aula1109", "scheme": <span class="v">"aula1109"</span> } }</pre>
+                    <p>
+                        Apague o <code>App.js</code>. Quem manda agora é a
+                        pasta <code>src/app/</code>.
+                    </p>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">5</div>
+                    <h2>O arquivo é o endereço</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        Não existe lista de rotas. O caminho do arquivo dentro
+                        de <code>src/app/</code> é a URL, letra por letra.
+                    </p>
+                    <div class="rolagem">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Arquivo</th>
+                                    <th>Endereço</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>src/app/index.js</code></td>
+                                    <td><code>/</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>src/app/notas.js</code></td>
+                                    <td><code>/notas</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>src/app/perfil.js</code></td>
+                                    <td><code>/perfil</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>src/app/_layout.js</code></td>
+                                    <td>não é tela: envolve as outras</td>
+                                </tr>
+                                <tr>
+                                    <td><code>src/components/</code></td>
+                                    <td>fora de app/, não vira rota</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>
+                        <code>index</code> é a tela da pasta. Criar tela é criar
+                        arquivo. Um arquivo no lugar errado vira uma página que
+                        você não queria.
+                    </p>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">6</div>
+                    <h2>O Stack e o cabeçalho</h2>
+                </div>
+                <div class="passo-corpo">
+                    <p>
+                        O <code>Stack</code> do <code>_layout.js</code> empilha:
+                        abrir uma tela põe em cima, voltar tira do topo. Botão
+                        de voltar, gesto de arrastar e cabeçalho vêm junto.
+                    </p>
+                    <p>
+                        O título do cabeçalho é o nome do arquivo. Para mudar,
+                        cada tela põe um <code>Stack.Screen</code>:
+                    </p>
+                    <pre>&lt;<span class="v">Stack.Screen</span> options={{ title: <span class="v">"Minhas notas"</span> }} /&gt;
+
+<span class="c">// ou some com ele, só nesta tela:</span>
+&lt;<span class="v">Stack.Screen</span> options={{ headerShown: <span class="v">false</span> }} /&gt;</pre>
+                    <p>
+                        Sem cabeçalho, nada segura o topo: a tela volta a
+                        precisar das quatro <code>edges</code>. É o caso do
+                        <code>perfil.js</code>.
+                    </p>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">7</div>
+                    <h2>Link e router</h2>
+                </div>
+                <div class="passo-corpo">
+                    <pre><span class="c">// toque do usuário</span>
+&lt;<span class="v">Link</span> href=<span class="v">"/notas"</span>&gt;Ver minhas notas&lt;/<span class="v">Link</span>&gt;
+
+<span class="c">// navegação por código</span>
+router.<span class="v">push</span>(<span class="v">"/perfil"</span>);
+router.<span class="v">back</span>();</pre>
+                    <p>
+                        <code>router</code> é para quando a navegação acontece
+                        depois de algo: salvou e vai para a lista, fez login e
+                        vai para o painel.
+                    </p>
+                </div>
+            </section>
+
+            <div class="parte"><span>Parte 3 &middot; Consulta</span></div>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">8</div>
+                    <h2>Quando der errado</h2>
+                </div>
+                <div class="passo-corpo">
+                    <div class="erros">
+                        <div class="erro">
+                            <div class="sintoma">
+                                Faixa branca embaixo do cabeçalho.
+                            </div>
+                            <div class="causa">
+                                Área segura duplicada. Use
+                                <code>edges={["bottom"]}</code>.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                Tirei o <code>paddingTop</code> e o conteúdo
+                                colou no cabeçalho.
+                            </div>
+                            <div class="causa">
+                                Esse <code>paddingTop</code> é espaçamento seu.
+                                Com <code>["bottom"]</code> a SafeAreaView não
+                                mexe no topo.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                Aviso: <em>missing the required default
+                                export</em>.
+                            </div>
+                            <div class="causa">
+                                Falta <code>export default</code> na função da
+                                tela.
+                            </div>
+                        </div>
+                        <div class="erro">
+                            <div class="sintoma">
+                                Tela preta: <em>Unmatched Route</em>.
+                            </div>
+                            <div class="causa">
+                                O endereço não bate com nenhum arquivo.
+                                <code>/Notas</code> não é <code>/notas</code>.
+                                O link <strong>Sitemap</strong> nessa tela lista
+                                as rotas que existem.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="passo">
+                <div class="passo-cabeca">
+                    <div class="passo-num">9</div>
+                    <h2>Cola</h2>
+                </div>
+                <div class="passo-corpo">
+                    <div class="rolagem">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Você quer</th>
+                                    <th>Escreve</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Área segura no app</td>
+                                    <td>
+                                        <code>&lt;SafeAreaProvider&gt;</code> no
+                                        <code>_layout.js</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Área segura na tela</td>
+                                    <td>
+                                        View raiz vira
+                                        <code>&lt;SafeAreaView&gt;</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tela com cabeçalho</td>
+                                    <td><code>edges={["bottom"]}</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Criar tela</td>
+                                    <td>
+                                        <code>src/app/nome.js</code> com
+                                        <code>export default</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ir para outra tela</td>
+                                    <td><code>&lt;Link href="/nome"&gt;</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Ir ou voltar por código</td>
+                                    <td>
+                                        <code>router.push("/nome")</code>,
+                                        <code>router.back()</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Título do cabeçalho</td>
+                                    <td>
+                                        <code
+                                            >&lt;Stack.Screen options={{ title:
+                                            "..." }} /&gt;</code
+                                        >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Esconder o cabeçalho</td>
+                                    <td><code>headerShown: false</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="links" style="margin-top: 26px">
+                        <div class="link-item">
+                            <a
+                                href="https://docs.expo.dev/versions/latest/sdk/safe-area-context/"
+                                >Documentação do safe-area-context</a
+                            >
+                            <span
+                                >Tem o <code>useSafeAreaInsets</code>, para
+                                quando você precisa do número na mão.</span
+                            >
+                        </div>
+                        <div class="link-item">
+                            <a href="https://docs.expo.dev/router/introduction/"
+                                >Documentação do Expo Router</a
+                            >
+                            <span>Abas e rotas dinâmicas.</span>
+                        </div>
+                        <div class="link-item">
+                            <a href="/materiais/revisao">Desenhe as Caixas</a>
+                            <span>O material anterior: flexbox.</span>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 26px">
+                        Falta passar dados de uma tela para a outra: abrir
+                        <code>/notas/3</code> e a tela saber que é a disciplina
+                        3. Isso precisa de um hook, que é a próxima aula.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <script>
+            const telaDemo = document.getElementById("tela-demo");
+            const textoDemo = document.getElementById("texto-demo");
+
+            const TEXTOS = {
+                sem: "O hachurado é o que o sistema ocupa. Sem a área segura, o título do app fica debaixo do relógio e do notch.",
+                com: "A SafeAreaView leu quanto o sistema ocupa em cada borda e aplicou como padding. O tamanho vem do aparelho de quem está usando: muda de celular para celular.",
+            };
+
+            document.querySelectorAll("#chips-safe button").forEach((botao) => {
+                botao.addEventListener("click", () => {
+                    document
+                        .querySelectorAll("#chips-safe button")
+                        .forEach((b) =>
+                            b.setAttribute("aria-pressed", String(b === botao)),
+                        );
+                    telaDemo.classList.toggle(
+                        "segura",
+                        botao.dataset.modo === "com",
+                    );
+                    textoDemo.textContent = TEXTOS[botao.dataset.modo];
+                });
+            });
+        </script>
+    </body>
+</html>
