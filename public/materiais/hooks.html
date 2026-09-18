@@ -865,17 +865,8 @@
                 <div class="passo-corpo">
                     <pre><span class="v">const</span> [nome, setNome] = useState(<span class="v">""</span>);
 
-<span class="v">function</span> mudarNome(texto) {
-  setNome(texto);
-}
-
-<span class="v">let</span> saudacao = "Olá, Estudante";
-<span class="v">if</span> (nome !== "") {
-  saudacao = "Olá, " + nome;
-}
-
-&lt;TextInput value={<span class="v">nome</span>} onChangeText={<span class="v">mudarNome</span>} /&gt;
-&lt;Text&gt;{saudacao}&lt;/Text&gt;</pre>
+&lt;TextInput value={<span class="v">nome</span>} onChangeText={<span class="v">setNome</span>} /&gt;
+&lt;Text&gt;Olá, {nome !== "" ? nome : "Estudante"}&lt;/Text&gt;</pre>
                     <p>
                         <code>value</code> define o que o campo mostra.
                         <code>onChangeText</code> é a função que o campo executa
@@ -884,9 +875,20 @@
                         fonte do que aparece no campo.
                     </p>
                     <p>
-                        O <code>if</code> fica antes do <code>return</code>,
-                        onde qualquer código JavaScript é permitido. Dentro do
-                        JSX vai só o resultado.
+                        <strong
+                            >O campo entrega o texto e <code>setNome</code>
+                            recebe o texto: dá para entregar
+                            <code>setNome</code> direto, sem função no
+                            meio.</strong
+                        >
+                        Escrever <code>function mudarNome(texto)</code> só para
+                        chamar <code>setNome(texto)</code> não acrescenta nada.
+                        A função nomeada vale quando há algo a fazer antes de
+                        guardar — como <code>aumentarNota</code>, que soma 0.5.
+                    </p>
+                    <p>
+                        A saudação usa o mesmo ternário do passo 4: enquanto o
+                        campo está vazio, mostra "Estudante".
                     </p>
                     <p>
                         Cada tela tem o próprio estado. O nome digitado no
@@ -1130,7 +1132,7 @@
                                 <tr>
                                     <td>Campo de texto</td>
                                     <td>
-                                        <code>&lt;TextInput value={t} onChangeText={mudarT} /&gt;</code>
+                                        <code>&lt;TextInput value={t} onChangeText={setT} /&gt;</code>
                                     </td>
                                 </tr>
                                 <tr>
