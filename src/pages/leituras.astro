@@ -1,0 +1,347 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+
+// Sem data (encontro a definir) vai para o topo.
+const ts = (d?: Date) => d?.getTime() ?? Number.MAX_SAFE_INTEGER;
+const leituras = (await getCollection('leituras')).sort((a, b) => ts(b.data.data) - ts(a.data.data));
+const entradas = await Promise.all(
+  leituras.map(async (l) => ({ ...l, Content: (await render(l)).Content }))
+);
+
+const statusLabel = { lida: 'Lida', atual: 'Lendo agora', proxima: 'Próxima' };
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+const passadas = [
+  ['1 · Varredura', '5–10 min', 'Título, resumo, introdução, títulos das seções e conclusão. No fim você sabe do que o artigo trata e se vale seguir.'],
+  ['2 · Compreensão', 'até 1 h', 'Leia com cuidado, pulando provas e detalhes. Olhe figuras e gráficos e anote os pontos principais. No fim, dá para explicar o artigo a alguém.'],
+  ['3 · Profundidade', 'opcional, horas', 'Refaça o trabalho na cabeça, com as premissas dos autores, e compare. Aparecem as premissas frágeis e o que ficou de fora.'],
+];
+
+const dicas = [
+  ['Anote enquanto lê', 'Página, ideia e sua reação (concordo, discordo, dúvida).'],
+  ['Trecho de ouro', 'Grife uma ou duas frases que marcaram você, por concordar ou discordar. Você vai ler no encontro.'],
+  ['Leve uma dúvida', 'Algo que o texto deixou no ar ou que pareceu estranho.'],
+  ['Divida a leitura', 'Duas ou três sessões curtas ao longo da quinzena rendem mais do que tudo na véspera.'],
+  ['Inglês não é barreira', 'Use tradutor nos trechos difíceis. O que importa é entender o argumento.'],
+  ['Venha mesmo sem terminar', 'Dá para ouvir as outras leituras e entrar na conversa.'],
+];
+
+const roteiro = [
+  ['Nota de 1 a 5', 'Abrimos com uma rodada rápida: cada pessoa dá uma nota para o texto e explica em uma frase.'],
+  ['Trechos de ouro', 'Cada pessoa lê as frases que grifou. Ainda sem debate, só ouvindo o que marcou cada um.'],
+  ['Conversa', 'Quem facilita puxa as perguntas que preparou, e as dúvidas de todo mundo entram aqui.'],
+  ['Próximo facilitador', 'Antes de sair, definimos quem facilita o próximo encontro. Essa pessoa escolhe a leitura e manda para o grupo.'],
+];
+
+const facilitacao = [
+  'Escolhe a leitura, de olho nas sugestões do Discussions, e manda para o grupo.',
+  'Prepara duas ou três perguntas.',
+  'Decide a dinâmica e cuida do tempo.',
+];
+---
+
+<BaseLayout title="Clube da leitura" description="Linha do tempo das leituras do clube, dicas de leitura e como participar dos encontros.">
+  <div class="clube" data-pagefind-body>
+    <PageHeader
+      eyebrow="~/leituras"
+      title="Clube da leitura"
+      subtitle="Artigos agora, livros depois. Um encontro a cada 15 dias."
+    />
+
+    <section>
+      <h2>Linha do tempo</h2>
+      {entradas.length === 0 ? (
+        <p class="muted">Nenhuma leitura registrada ainda.</p>
+      ) : (
+        <ol class="timeline">
+          {entradas.map(({ data, Content }) => (
+            <li class="item" data-status={data.status}>
+              <article class="card">
+                <div class="meta">
+                  {data.data ? <time datetime={data.data.toISOString()}>{fmtDate(data.data)}</time> : <span>Data a definir</span>}
+                  <span class="badge">{statusLabel[data.status]}</span>
+                </div>
+                <h3>{data.titulo}</h3>
+                <p class="autor">{data.autor}</p>
+                <div class="notas"><Content /></div>
+                {data.links.length > 0 && (
+                  <ul class="links">
+                    {data.links.map((l) => <li><a href={l.url} rel="noopener">{l.label} ↗</a></li>)}
+                  </ul>
+                )}
+              </article>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+
+    <section>
+      <h2>Como ler um artigo</h2>
+      <p class="muted">Em três passadas, pelo método de S. Keshav (<a href="https://doi.org/10.1145/1273445.1273458" rel="noopener">How to Read a Paper</a>, 2007).</p>
+      <ol class="passadas">
+        {passadas.map(([titulo, tempo, texto]) => (
+          <li><strong>{titulo}</strong><span class="tempo">{tempo}</span><p>{texto}</p></li>
+        ))}
+      </ol>
+
+      <h3 class="sub">Para o encontro</h3>
+      <ul class="dicas">
+        {dicas.map(([t, d]) => <li><strong>{t}</strong><p>{d}</p></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Como funcionam os encontros</h2>
+      <ol class="roteiro">
+        {roteiro.map(([bloco, texto]) => <li><span class="passo-num" aria-hidden="true" /><strong>{bloco}</strong><p>{texto}</p></li>)}
+      </ol>
+
+      <aside class="destaque">
+        <p class="eyebrow">A facilitação roda</p>
+        <p>A cada encontro, uma pessoa diferente:</p>
+        <ul>{facilitacao.map((f) => <li>{f}</li>)}</ul>
+        <p>Não precisa entender do assunto, só organizar a conversa. Os passos acima são o nosso padrão, e quem facilita pode mudar. Assim o clube não depende de uma pessoa só.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Participe</h2>
+      <p>
+        Combinamos os encontros num grupo. Para entrar, mande um e-mail para
+        <a href="mailto:mateus@roveda.dev">mateus@roveda.dev</a>.
+      </p>
+      <p>
+        Sugestões de leitura vão no <a href="https://github.com/mateusrovedaa/roveda.dev/discussions" rel="noopener">GitHub Discussions</a>, com título e link.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  :global(main:has(.clube)) { max-width: 1000px; }
+
+  section { margin-bottom: var(--space-xl); }
+  h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0 0 var(--space-lg);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 1.85rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--text-strong);
+  }
+  h2::before { content: '//'; font-family: var(--font-mono); font-size: 0.6em; font-weight: 700; color: var(--text-muted); }
+  .muted { color: var(--text-muted); }
+  .tempo { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+
+  /* Linha do tempo: linha central, cards alternando esquerda/direita */
+  .timeline {
+    --dot: 14px;
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: var(--border-subtle);
+  }
+  .item {
+    position: relative;
+    width: 50%;
+    padding: 0 32px 32px 0;
+  }
+  .item:nth-child(even) {
+    margin-left: 50%;
+    padding: 0 0 32px 32px;
+  }
+  .item::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: calc(var(--dot) / -2);
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+    background: var(--surface-page);
+    border: 2px solid var(--border-strong);
+    box-sizing: border-box;
+    z-index: 1;
+  }
+  .item:nth-child(even)::before { right: auto; left: calc(var(--dot) / -2); }
+  .item[data-status='lida']::before { background: var(--border-strong); }
+  .item[data-status='atual']::before {
+    background: var(--border-strong);
+    box-shadow: 0 0 0 5px var(--accent-highlight);
+  }
+
+  .card {
+    position: relative;
+    padding: 16px 18px;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+  }
+  .item[data-status='atual'] .card { border-color: var(--border-strong); }
+  .item[data-status='proxima'] .card { border-style: dashed; }
+  /* Setinha apontando para a linha */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    right: -7px;
+    width: 12px;
+    height: 12px;
+    background: inherit;
+    border: inherit;
+    border-left: 0;
+    border-bottom: 0;
+    transform: rotate(45deg);
+  }
+  .item:nth-child(even) .card::after { right: auto; left: -7px; transform: rotate(-135deg); }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .badge {
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-raised);
+    padding: 1px 8px;
+    border-radius: 999px;
+  }
+  .card h3 { margin: 8px 0 4px; font-family: var(--font-display); font-size: 16px; line-height: 1.35; }
+  .autor { color: var(--text-muted); margin: 0; font-size: 14px; }
+  .notas :global(p) { margin: 8px 0 0; font-size: 15px; }
+  .links { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; padding: 0; margin: 10px 0 0; font-size: 14px; }
+
+  /* Três passadas */
+  .passadas {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-md) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .passadas li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    background: var(--surface-highlight);
+  }
+  .passadas strong { font-family: var(--font-display); }
+  .passadas p { margin: 6px 0 0; font-size: 14.5px; }
+
+  .sub {
+    margin: var(--space-lg) 0 var(--space-md);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-strong);
+  }
+  .dicas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 24px;
+  }
+  .dicas p { margin: 2px 0 0; color: var(--text-muted); font-size: 14.5px; }
+
+
+  /* Roteiro: passos ligados por uma linha, com número grande */
+  .roteiro {
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    counter-reset: passo;
+  }
+  .roteiro::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    right: 22px;
+    height: 2px;
+    background: var(--border-subtle);
+  }
+  .roteiro li { position: relative; counter-increment: passo; }
+  .passo-num::before {
+    content: counter(passo);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--border-strong);
+    background: var(--surface-page);
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+  .roteiro li:first-child .passo-num::before { background: var(--border-strong); color: var(--surface-page); }
+  .roteiro strong { font-family: var(--font-display); font-size: 16px; }
+  .roteiro p { margin: 4px 0 0; color: var(--text-muted); font-size: 14.5px; }
+
+  .destaque {
+    padding: 20px 22px;
+    border-left: 4px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    background: var(--surface-raised);
+  }
+  .destaque .eyebrow {
+    margin: 0 0 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .destaque ul { margin: 4px 0 10px; padding-left: 1.2em; }
+  .destaque p { margin: 0; }
+  .destaque p:last-child { margin: 0; color: var(--text-muted); }
+
+  @media (max-width: 720px) {
+    .timeline::before { left: 6px; }
+    .item, .item:nth-child(even) { width: auto; margin-left: 0; padding: 0 0 24px 32px; }
+    .item::before, .item:nth-child(even)::before { left: 0; right: auto; }
+    .card::after, .item:nth-child(even) .card::after { right: auto; left: -7px; transform: rotate(-135deg); }
+    .passadas, .dicas { grid-template-columns: 1fr; }
+    .roteiro { grid-template-columns: 1fr; gap: 20px; }
+    .roteiro::before { top: 22px; bottom: 22px; left: 21px; right: auto; width: 2px; height: auto; }
+    .roteiro li { padding-left: 60px; }
+    .passo-num::before { position: absolute; left: 0; top: 0; margin: 0; }
+  }
+</style>
