@@ -1,7 +1,7 @@
 ---
 titulo: "Correct Code, Broken Contributions? SWE-CC: Benchmarking Repository Policy Compliance for Coding Agents"
 autor: Hai Dang Truong, Rayner Goh, Thanh Le-Cong e Yintong Huo
-status: atual
+status: lida
 links:
   - label: arXiv
     url: https://arxiv.org/abs/2610.06193

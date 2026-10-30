@@ -3,9 +3,14 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 
-// Sem data (encontro a definir) vai para o topo.
+// Sem data (encontro a definir) vai para o topo. Em empate, atual > proxima > lida.
 const ts = (d?: Date) => d?.getTime() ?? Number.MAX_SAFE_INTEGER;
-const leituras = (await getCollection('leituras')).sort((a, b) => ts(b.data.data) - ts(a.data.data));
+const statusOrder = { atual: 0, proxima: 1, lida: 2 };
+const leituras = (await getCollection('leituras')).sort((a, b) => {
+  const diff = ts(b.data.data) - ts(a.data.data);
+  if (diff !== 0) return diff;
+  return statusOrder[a.data.status] - statusOrder[b.data.status];
+});
 const entradas = await Promise.all(
   leituras.map(async (l) => ({ ...l, Content: (await render(l)).Content }))
 );
