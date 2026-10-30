@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="async/await, Promise e por que o JavaScript não bloqueia; GET e POST no MockAPI com React Native.">
+<title>Pedir e Esperar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+  body { margin: 0; }
+  /* caderno quadriculado da série (Desenhe as Caixas): tinta, laranja = pedido, verde = resposta, caneta = erro */
+  :root {
+    --papel: #F3F4F1;
+    --papel-fig: #FBFCFA;
+    --grade: #DEE5DE;
+    --grade-forte: #CCD8CE;
+    --tinta: #1B2A32;
+    --tinta-fraca: #5D6E75;
+    --tinta-tenue: #8A9AA0;
+    --pedido: #B44F16;
+    --resposta: #16705F;
+    --caneta: #B7302A;
+    --espera: #4A7FA5;
+    --espera-fundo: #CFE0EC;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --papel: #14181A; --papel-fig: #1A2023; --grade: #242C2E; --grade-forte: #2E393C;
+      --tinta: #E5EAE7; --tinta-fraca: #9BABAE; --tinta-tenue: #6E7E82;
+      --pedido: #EE9448; --resposta: #3FCFB4; --caneta: #EF6A5E;
+      --espera: #4A8FC4; --espera-fundo: #1E3A52;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --papel: #14181A; --papel-fig: #1A2023; --grade: #242C2E; --grade-forte: #2E393C;
+    --tinta: #E5EAE7; --tinta-fraca: #9BABAE; --tinta-tenue: #6E7E82;
+    --pedido: #EE9448; --resposta: #3FCFB4; --caneta: #EF6A5E;
+    --espera: #4A8FC4; --espera-fundo: #1E3A52;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background-color: var(--papel);
+    background-image:
+      repeating-linear-gradient(to right, var(--grade) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(to bottom, var(--grade) 0 1px, transparent 1px 28px);
+    color: var(--tinta);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.62;
+    -webkit-text-size-adjust: 100%;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .folha { max-width: 820px; margin: 0 auto; padding-block: 56px 120px; }
+  @media (min-width: 900px) {
+    .folha { border-left: 1px solid var(--caneta); padding-left: 56px; max-width: 852px; }
+  }
+
+  h1, h2, h3, .eyebrow, .rotulo, th { font-family: var(--display); }
+  h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); line-height: 1.02; font-weight: 800; letter-spacing: -0.025em; margin: 0; text-wrap: balance; }
+  h2 { font-size: clamp(1.4rem, 3.6vw, 1.85rem); font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; margin: 0; text-wrap: balance; }
+  h3 { font-size: 1.05rem; font-weight: 700; margin: 0; }
+  p { margin: 0; max-width: 66ch; }
+  strong { font-weight: 600; }
+  code { font-family: var(--mono); font-size: 0.84em; }
+  p code, li code, td code { background: color-mix(in srgb, var(--tinta) 8%, transparent); padding: 0.1em 0.34em; border-radius: 3px; }
+  .eyebrow { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--tinta-fraca); }
+  .pd { color: var(--pedido); font-weight: 600; }
+  .rp { color: var(--resposta); font-weight: 600; }
+  .er { color: var(--caneta); font-weight: 600; }
+
+  /* hero */
+  .hero { margin-bottom: 68px; }
+  .hero-caixa { position: relative; margin-top: 22px; padding: 30px 26px; border: 2px solid var(--tinta); background: var(--papel-fig); }
+  .cota { position: absolute; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em; white-space: nowrap; background: var(--papel-fig); padding: 0 8px; }
+  .cota-topo { top: -11px; left: 22px; color: var(--pedido); }
+  .cota-baixo { bottom: -11px; right: 22px; color: var(--resposta); }
+  .hero-sub { margin-top: 18px; font-size: 1.02rem; color: var(--tinta-fraca); max-width: 54ch; }
+
+  /* partes e passos */
+  .parte { display: flex; align-items: center; gap: 14px; margin: 0 0 46px; }
+  .parte span { font-family: var(--display); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--tinta-fraca); white-space: nowrap; }
+  .parte::after { content: ""; flex: 1; height: 1px; background: var(--grade-forte); }
+  .passo { margin-bottom: 76px; }
+  .passo-cabeca { display: grid; grid-template-columns: 46px 1fr; gap: 16px; align-items: start; margin-bottom: 20px; }
+  .passo-num { font-family: var(--mono); font-size: 0.82rem; font-weight: 700; color: var(--papel); background: var(--tinta); width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; margin-top: 4px; }
+  .passo-corpo { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .passo > .passo-corpo { padding-left: 62px; }
+  @media (max-width: 620px) {
+    .passo > .passo-corpo { padding-left: 0; }
+    .passo-cabeca { grid-template-columns: 34px 1fr; gap: 12px; }
+  }
+
+  .figura { border: 1px solid var(--grade-forte); background: var(--papel-fig); padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .figura-rotulo { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--tinta-tenue); }
+
+  pre { margin: 0; padding: 16px 18px; background: color-mix(in srgb, var(--tinta) 7%, transparent); border-radius: 4px; overflow-x: auto; font-family: var(--mono); font-size: 0.78rem; line-height: 1.75; color: var(--tinta-fraca); }
+  pre .v { color: var(--tinta); font-weight: 700; }
+  pre .c { color: var(--tinta-tenue); font-style: italic; }
+  pre .pd, pre .rp, pre .er { font-weight: 700; }
+
+  button { font-family: var(--mono); font-size: 0.75rem; padding: 8px 13px; border: 1px solid var(--grade-forte); background: var(--papel); color: var(--tinta-fraca); border-radius: 3px; cursor: pointer; transition: background 0.13s, color 0.13s, border-color 0.13s; }
+  button:hover { border-color: var(--tinta-tenue); color: var(--tinta); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+  button[aria-pressed="true"] { background: var(--tinta); border-color: var(--tinta); color: var(--papel); font-weight: 700; }
+  button.acao { background: var(--tinta); border-color: var(--tinta); color: var(--papel); font-weight: 700; }
+  button.acao.pd { background: var(--pedido); border-color: var(--pedido); color: var(--papel-fig); }
+  button.acao.rp { background: var(--resposta); border-color: var(--resposta); color: var(--papel-fig); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+  /* passo 1: pedido e resposta lado a lado */
+  .ida-volta { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .bilhete { border: 1px solid var(--grade-forte); background: var(--papel-fig); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .bilhete.pd-b { border-top: 3px solid var(--pedido); }
+  .bilhete.rp-b { border-top: 3px solid var(--resposta); }
+  .bilhete .titulo { font-family: var(--mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .campo-b { display: grid; grid-template-columns: 70px 1fr; gap: 8px; font-size: 0.92rem; align-items: baseline; }
+  .campo-b .k { font-family: var(--mono); font-size: 0.7rem; color: var(--tinta-tenue); text-transform: uppercase; letter-spacing: 0.06em; }
+  .campo-b .val { font-family: var(--mono); font-size: 0.78rem; color: var(--tinta); overflow-wrap: anywhere; min-width: 0; }
+
+  /* tabela */
+  .rolagem-h { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 480px; }
+  th { text-align: left; font-size: 0.7rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--tinta-tenue); font-weight: 600; padding: 0 12px 9px 0; border-bottom: 1px solid var(--grade-forte); }
+  td { padding: 11px 12px 11px 0; border-bottom: 1px solid var(--grade); vertical-align: top; color: var(--tinta-fraca); }
+  td:first-child { color: var(--tinta); white-space: nowrap; font-family: var(--mono); font-size: 0.8rem; font-weight: 700; }
+  tr.hoje td:first-child::after { content: " · hoje"; color: var(--pedido); font-weight: 400; }
+
+  /* passo 2: código que roda */
+  .roda { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 760px) { .roda { grid-template-columns: minmax(0, 1fr) 232px; align-items: start; } }
+  .codigo-vivo { display: flex; flex-direction: column; background: color-mix(in srgb, var(--tinta) 7%, transparent); border-radius: 4px; padding: 12px 0; overflow-x: auto; min-width: 0; }
+  .ln { font-family: var(--mono); font-size: 0.76rem; line-height: 1.95; white-space: pre; padding: 0 14px; color: var(--tinta-fraca); border-left: 3px solid transparent; transition: background 0.15s, border-color 0.15s; }
+  .ln.agora { background: color-mix(in srgb, var(--tinta) 13%, transparent); border-left-color: var(--tinta); color: var(--tinta); font-weight: 700; }
+  .ln.esperando { background: var(--espera-fundo); border-left-color: var(--espera); color: var(--tinta); }
+  .ln.quebrou { background: color-mix(in srgb, var(--caneta) 16%, transparent); border-left-color: var(--caneta); color: var(--tinta); }
+  .ln .falta { color: var(--caneta); text-decoration: line-through; }
+  .ln .tem { color: var(--espera); font-weight: 700; }
+
+  .internet { display: flex; flex-direction: column; gap: 6px; }
+  .internet-rotulo { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.7rem; color: var(--tinta-fraca); }
+  .trilha { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--tinta) 9%, transparent); overflow: hidden; }
+  .trilha > div { height: 100%; width: 0; background: var(--espera); }
+
+  .console { font-family: var(--mono); font-size: 0.74rem; line-height: 1.7; background: var(--tinta); color: var(--papel); border-radius: 4px; padding: 12px 14px; min-height: 92px; overflow-x: auto; }
+  .console .vazio { color: var(--tinta-tenue); }
+  .console .e { color: #FF9C93; }
+  .console div { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  /* aparelho: captura com paleta própria, não é parte da página */
+  .aparelho { border: 2px solid var(--tinta); border-radius: 18px; padding: 6px; background: var(--tinta); justify-self: center; width: 100%; max-width: 232px; }
+  .app { background: #FFFFFF; border-radius: 13px; height: 300px; overflow: hidden; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111827; }
+  .app-topo { background: #2354D6; color: #FFFFFF; font-size: 0.8rem; font-weight: 600; padding: 26px 12px 10px; }
+  .app-corpo { padding: 10px; display: flex; flex-direction: column; gap: 6px; flex: 1; overflow: hidden; }
+  .app-item { background: #F1F3F6; border-radius: 8px; padding: 8px 10px; font-size: 0.72rem; }
+  .app-item.novo { outline: 2px solid #16705F; }
+  .app-aviso { font-size: 0.72rem; color: #6B7280; text-align: center; margin-top: 30px; }
+  .app-girador { width: 22px; height: 22px; border: 3px solid #D9DDE3; border-top-color: #2354D6; border-radius: 50%; margin: 26px auto 0; animation: gira 0.8s linear infinite; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .app-girador { animation-duration: 3s; } }
+  .app.vermelha { background: #C62828; color: #FFFFFF; }
+  .app.vermelha .app-topo { background: #8E1B1B; }
+  .app-vermelho { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; padding: 12px; line-height: 1.5; }
+  .aparelho-legenda { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-tenue); text-align: center; margin-top: 8px; }
+  .app-campo { border: 1px solid #D9DDE3; border-radius: 6px; padding: 6px 8px; font-size: 0.72rem; color: #9CA3AF; }
+  .app-campo.cheio { color: #111827; }
+  .app-botao { background: #2354D6; color: #FFFFFF; font-size: 0.68rem; font-weight: 700; text-align: center; border-radius: 4px; padding: 6px; text-transform: uppercase; }
+
+  /* passo 3: senha da lanchonete */
+  .senha { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .senha-card { border: 1px solid var(--grade-forte); background: var(--papel-fig); padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+  .senha-card .desenho { height: 72px; display: grid; place-items: center; }
+  .senha-card .nome { font-family: var(--mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .senha-card .quando { font-size: 0.92rem; color: var(--tinta-fraca); line-height: 1.45; }
+  .l { stroke: var(--tinta); fill: none; stroke-width: 1.6; }
+  .l-pd { stroke: var(--pedido); fill: none; stroke-width: 2; }
+  .l-rp { stroke: var(--resposta); fill: none; stroke-width: 2; }
+  .f-papel { fill: var(--papel-fig); stroke: var(--tinta); stroke-width: 1.6; }
+  .t-m { font-family: var(--mono); font-size: 13px; font-weight: 700; fill: var(--tinta); }
+  .t-pd { font-family: var(--mono); font-size: 11px; font-weight: 700; fill: var(--pedido); }
+  .t-rp { font-family: var(--mono); font-size: 11px; font-weight: 700; fill: var(--resposta); }
+
+  .regras { display: flex; flex-direction: column; gap: 12px; }
+  .regra { border-left: 3px solid var(--tinta); padding: 2px 0 2px 16px; }
+  .regra p { font-size: 0.98rem; }
+
+
+  /* passo 4: linhas do tempo */
+  .linhas-tempo { display: flex; flex-direction: column; gap: 12px; overflow-x: auto; }
+  .lt { display: grid; grid-template-columns: 110px minmax(420px, 1fr); gap: 12px; align-items: center; }
+  .lt-nome { font-family: var(--mono); font-size: 0.74rem; font-weight: 700; display: flex; flex-direction: column; line-height: 1.3; }
+  .lt-nome span { font-weight: 400; color: var(--tinta-tenue); font-size: 0.66rem; }
+  .lt-faixa { display: flex; gap: 3px; height: 34px; }
+  .seg { display: grid; place-items: center; font-family: var(--mono); font-size: 0.64rem; border-radius: 3px; padding: 0 6px; white-space: nowrap; overflow: hidden; min-width: 0; }
+  .seg.pd-s { background: color-mix(in srgb, var(--pedido) 20%, transparent); color: var(--pedido); font-weight: 700; }
+  .seg.rp-s { background: color-mix(in srgb, var(--resposta) 20%, transparent); color: var(--resposta); font-weight: 700; }
+  .seg.parada { border: 1px dashed var(--caneta); color: var(--caneta); background: repeating-linear-gradient(45deg, transparent 0 5px, color-mix(in srgb, var(--caneta) 14%, transparent) 5px 6px); }
+  .seg.livre { background: color-mix(in srgb, var(--tinta) 9%, transparent); color: var(--tinta-fraca); }
+  .seg.rede { background: var(--espera-fundo); color: var(--tinta); border: 1px solid var(--espera); }
+  .seg.vazio { background: transparent; }
+
+  /* passo 5: simulador */
+  .sim { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 760px) { .sim { grid-template-columns: 232px minmax(0, 1fr); align-items: start; } }
+  .sim-lado { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .form label { display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--tinta-tenue); min-width: 0; }
+  .form input { font-family: var(--mono); font-size: 0.82rem; padding: 7px 9px; border: 1px solid var(--grade-forte); border-radius: 3px; background: var(--papel); color: var(--tinta); width: 100%; min-width: 0; }
+  .servidor { border: 1px dashed var(--grade-forte); border-radius: 4px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .servidor .figura-rotulo { display: flex; justify-content: space-between; gap: 8px; }
+  .servidor pre { padding: 10px 12px; font-size: 0.72rem; line-height: 1.6; max-height: 210px; }
+  .troca { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .troca pre { font-size: 0.72rem; line-height: 1.6; min-height: 120px; }
+  .troca .figura-rotulo.pd { color: var(--pedido); }
+  .troca .figura-rotulo.rp { color: var(--resposta); }
+
+  .veredito { display: flex; flex-direction: column; gap: 9px; padding: 15px 16px; border: 1px dashed var(--grade-forte); border-radius: 4px; }
+  .selo { align-self: flex-start; font-family: var(--mono); font-size: 0.63rem; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; background: var(--tinta); color: var(--papel); padding: 4px 9px; border-radius: 3px; }
+  .veredito .explica { font-size: 1rem; color: var(--tinta-fraca); }
+
+  /* parte 2 */
+  ol { margin: 0; padding-left: 22px; max-width: 64ch; }
+  ol li { margin-bottom: 9px; }
+  ol li::marker { color: var(--tinta-tenue); font-family: var(--mono); font-size: 0.85em; }
+  .erros { display: flex; flex-direction: column; gap: 20px; }
+  .erro { border-left: 3px solid var(--caneta); padding: 3px 0 3px 16px; display: flex; flex-direction: column; gap: 5px; }
+  .erro .sintoma { font-weight: 600; }
+  .erro .causa { color: var(--tinta-fraca); font-size: 0.96rem; max-width: 66ch; }
+  .destaque { border: 2px solid var(--tinta); background: var(--papel-fig); padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .links { display: flex; flex-direction: column; gap: 14px; }
+  .link-item { display: flex; flex-direction: column; gap: 3px; padding-bottom: 14px; border-bottom: 1px solid var(--grade); }
+  .link-item:last-child { border-bottom: 0; }
+  .link-item a { color: var(--tinta); text-decoration: none; border-bottom: 1px solid var(--caneta); font-weight: 600; align-self: flex-start; }
+  .link-item a:hover { color: var(--caneta); }
+  .link-item span { font-size: 0.94rem; color: var(--tinta-fraca); }
+  .assinatura { margin-top: 56px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tinta-tenue); }
+</style>
+</head>
+<body>
+<div class="folha">
+
+  <header class="hero">
+    <div class="eyebrow">Univates &middot; Desenvolvimento mobile &middot; aula 14</div>
+    <div class="hero-caixa">
+      <div class="cota cota-topo">→ requisição</div>
+      <div class="cota cota-baixo">resposta ←</div>
+      <h1>Pedir e Esperar</h1>
+    </div>
+    <p class="hero-sub">
+      Na aula passada o app perguntou um CEP para a internet. Hoje ele também manda dados para lá.
+      Nos dois casos a resposta demora, e o código precisa esperar por ela. Para isso servem o
+      <code>async</code> e o <code>await</code>.
+    </p>
+  </header>
+
+  <div class="parte"><span>Parte 1 &middot; Entender</span></div>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">1</div>
+      <h2>Toda conversa com uma API tem duas metades</h2>
+    </div>
+    <div class="passo-corpo">
+      <p>
+        O app manda uma <span class="pd">requisição</span> e o servidor devolve uma
+        <span class="rp">resposta</span>. A requisição diz <strong>o que</strong> você quer fazer (o
+        método) e <strong>com quem</strong> (a URL). Às vezes ela leva junto um dado, chamado <strong>corpo</strong>. A resposta sempre volta com um <strong>status</strong>, um número que
+        diz se deu certo, e quase sempre com um corpo em JSON.
+      </p>
+
+      <div class="ida-volta">
+        <div class="bilhete pd-b">
+          <div class="titulo pd">Requisição · POST</div>
+          <div class="campo-b"><span class="k">método</span><span class="val">POST</span></div>
+          <div class="campo-b"><span class="k">URL</span><span class="val">…mockapi.io/api/v1/bordeis</span></div>
+          <div class="campo-b"><span class="k">header</span><span class="val">Content-Type: application/json</span></div>
+          <div class="campo-b"><span class="k">corpo</span><span class="val">{"nome":"Gaveta","cor":"azul"}</span></div>
+        </div>
+        <div class="bilhete rp-b">
+          <div class="titulo rp">Resposta</div>
+          <div class="campo-b"><span class="k">status</span><span class="val">201 Created</span></div>
+          <div class="campo-b"><span class="k">corpo</span><span class="val">{"id":"3","nome":"Gaveta","cor":"azul","createdAt":"…"}</span></div>
+        </div>
+      </div>
+
+      <p>
+        O método é um verbo. Cada um corresponde a um comando SQL que vocês já usaram no app dos
+        bordeis. Muda o lugar onde o dado mora, do celular para um servidor, mas as quatro operações
+        são as mesmas.
+      </p>
+
+      <div class="rolagem-h">
+        <table>
+          <thead><tr><th>Método</th><th>Faz o quê</th><th>No SQLite (aula 10)</th><th>Status se der certo</th></tr></thead>
+          <tbody>
+            <tr class="hoje"><td>GET</td><td>busca a lista, ou um item pelo id</td><td><code>SELECT</code></td><td>200</td></tr>
+            <tr class="hoje"><td>POST</td><td>cria um item novo</td><td><code>INSERT</code></td><td>201</td></tr>
+            <tr><td>PUT</td><td>altera um item</td><td><code>UPDATE</code></td><td>200</td></tr>
+            <tr><td>DELETE</td><td>apaga um item</td><td><code>DELETE</code></td><td>200</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        E os status que vão aparecer hoje: <strong>200</strong> e <strong>201</strong> deram certo;
+        <strong>404</strong> é URL errada (o recurso não existe); <strong>500</strong> é problema do
+        lado do servidor. Sem internet não tem status nenhum, porque a resposta nem chega.
+      </p>
+    </div>
+  </section>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">2</div>
+      <h2>A internet demora, e o código não espera sozinho</h2>
+    </div>
+    <div class="passo-corpo">
+      <p>
+        O JavaScript executa uma linha atrás da outra, muito rápido. Uma linha que vai à internet leva
+        centenas de milissegundos, às vezes segundos no 4G. Se ninguém mandar esperar, a próxima linha
+        roda antes da resposta chegar e tenta usar uma coisa que ainda não existe.
+      </p>
+      <p>
+        Rode as duas versões abaixo. A barra azul é a internet trabalhando.
+      </p>
+
+      <div class="figura">
+        <div class="figura-rotulo">Figura 1: a mesma função, com e sem await</div>
+        <div class="chips">
+          <button id="v-com" aria-pressed="true">com await</button>
+          <button id="v-sem" aria-pressed="false">sem await</button>
+          <button id="rodar" class="acao">▶ rodar carregar()</button>
+        </div>
+
+        <div class="roda">
+          <div class="codigo-vivo" id="codigo"></div>
+          <div>
+            <div class="aparelho">
+              <div class="app" id="app1">
+                <div class="app-topo">Bordeis na nuvem</div>
+                <div class="app-corpo" id="app1-corpo"><div class="app-aviso">aperte rodar</div></div>
+              </div>
+            </div>
+            <div class="aparelho-legenda">a tela do app</div>
+          </div>
+        </div>
+
+        <div class="internet">
+          <div class="internet-rotulo"><span>internet</span><span id="ms">0 ms</span></div>
+          <div class="trilha"><div id="barra"></div></div>
+        </div>
+        <div class="console" id="console"><div class="vazio">console.log aparece aqui</div></div>
+      </div>
+
+      <p>
+        Sem <code>await</code>, a variável <code>resposta</code> guarda uma <code>Promise</code>, que
+        ainda não é a resposta. A linha seguinte procura <code>.json()</code> nela, não encontra, e o
+        app mostra a tela vermelha. A internet continua trabalhando depois do erro, e a resposta chega
+        1600 ms depois, quando a função já parou.
+      </p>
+    </div>
+  </section>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">3</div>
+      <h2>Promise é a senha da lanchonete</h2>
+    </div>
+    <div class="passo-corpo">
+      <p>
+        Você pede um lanche e o caixa te entrega uma <strong>senha</strong>. A
+        senha é a promessa de que o lanche vai chegar. Com ela na mão você tem duas opções: ficar
+        parado olhando o painel até chamarem o número, ou sair e esquecer, e aí o lanche fica no
+        balcão.
+      </p>
+
+      <div class="senha">
+        <div class="senha-card">
+          <div class="desenho">
+            <svg width="120" height="64" viewBox="0 0 120 64" aria-hidden="true">
+              <rect class="f-papel" x="38" y="8" width="44" height="48" rx="3" />
+              <text class="t-m" x="60" y="37" text-anchor="middle">#42</text>
+              <line class="l-pd" x1="4" y1="32" x2="32" y2="32" />
+              <polyline class="l-pd" points="25,26 32,32 25,38" />
+            </svg>
+          </div>
+          <div class="nome pd">fetch(API)</div>
+          <div class="quando">Faz o pedido e devolve na hora a senha, a <code>Promise</code>. A resposta ainda não está ali.</div>
+        </div>
+        <div class="senha-card">
+          <div class="desenho">
+            <svg width="120" height="64" viewBox="0 0 120 64" aria-hidden="true">
+              <rect class="l" x="20" y="6" width="80" height="34" rx="3" />
+              <text class="t-m" x="60" y="29" text-anchor="middle">42</text>
+              <circle class="l" cx="60" cy="54" r="7" />
+              <line class="l" x1="60" y1="54" x2="60" y2="50" />
+              <line class="l" x1="60" y1="54" x2="63" y2="55" />
+            </svg>
+          </div>
+          <div class="nome" style="color: var(--espera)">await</div>
+          <div class="quando">Fica olhando o painel. A função pausa nesta linha até a promessa se cumprir, e só então segue com o valor de verdade.</div>
+        </div>
+        <div class="senha-card">
+          <div class="desenho">
+            <svg width="120" height="64" viewBox="0 0 120 64" aria-hidden="true">
+              <rect class="f-papel" x="30" y="22" width="60" height="30" rx="3" />
+              <path class="l-rp" d="M40 22 Q60 4 80 22" />
+              <text class="t-rp" x="60" y="42" text-anchor="middle">200</text>
+            </svg>
+          </div>
+          <div class="nome rp">resposta</div>
+          <div class="quando">O lanche chegou. É um objeto com <code>status</code>, <code>ok</code> e o corpo, que ainda precisa virar objeto com <code>resposta.json()</code>.</div>
+        </div>
+      </div>
+
+      <div class="regras">
+        <div class="regra">
+          <h3><code>await</code> só funciona dentro de função <code>async</code></h3>
+          <p>A palavra <code>async</code> antes de <code>function</code> avisa que esta função pode parar no meio para esperar. Sem o <code>async</code>, o Expo nem compila e aponta a linha do <code>await</code>.</p>
+        </div>
+        <div class="regra">
+          <h3>São dois <code>await</code>, e os dois são necessários</h3>
+          <p>O primeiro espera os <em>cabeçalhos</em> da resposta, onde está o status. O corpo ainda pode estar chegando aos pedaços, por isso <code>resposta.json()</code> também devolve uma Promise e também leva <code>await</code>.</p>
+        </div>
+        <div class="regra">
+          <h3>Enquanto uma função espera, o app não trava</h3>
+          <p>Só <code>carregar()</code> fica parada. A tela continua respondendo ao toque, e é por isso que dá para mostrar um girador de carregando durante a espera.</p>
+        </div>
+      </div>
+
+      <pre><span class="c">// a forma que vamos usar sempre:</span>
+<span class="v">async</span> function carregar() {
+  const resposta = <span class="v">await</span> fetch(API);      <span class="c">// espera o status</span>
+  const dados = <span class="v">await</span> resposta.json();  <span class="c">// espera o corpo virar objeto</span>
+  setLista(dados);                       <span class="c">// a tela redesenha</span>
+}</pre>
+    </div>
+  </section>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">4</div>
+      <h2>Por que o JavaScript espera diferente</h2>
+    </div>
+    <div class="passo-corpo">
+      <p>
+        No jeito mais comum de buscar uma URL em PHP ou Java não tem <code>await</code>. A linha que vai
+        à internet para o programa até a resposta chegar, e a próxima linha já recebe o dado pronto:
+      </p>
+<pre><span class="c">// PHP: o programa para nesta linha até a resposta chegar</span>
+$dados = json_decode(file_get_contents($api));
+
+<span class="c">// Java: a thread para nesta linha</span>
+HttpResponse&lt;String&gt; resposta = client.send(req, BodyHandlers.ofString());</pre>
+      <p>
+        Isso se chama <strong>bloquear</strong>. Funciona bem num servidor porque, na configuração mais
+        comum, cada requisição ganha a sua própria <em>thread</em> (no Java) ou o seu próprio processo
+        (no PHP). Enquanto uma fica parada esperando, as outras seguem trabalhando. Java também tem
+        jeitos de não bloquear, mas a primeira forma que se aprende é essa.
+      </p>
+      <p>
+        O JavaScript nasceu em 1995 dentro do navegador, e o código de uma página roda em
+        <strong>uma thread só</strong>. Essa mesma thread desenha a página, responde aos cliques e roda
+        o seu código. Se uma requisição
+        bloqueasse essa thread, a página inteira congelaria até a resposta chegar, sem rolar, clicar ou digitar. Por isso o <code>fetch</code> não bloqueia. O código entrega a requisição para o
+        navegador, segue rodando, e o navegador avisa quando a resposta chega.
+      </p>
+
+      <div class="figura">
+        <div class="figura-rotulo">Figura 2: a mesma requisição de 1,6 s, bloqueando e sem bloquear</div>
+        <div class="linhas-tempo">
+          <div class="lt">
+            <div class="lt-nome">Java / PHP<span>a thread</span></div>
+            <div class="lt-faixa">
+              <div class="seg pd-s" style="flex:1">pede</div>
+              <div class="seg parada" style="flex:6">parada esperando a rede</div>
+              <div class="seg rp-s" style="flex:2">usa a resposta</div>
+            </div>
+          </div>
+          <div class="lt">
+            <div class="lt-nome">JavaScript<span>a única thread</span></div>
+            <div class="lt-faixa">
+              <div class="seg pd-s" style="flex:1">pede</div>
+              <div class="seg livre" style="flex:2">toque</div>
+              <div class="seg livre" style="flex:2">desenha</div>
+              <div class="seg livre" style="flex:2">rolagem</div>
+              <div class="seg rp-s" style="flex:2">usa a resposta</div>
+            </div>
+          </div>
+          <div class="lt">
+            <div class="lt-nome">a rede<span>fora do seu código</span></div>
+            <div class="lt-faixa">
+              <div class="seg vazio" style="flex:1"></div>
+              <div class="seg rede" style="flex:6">requisição viajando</div>
+              <div class="seg vazio" style="flex:2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        No celular a regra é a mesma, e vale até no Android nativo. Desde o Android 3.0, um app em
+        Java ou Kotlin que faz rede na thread principal (a que desenha a tela) é derrubado com
+        <code>NetworkOnMainThreadException</code>. Lá o programador precisa abrir outra thread, ou usar
+        as coroutines do Kotlin. No React Native o seu JavaScript roda numa thread só, e quem faz a
+        requisição de verdade é o código nativo do aparelho (no Android, a biblioteca OkHttp).
+      </p>
+
+      <h3>Três jeitos de escrever "me avisa quando chegar"</h3>
+      <p>
+        Como o JavaScript não pode parar, por muitos anos o jeito era passar uma função para ser
+        chamada depois, o <em>callback</em>. Com várias requisições em sequência, os callbacks ficavam
+        um dentro do outro. Em 2015 a linguagem ganhou a Promise, e em 2017 o
+        <code>async</code>/<code>await</code>, ideia copiada do C#, que já tinha essas duas palavras
+        desde 2012. As três versões abaixo fazem a mesma coisa:
+      </p>
+<pre><span class="c">// até ~2015: callback (XMLHttpRequest)</span>
+const xhr = new XMLHttpRequest();
+xhr.open("GET", API);
+xhr.onload = function () {
+  setLista(JSON.parse(xhr.responseText));   <span class="c">// chamada quando a resposta chega</span>
+};
+xhr.send();
+
+<span class="c">// 2015: Promise com .then</span>
+fetch(API)
+  .then((resposta) =&gt; resposta.json())
+  .then((dados) =&gt; setLista(dados));
+
+<span class="c">// 2017: async/await, o que usamos</span>
+<span class="v">async</span> function carregar() {
+  const resposta = <span class="v">await</span> fetch(API);
+  const dados = <span class="v">await</span> resposta.json();
+  setLista(dados);
+}</pre>
+      <p>
+        O <code>await</code> deixa o código com cara de Java ou PHP, uma linha depois da outra, sem
+        bloquear nada. Quando a função chega num <code>await</code>, a função fica suspensa e a thread fica livre para a tela trabalhar. Quando a resposta chega, a função continua daquela linha. Por baixo, cada
+        <code>await</code> ainda é um <code>.then</code>.
+      </p>
+    </div>
+  </section>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">5</div>
+      <h2>GET pergunta, POST manda</h2>
+    </div>
+    <div class="passo-corpo">
+      <p>
+        O GET é o que vocês já fizeram com a ViaCEP: só a URL. O POST precisa de mais informação, então
+        o <code>fetch</code> ganha um segundo parâmetro, um objeto com o método, o
+        aviso de que o corpo é JSON e o próprio corpo.
+      </p>
+      <p>
+        Abaixo tem um servidor de mentira que se comporta como o MockAPI. Faça um POST e olhe a tela do
+        app. O bordel novo vai para o servidor, mas o celular só fica sabendo dele depois de um GET.
+      </p>
+
+      <div class="figura">
+        <div class="figura-rotulo">Figura 3: o app e o servidor, cada um com a sua lista</div>
+        <div class="sim">
+          <div>
+            <div class="aparelho">
+              <div class="app" id="app2">
+                <div class="app-topo">Bordeis na nuvem</div>
+                <div class="app-corpo">
+                  <div class="app-campo" id="app2-nome">Nome do bordel</div>
+                  <div class="app-campo" id="app2-cor">Cor do bordel</div>
+                  <div class="app-botao">Salvar na API</div>
+                  <div id="app2-lista" style="display:flex;flex-direction:column;gap:6px;margin-top:4px"></div>
+                </div>
+              </div>
+            </div>
+            <div class="aparelho-legenda">o que o celular mostra</div>
+          </div>
+
+          <div class="sim-lado">
+            <div class="form">
+              <label for="f-nome">nome<input id="f-nome" value="Gaveta da cozinha" autocomplete="off"></label>
+              <label for="f-cor">cor<input id="f-cor" value="azul" autocomplete="off"></label>
+            </div>
+            <div class="chips">
+              <button id="b-post" class="acao pd">POST · salvar</button>
+              <button id="b-get" class="acao rp">GET · carregar</button>
+              <button id="b-recarrega" aria-pressed="false">chamar carregar() depois do POST</button>
+            </div>
+            <div class="troca">
+              <div><div class="figura-rotulo pd">o que o app mandou</div><pre id="req">—</pre></div>
+              <div><div class="figura-rotulo rp">o que o servidor devolveu</div><pre id="res">—</pre></div>
+            </div>
+            <div class="servidor">
+              <div class="figura-rotulo"><span>no servidor (MockAPI)</span><span id="srv-n"></span></div>
+              <pre id="srv"></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="veredito">
+          <div class="selo" id="selo">comece pelo POST</div>
+          <div class="explica" id="explica">Ao abrir a tela, o <code>useEffect</code> fez um GET, e o celular mostra os dois bordeis que já estavam no servidor (são exemplos).</div>
+        </div>
+      </div>
+
+      <p>
+        O corpo que sai do app é texto: JSON é um formato de texto.
+        <code>JSON.stringify</code> transforma o objeto em texto na ida, e
+        <code>resposta.json()</code> faz o caminho contrário na volta. Quem cria o
+        <code>id</code> e o <code>createdAt</code> é o servidor; o app manda só <code>nome</code> e
+        <code>cor</code>.
+      </p>
+      <p>
+        Agora ligue o botão <em>chamar carregar() depois do POST</em> e salve outro. É a última linha do
+        <code>salvar()</code> no app de hoje: depois de mandar, pergunta de novo.
+      </p>
+    </div>
+  </section>
+
+  <div class="parte"><span>Parte 2 &middot; Construir</span></div>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">6</div>
+      <h2>Criar a sua API no MockAPI</h2>
+    </div>
+    <div class="passo-corpo">
+      <p>
+        O MockAPI cria uma API de verdade, na internet, sem escrever servidor. Cada um cria o seu
+        projeto; a URL é só sua (e de quem você passar ela).
+      </p>
+      <ol>
+        <li>Entre em <code>mockapi.io</code> e faça login com GitHub ou Google.</li>
+        <li>Crie um projeto novo. O prefixo pode ficar <code>/api/v1</code>.</li>
+        <li>Crie um recurso chamado <code>bordeis</code>. Apague os campos de exemplo <code>name</code> e <code>avatar</code> e crie <code>nome</code> e <code>cor</code>, do tipo String. Deixe <code>id</code> e <code>createdAt</code>.</li>
+        <li>Copie a URL do recurso. Ela tem a forma <code>https://&lt;seu-id&gt;.mockapi.io/api/v1/bordeis</code>.</li>
+        <li>Cole essa URL na barra do navegador. Se aparecer <code>[]</code>, a API está no ar e vazia. Teste também no Bruno, como na aula passada.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">7</div>
+      <h2>A tela, inteira</h2>
+    </div>
+    <div class="passo-corpo">
+      <p>
+        Arquivo novo <code>src/app/bordeis-api.js</code>, mais um link na tela inicial. Compare com o
+        <code>bordel.js</code> da aula 10: o <code>listar()</code> virou <code>carregar()</code> com
+        GET, e o <code>salvar()</code> virou um POST.
+      </p>
+<pre><span class="v">const</span> API = <span class="pd">"https://SEU-ID.mockapi.io/api/v1/bordeis"</span>;
+
+<span class="c">// GET: pede a lista inteira para a API.</span>
+<span class="v">async</span> function carregar() {
+  setCarregando(<span class="v">true</span>);
+  <span class="v">try</span> {
+    const resposta = <span class="v">await</span> fetch(API);
+    <span class="v">if</span> (!resposta.ok) {
+      setErro(`A API respondeu ${resposta.status}.`);
+    } <span class="v">else</span> {
+      const dados = <span class="v">await</span> resposta.json();
+      setLista(dados);
+      setErro("");
+    }
+  } <span class="v">catch</span> {
+    setErro("Sem conexão com a API.");   <span class="c">// sem internet: nem chega resposta</span>
+  }
+  setCarregando(<span class="v">false</span>);
+}
+
+<span class="c">// POST: manda um bordel novo. O corpo vai como TEXTO em JSON.</span>
+<span class="v">async</span> function salvar() {
+  <span class="v">if</span> (!nome.trim() || !cor.trim()) {
+    setErro("Preencha nome e cor.");
+    <span class="v">return</span>;
+  }
+  <span class="v">try</span> {
+    const resposta = <span class="v">await</span> fetch(API, {
+      <span class="pd">method: "POST",</span>
+      <span class="pd">headers: { "Content-Type": "application/json" },</span>
+      <span class="pd">body: JSON.stringify({ nome: nome, cor: cor }),</span>
+    });
+    <span class="v">if</span> (!resposta.ok) {
+      setErro(`Não salvou: a API respondeu ${resposta.status}.`);
+    } <span class="v">else</span> {
+      setNome("");
+      setCor("");
+      carregar();                         <span class="c">// a lista não sabe do novo: pergunta de novo</span>
+    }
+  } <span class="v">catch</span> {
+    setErro("Sem conexão com a API.");
+  }
+}
+
+useEffect(() =&gt; { carregar(); }, []);   <span class="c">// GET ao abrir a tela</span>
+
+<span class="c">// na FlatList: puxar para baixo chama carregar(), e o girador usa o estado</span>
+&lt;<span class="v">FlatList</span> data={lista} refreshing={carregando} onRefresh={carregar} … /&gt;</pre>
+
+      <div class="destaque">
+        <h3>Onde cada erro é tratado</h3>
+        <p><strong>Demora</strong>: o estado <code>carregando</code> liga o girador da lista.
+        <strong>Servidor respondeu, mas mal</strong> (URL errada, 404): <code>resposta.ok</code> é
+        <code>false</code>. <strong>Nem chegou resposta</strong> (Wi-Fi desligado): o
+        <code>fetch</code> lança um erro e o <code>catch</code> pega. Testem os três em aula: errem
+        uma letra da URL e desliguem o Wi-Fi.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">8</div>
+      <h2>Erros comuns</h2>
+    </div>
+    <div class="passo-corpo">
+      <div class="erros">
+        <div class="erro">
+          <div class="sintoma"><code>resposta.json is not a function</code></div>
+          <div class="causa">Faltou o <code>await</code> antes do <code>fetch</code>. A variável guarda a senha (a Promise), e a senha não tem <code>.json()</code>.</div>
+        </div>
+        <div class="erro">
+          <div class="sintoma"><code>Unexpected reserved word 'await'</code> ao compilar</div>
+          <div class="causa">A função não tem <code>async</code>. Coloque antes de <code>function</code>.</div>
+        </div>
+        <div class="erro">
+          <div class="sintoma">O POST deu certo, mas o bordel aparece vazio, sem nome e sem cor</div>
+          <div class="causa">Faltou o <code>JSON.stringify</code> no <code>body</code> ou o header <code>Content-Type</code>. O servidor não entende o corpo, e o bordel fica só com <code>id</code> e <code>createdAt</code>, ou a API responde com erro.</div>
+        </div>
+        <div class="erro">
+          <div class="sintoma">Salvou, mas a lista na tela não mudou</div>
+          <div class="causa">Faltou chamar <code>carregar()</code> depois do POST. O item novo está no servidor, e o estado do app ainda guarda a lista antiga.</div>
+        </div>
+        <div class="erro">
+          <div class="sintoma">A tela mostra <code>A API respondeu 404.</code></div>
+          <div class="causa">A URL está errada: confira o id do projeto, o prefixo e o nome do recurso (<code>bordeis</code>, minúsculo e no plural, igual ao MockAPI).</div>
+        </div>
+        <div class="erro">
+          <div class="sintoma">Os campos aparecem com outro nome, ou <code>undefined</code></div>
+          <div class="causa">O nome do campo no MockAPI tem que ser igual ao do código. <code>Nome</code> e <code>nome</code> são campos diferentes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="passo">
+    <div class="passo-cabeca">
+      <div class="passo-num">9</div>
+      <h2>Para ir além</h2>
+    </div>
+    <div class="passo-corpo">
+      <div class="links">
+        <div class="link-item">
+          <a href="https://mockapi.io/docs" target="_blank" rel="noopener">MockAPI · documentação</a>
+          <span>Como criar recursos, gerar dados de exemplo e as rotas de cada método.</span>
+        </div>
+        <div class="link-item">
+          <a href="https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/Asynchronous/Promises" target="_blank" rel="noopener">MDN · Como usar promises</a>
+          <span>A senha da lanchonete com mais detalhe, em português.</span>
+        </div>
+        <div class="link-item">
+          <a href="https://reactnative.dev/docs/network" target="_blank" rel="noopener">React Native · Networking</a>
+          <span>O <code>fetch</code> no React Native, com exemplos de GET e POST.</span>
+        </div>
+        <div class="link-item">
+          <a href="https://roveda.dev/materiais/sqlite">Banco no Aparelho</a>
+          <span>Material anterior: o app dos bordeis no SQLite.</span>
+        </div>
+      </div>
+      <p>Próxima aula: PUT e DELETE, para editar e excluir pela API. Com isso o app dos bordeis faz pela internet tudo que fazia no SQLite.</p>
+    </div>
+  </section>
+
+  <div class="assinatura">roveda.dev &middot; Univates &middot; 30/10/2026</div>
+</div>
+
+<script>
+(function () {
+  /* ---------- figura 1: com e sem await ---------- */
+  var COM = [
+    { t: "async function carregar() {" },
+    { t: '  console.log("1. pedi a lista");', log: "1. pedi a lista" },
+    { t: "  const resposta = <span class=\"tem\">await</span> fetch(API);", rede: true },
+    { t: '  console.log("2. chegou:", resposta.status);', log: "2. chegou: 200" },
+    { t: "  const dados = <span class=\"tem\">await</span> resposta.json();", corpo: true },
+    { t: "  setLista(dados);", tela: true },
+    { t: "}" }
+  ];
+  var SEM = [
+    { t: "async function carregar() {" },
+    { t: '  console.log("1. pedi a lista");', log: "1. pedi a lista" },
+    { t: "  const resposta = <span class=\"falta\">await</span> fetch(API);", rede: true },
+    { t: '  console.log("2. chegou:", resposta.status);', log: "2. chegou: undefined" },
+    { t: "  const dados = <span class=\"falta\">await</span> resposta.json();", quebra: true },
+    { t: "  setLista(dados);" },
+    { t: "}" }
+  ];
+  var LISTA = [
+    { id: "1", nome: "Gaveta de meias", cor: "verde" },
+    { id: "2", nome: "Mesa do quarto", cor: "cinza" }
+  ];
+  var semAwait = false, rodando = false, timers = [];
+  var codigo = document.getElementById("codigo");
+  var cons = document.getElementById("console");
+  var barra = document.getElementById("barra");
+  var ms = document.getElementById("ms");
+  var app1 = document.getElementById("app1");
+  var app1c = document.getElementById("app1-corpo");
+  var btnRodar = document.getElementById("rodar");
+  var reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function desenhaCodigo() {
+    var linhas = semAwait ? SEM : COM;
+    codigo.innerHTML = "";
+    linhas.forEach(function (l) {
+      var d = document.createElement("div");
+      d.className = "ln";
+      d.innerHTML = l.t;
+      codigo.appendChild(d);
+    });
+  }
+  function marca(i, cls) {
+    Array.prototype.forEach.call(codigo.children, function (el, j) {
+      el.classList.remove("agora", "esperando", "quebrou");
+      if (j === i) el.classList.add(cls);
+    });
+  }
+  function log(txt, erro) {
+    var v = cons.querySelector(".vazio");
+    if (v) v.remove();
+    var d = document.createElement("div");
+    if (erro) d.className = "e";
+    d.textContent = txt;
+    cons.appendChild(d);
+  }
+  function tela(estado) {
+    app1.classList.remove("vermelha");
+    if (estado === "girando") {
+      app1c.innerHTML = '<div class="app-girador"></div>';
+    } else if (estado === "lista") {
+      app1c.innerHTML = "";
+      LISTA.forEach(function (b) {
+        var d = document.createElement("div");
+        d.className = "app-item";
+        d.textContent = b.id + " - " + b.nome + " - " + b.cor;
+        app1c.appendChild(d);
+      });
+    } else if (estado === "vermelha") {
+      app1.classList.add("vermelha");
+      app1c.innerHTML = '<div class="app-vermelho">Render Error<br><br>TypeError: resposta.json is not a function (it is undefined)</div>';
+    } else {
+      app1c.innerHTML = '<div class="app-aviso">aperte rodar</div>';
+    }
+  }
+  function depois(ms_, fn) { timers.push(setTimeout(fn, ms_)); }
+  function rede(duracao, fim) {
+    var t0 = performance.now();
+    function passo(agora) {
+      var p = Math.min(1, (agora - t0) / duracao);
+      barra.style.width = (p * 100) + "%";
+      ms.textContent = Math.round(p * duracao) + " ms";
+      if (p < 1 && rodando !== false) requestAnimationFrame(passo);
+      else if (p >= 1 && fim) fim();
+    }
+    requestAnimationFrame(passo);
+  }
+  function limpa() {
+    timers.forEach(clearTimeout); timers = [];
+    barra.style.width = "0"; ms.textContent = "0 ms";
+    cons.innerHTML = '<div class="vazio">console.log aparece aqui</div>';
+    marca(-1); tela("inicio");
+  }
+  function rodar() {
+    limpa(); rodando = true; btnRodar.disabled = true;
+    var passo = reduz ? 700 : 550, internet = 1600;
+    var linhas = semAwait ? SEM : COM;
+    var i = 0;
+    function proxima() {
+      if (i >= linhas.length) { marca(-1); rodando = false; btnRodar.disabled = false; return; }
+      var l = linhas[i], aqui = i; i++;
+      marca(aqui, "agora");
+      if (l.log) log(l.log);
+      if (l.rede) {
+        tela("girando");
+        if (!semAwait) {
+          marca(aqui, "esperando");
+          rede(internet, function () { log("   ← resposta chegou (" + internet + " ms)"); depois(250, proxima); });
+          return;
+        }
+        rede(internet, function () { log("   ← resposta chegou (" + internet + " ms), mas ninguém estava esperando"); rodando = false; btnRodar.disabled = false; });
+        log("   fetch devolveu: Promise { <pendente> }");
+      }
+      if (l.corpo) { marca(aqui, "esperando"); depois(passo, proxima); return; }
+      if (l.tela) { tela("lista"); }
+      if (l.quebra) {
+        marca(aqui, "quebrou");
+        log("TypeError: resposta.json is not a function (it is undefined)", true);
+        tela("vermelha");
+        return;
+      }
+      depois(passo, proxima);
+    }
+    proxima();
+  }
+  function versao(sem) {
+    semAwait = sem;
+    document.getElementById("v-com").setAttribute("aria-pressed", String(!sem));
+    document.getElementById("v-sem").setAttribute("aria-pressed", String(sem));
+    rodando = false; btnRodar.disabled = false;
+    desenhaCodigo(); limpa();
+  }
+  document.getElementById("v-com").addEventListener("click", function () { versao(false); });
+  document.getElementById("v-sem").addEventListener("click", function () { versao(true); });
+  btnRodar.addEventListener("click", rodar);
+  desenhaCodigo();
+
+  /* ---------- figura 2: GET e POST num servidor de mentira ---------- */
+  var URL_API = "https://SEU-ID.mockapi.io/api/v1/bordeis";
+  var servidor = [
+    { id: "1", nome: "Gaveta de meias", cor: "verde", createdAt: "2026-10-30T18:02:11.000Z" },
+    { id: "2", nome: "Mesa do quarto", cor: "cinza", createdAt: "2026-10-30T18:04:40.000Z" }
+  ];
+  var noApp = [], ultimoNovo = null, recarrega = false;
+  var fNome = document.getElementById("f-nome"), fCor = document.getElementById("f-cor");
+  var reqEl = document.getElementById("req"), resEl = document.getElementById("res");
+  var selo = document.getElementById("selo"), explica = document.getElementById("explica");
+  var bRec = document.getElementById("b-recarrega");
+
+  function json(o) { return JSON.stringify(o, null, 2); }
+  function desenhaServidor() {
+    document.getElementById("srv").textContent = json(servidor);
+    document.getElementById("srv-n").textContent = servidor.length + " bordeis";
+  }
+  function desenhaApp() {
+    var l = document.getElementById("app2-lista");
+    l.innerHTML = "";
+    if (!noApp.length) {
+      var a = document.createElement("div");
+      a.className = "app-aviso"; a.style.marginTop = "10px";
+      a.textContent = "lista vazia";
+      l.appendChild(a);
+    }
+    noApp.slice(-4).forEach(function (b) {
+      var d = document.createElement("div");
+      d.className = "app-item" + (b.id === ultimoNovo ? " novo" : "");
+      d.textContent = b.id + " - " + b.nome + " - " + b.cor;
+      l.appendChild(d);
+    });
+    var n = document.getElementById("app2-nome"), c = document.getElementById("app2-cor");
+    n.textContent = fNome.value || "Nome do bordel"; n.classList.toggle("cheio", !!fNome.value);
+    c.textContent = fCor.value || "Cor do bordel"; c.classList.toggle("cheio", !!fCor.value);
+  }
+  function diz(s, e) { selo.textContent = s; explica.textContent = e; }
+  function get(depoisDoPost) {
+    noApp = servidor.map(function (b) { return b; });
+    if (!depoisDoPost) {
+      reqEl.textContent = "GET " + URL_API + "\n\n(sem corpo)";
+      resEl.textContent = "200 OK\n\n" + json(servidor);
+      diz("GET · 200", "O app pediu a lista inteira e trocou a dele pela do servidor. Agora as duas são iguais.");
+    }
+    desenhaApp();
+  }
+  function post() {
+    var nome = fNome.value.trim(), cor = fCor.value.trim();
+    if (!nome || !cor) { diz("faltou um campo", "Preencha nome e cor antes de salvar."); return; }
+    var corpo = JSON.stringify({ nome: nome, cor: cor });
+    var novo = { id: String(servidor.length + 1), nome: nome, cor: cor, createdAt: new Date().toISOString().replace(/\.\d+Z$/, ".000Z") };
+    servidor.push(novo); ultimoNovo = novo.id;
+    reqEl.textContent = "POST " + URL_API + "\nContent-Type: application/json\n\n" + corpo;
+    resEl.textContent = "201 Created\n\n" + json(novo);
+    fNome.value = ""; fCor.value = "";
+    desenhaServidor();
+    if (recarrega) {
+      get(true);
+      diz("POST · 201 + GET", "Salvou e logo em seguida pediu a lista de novo. O bordel " + novo.id + " já aparece no celular, marcado em verde.");
+    } else {
+      desenhaApp();
+      diz("POST · 201", "O servidor criou o bordel " + novo.id + " e devolveu ele com id e createdAt. O celular continua com a lista antiga porque ninguém pediu a nova. Aperte GET.");
+    }
+  }
+  document.getElementById("b-post").addEventListener("click", post);
+  document.getElementById("b-get").addEventListener("click", function () { get(false); });
+  bRec.addEventListener("click", function () {
+    recarrega = !recarrega;
+    bRec.setAttribute("aria-pressed", String(recarrega));
+  });
+  fNome.addEventListener("input", desenhaApp);
+  fCor.addEventListener("input", desenhaApp);
+  noApp = servidor.slice();
+  desenhaServidor(); desenhaApp();
+})();
+</script>
+
+</body>
+</html>
