@@ -432,7 +432,7 @@
         </div>
         <div class="regra">
           <h3>Enquanto uma função espera, o app não trava</h3>
-          <p>Só <code>carregar()</code> fica parada. A tela continua respondendo ao toque, e é por isso que dá para mostrar um girador de carregando durante a espera.</p>
+          <p>Só <code>carregar()</code> fica parada. A tela continua respondendo ao toque durante a espera.</p>
         </div>
       </div>
 
@@ -659,60 +659,32 @@ fetch(API)
       </p>
 <pre><span class="v">const</span> API = <span class="pd">"https://SEU-ID.mockapi.io/api/v1/bordeis"</span>;
 
-<span class="c">// GET: pede a lista inteira para a API.</span>
+<span class="c">// GET: pede a lista para a API.</span>
 <span class="v">async</span> function carregar() {
-  setCarregando(<span class="v">true</span>);
-  <span class="v">try</span> {
-    const resposta = <span class="v">await</span> fetch(API);
-    <span class="v">if</span> (!resposta.ok) {
-      setErro(`A API respondeu ${resposta.status}.`);
-    } <span class="v">else</span> {
-      const dados = <span class="v">await</span> resposta.json();
-      setLista(dados);
-      setErro("");
-    }
-  } <span class="v">catch</span> {
-    setErro("Sem conexão com a API.");   <span class="c">// sem internet: nem chega resposta</span>
-  }
-  setCarregando(<span class="v">false</span>);
+  const resposta = <span class="v">await</span> fetch(API);
+  const dados = <span class="v">await</span> resposta.json();
+  setLista(dados);
 }
 
-<span class="c">// POST: manda um bordel novo. O corpo vai como TEXTO em JSON.</span>
+<span class="c">// POST: manda um bordel novo. O corpo vai como texto em JSON.</span>
 <span class="v">async</span> function salvar() {
-  <span class="v">if</span> (!nome.trim() || !cor.trim()) {
-    setErro("Preencha nome e cor.");
-    <span class="v">return</span>;
-  }
-  <span class="v">try</span> {
-    const resposta = <span class="v">await</span> fetch(API, {
-      <span class="pd">method: "POST",</span>
-      <span class="pd">headers: { "Content-Type": "application/json" },</span>
-      <span class="pd">body: JSON.stringify({ nome: nome, cor: cor }),</span>
-    });
-    <span class="v">if</span> (!resposta.ok) {
-      setErro(`Não salvou: a API respondeu ${resposta.status}.`);
-    } <span class="v">else</span> {
-      setNome("");
-      setCor("");
-      carregar();                         <span class="c">// a lista não sabe do novo: pergunta de novo</span>
-    }
-  } <span class="v">catch</span> {
-    setErro("Sem conexão com a API.");
-  }
+  <span class="v">await</span> fetch(API, {
+    <span class="pd">method: "POST",</span>
+    <span class="pd">headers: { "Content-Type": "application/json" },</span>
+    <span class="pd">body: JSON.stringify({ nome: nome, cor: cor }),</span>
+  });
+  setNome("");
+  setCor("");
+  carregar();   <span class="c">// a lista não sabe do novo: pergunta de novo</span>
 }
 
-useEffect(() =&gt; { carregar(); }, []);   <span class="c">// GET ao abrir a tela</span>
-
-<span class="c">// na FlatList: puxar para baixo chama carregar(), e o girador usa o estado</span>
-&lt;<span class="v">FlatList</span> data={lista} refreshing={carregando} onRefresh={carregar} … /&gt;</pre>
+useEffect(() =&gt; { carregar(); }, []);   <span class="c">// GET ao abrir a tela</span></pre>
 
       <div class="destaque">
-        <h3>Onde cada erro é tratado</h3>
-        <p><strong>Demora</strong>: o estado <code>carregando</code> liga o girador da lista.
-        <strong>Servidor respondeu, mas mal</strong> (URL errada, 404): <code>resposta.ok</code> é
-        <code>false</code>. <strong>Nem chegou resposta</strong> (Wi-Fi desligado): o
-        <code>fetch</code> lança um erro e o <code>catch</code> pega. Testem os três em aula: errem
-        uma letra da URL e desliguem o Wi-Fi.</p>
+        <h3>Quebrar de propósito</h3>
+        <p>Esta versão não trata erro, de propósito, igual à tela do CEP. Testem em aula: errem uma
+        letra da URL e salvem um bordel; depois desliguem o Wi-Fi e puxem a lista. Nos dois casos o
+        app quebra ou a lista não aparece, e o motivo está no terminal do Expo.</p>
       </div>
     </div>
   </section>
@@ -741,8 +713,8 @@ useEffect(() =&gt; { carregar(); }, []);   <span class="c">// GET ao abrir a tel
           <div class="causa">Faltou chamar <code>carregar()</code> depois do POST. O item novo está no servidor, e o estado do app ainda guarda a lista antiga.</div>
         </div>
         <div class="erro">
-          <div class="sintoma">A tela mostra <code>A API respondeu 404.</code></div>
-          <div class="causa">A URL está errada: confira o id do projeto, o prefixo e o nome do recurso (<code>bordeis</code>, minúsculo e no plural, igual ao MockAPI).</div>
+          <div class="sintoma">A lista não aparece, ou o app quebra ao abrir a tela</div>
+          <div class="causa">Provavelmente a URL está errada. Abra a mesma URL no navegador e confira o id do projeto, o prefixo e o nome do recurso (<code>bordeis</code>, minúsculo e no plural, igual ao MockAPI).</div>
         </div>
         <div class="erro">
           <div class="sintoma">Os campos aparecem com outro nome, ou <code>undefined</code></div>
