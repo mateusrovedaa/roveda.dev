@@ -96,7 +96,7 @@ const ST=[
  {s:'Anotação',f:3,shot:'extract',n:'Anotação da extração',t:'Depois de dois testes e de umas conferências pontuais de campo, veio a rodada de anotação para valer: 30 artigos escolhidos a dedo, campo a campo. Os pedidos de vocês mudaram o catálogo: definições mais operacionais, coinfecção separada de co-circulação e dois campos cortados.',q:'As definições dos campos estão claras o bastante para extrair o acervo inteiro?'},
  {s:'Extração',f:3,n:'Extração dos 1.010',t:'1.010 artigos lidos de ponta a ponta, cada valor com o trecho e a página que o sustentam. No fim, uma planilha só: uma linha por artigo, uma coluna por campo.',q:'Os dados extraídos estão condizentes com o protocolo?'},
  {s:'Melhorias',f:3,n:'Melhorias',t:'A devolutiva de vocês, mais a comparação com o GenBank em 26 artigos, virou um loop: ajustar definições e campos, rodar, conferir, repetir.',q:'Os ajustes resolvem o que a devolutiva apontou?'},
- {s:'Nova extração',f:3,n:'Nova extração',t:'Com as melhorias aplicadas, a esteira rodou de novo: 60 artigos sorteados, às cegas, sem cola. Cada um de vocês pega os que quiser.',q:'Os resultados sustentam um artigo?'},
+ {s:'Nova extração',f:3,n:'Nova extração',t:'Com as melhorias aplicadas, a esteira rodou de novo: 60 artigos sorteados, às cegas, sem cola. Cada um de vocês pega os que quiser. A próxima, com os 1.010 artigos, já está em construção.',q:'Os resultados sustentam um artigo?'},
  {s:'O artigo',n:'O artigo',t:'Ainda em construção. Tem andaime, tem cone e tem um manuscrito que insiste em ganhar mais uma versão. Essa parte a gente escreve junto.',q:'O Artigão virou rascunho. Podemos fazer uma pausa para comemorar?'},
  {s:'Paulista',n:'Um bar na Paulista',t:'Oito pessoas, oito unidades. Obrigado por cada GO, e por cada NO-GO que nos poupou de processar 1.010 artigos do jeito errado. Quando der, a gente toma uma UNIDADE de verdade.'},
 ];
@@ -199,7 +199,11 @@ const PROPS=[
  b=>{R(b+172,G-12,4,12,'#7a5b2e');R(b+234,G-12,4,12,'#7a5b2e');R(b+158,G-80,92,68,'#7a5b2e');R(b+161,G-77,86,62,'#efe6d0');Tx('loop de ajustes',b+204,G-68,'#1b2440',6);
      for(let r=0;r<5;r++){const ry=G-62+r*9;R(b+167,ry,6,6,'#1b2440');R(b+168,ry+1,4,4,r<4?'#2f9e57':'#efe6d0');R(b+178,ry+2,40+(r*13)%22,2,'#56627a')}},
  b=>{for(let i=0;i<60;i++){const ex=b+140+(i%10)*13,ey=G-70+Math.floor(i/10)*10;R(ex,ey,10,7,'#f4ead0');g.fillStyle='#c8b98f';g.beginPath();g.moveTo(ex,ey);g.lineTo(ex+5,ey+4);g.lineTo(ex+10,ey);g.fill()}
-     Tx('60, sem espiar',b+204,G-76,'#1b2440',6);R(b+140,G-8,128,3,'#7a5b2e');R(b+146,G-5,3,5,'#7a5b2e');R(b+259,G-5,3,5,'#7a5b2e')},
+     Tx('60, sem espiar',b+204,G-76,'#1b2440',6);R(b+140,G-8,128,3,'#7a5b2e');R(b+146,G-5,3,5,'#7a5b2e');R(b+259,G-5,3,5,'#7a5b2e');
+     // a próxima extração, do acervo inteiro, ainda em obras
+     R(b+306,G-46,3,46,'#30364d');R(b+387,G-46,3,46,'#30364d');R(b+298,G-72,100,26,'#f0b429');Tx('EM CONSTRUÇÃO',b+348,G-61,'#1b2440',7);Tx('extração dos 1.010',b+348,G-51,'#1b2440',6);
+     for(let k=0;k<12;k++)R(b+300+k*8,G-44,8,5,k%2?'#1b2440':'#f0b429');
+     for(const cx of[b+290,b+404]){R(cx,G-3,9,3,'#e8641e');R(cx+2,G-8,5,5,'#e8641e');R(cx+2,G-6,5,1,'#fff');R(cx+3,G-11,3,3,'#e8641e')}},
  b=>{R(b+170,G-80,62,80,'#fff');R(b+176,G-74,40,3,'#1b2440');for(let r=0;r<5;r++)R(b+176,G-66+r*5,50-(r%2)*9,2,'#9aa6c4');
      R(b+176,G-38,50,1,'#c8b98f');R(b+176,G-16,50,1,'#c8b98f');R(b+176,G-38,1,23,'#c8b98f');R(b+225,G-38,1,23,'#c8b98f');Tx('fig. 1?',b+201,G-24,'#b3a274',6);
      R(b+162,G-88,2,88,'#8b93ad');R(b+238,G-88,2,88,'#8b93ad');R(b+158,G-58,86,2,'#b9772f');R(b+158,G-30,86,2,'#b9772f');
