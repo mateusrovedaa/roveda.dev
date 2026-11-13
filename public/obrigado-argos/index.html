@@ -71,7 +71,7 @@ button:focus-visible{outline:3px solid var(--chopp);outline-offset:2px}
     </section>
     <button id="btn" type="button" hidden></button>
   </div>
-  <p id="hint">Para andar: segure o botão, a tela ou a seta →. Em cada cancela, quem decide é você.</p>
+  <p id="hint">Para andar: segure o botão, a tela, a seta → ou a barra de espaço. Em cada cancela, quem decide é você.</p>
 </main>
 
 <script>
@@ -331,12 +331,15 @@ const press=()=>{downState=state;if(state==='walk')hold=true};
 btn.addEventListener('pointerdown',press);
 cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
 addEventListener('pointerup',()=>hold=false);addEventListener('pointercancel',()=>hold=false);addEventListener('blur',()=>hold=false);
-btn.addEventListener('click',e=>{const s=e.detail===0?state:downState; // soltar o botão de andar em cima da cancela não conta como GO
+btn.addEventListener('click',e=>{if(e.detail===0&&performance.now()-spaceAt<600)return;const s=e.detail===0?state:downState; // soltar o botão de andar em cima da cancela não conta como GO
   if(s==='gate'&&state==='gate')go();else if(s==='boss'&&state==='boss')hit();else if(s==='bar'&&state==='bar')reset()});
 btn.addEventListener('contextmenu',e=>e.preventDefault());cv.addEventListener('contextmenu',e=>e.preventDefault());
-addEventListener('keydown',e=>{if(e.code==='ArrowRight'||e.code==='KeyD'){e.preventDefault();if(state==='walk')hold=true}
-  if(e.code==='Enter'&&document.activeElement!==btn){if(state==='gate')go();else if(state==='boss')hit()}});
-addEventListener('keyup',e=>{if(e.code==='ArrowRight'||e.code==='KeyD')hold=false});
+// teclado: seta, D ou espaço seguram a caminhada; espaço ou Enter dão GO e golpeiam (sem repetição, para a tecla presa não atravessar a cancela)
+let spaceAt=0;const WALK=['ArrowRight','KeyD','Space'];
+addEventListener('keydown',e=>{if(state==='select')return;
+  if(WALK.includes(e.code)){e.preventDefault();if(e.code==='Space')spaceAt=performance.now();if(state==='walk')hold=true}
+  if((e.code==='Space'||(e.code==='Enter'&&document.activeElement!==btn))&&!e.repeat){if(state==='gate')go();else if(state==='boss')hit()}});
+addEventListener('keyup',e=>{if(WALK.includes(e.code)){if(state!=='select')e.preventDefault();hold=false}});
 
 // ---------- música: composição própria, rock de riff na caminhada e disco no bar ----------
 let AC=null,master,NB,mus=true,mstep=0,nextT=0;
