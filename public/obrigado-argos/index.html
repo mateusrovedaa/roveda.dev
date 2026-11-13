@@ -61,7 +61,7 @@ button:focus-visible{outline:3px solid var(--chopp);outline-offset:2px}
 <main>
   <header><h1>Caminhada do Argos</h1><button id="snd" type="button" aria-pressed="true">♪ Som ligado</button></header>
   <div id="wrap">
-    <canvas id="stage" aria-label="Os oito personagens caminhando pelas etapas do projeto até um bar na Avenida Paulista"></canvas>
+    <canvas id="stage" aria-label="Os oito personagens caminhando pelas etapas do projeto"></canvas>
     <section id="panel" aria-live="polite">
       <p id="eyebrow"></p>
       <h2 id="ttl"></h2>
@@ -271,7 +271,7 @@ function panel(){
   const sel=state==='select',s=ST[Math.max(0,seg)];
   document.body.dataset.state=state;
   $('pick').hidden=!sel;btn.hidden=sel;$('q').hidden=state!=='gate';
-  if(sel){$('eyebrow').textContent='Antes de começar';$('ttl').textContent='Quem é você?';$('txt').textContent='Escolha o seu personagem. Os outros sete vão junto, das primeiras reuniões até o bar.';return}
+  if(sel){$('eyebrow').textContent='Antes de começar';$('ttl').textContent='Quem é você?';$('txt').textContent='Escolha o seu personagem. Os outros sete vão junto, do começo ao fim.';return}
   $('eyebrow').textContent=(s.f?`Fase ${s.f} · ${FASES[s.f]} · `:'')+`Etapa ${seg+1} de ${ST.length}`;$('ttl').textContent=s.n;$('txt').textContent=s.t;
   if(state==='gate')$('q').textContent='GO / NO-GO: '+s.q;
   btn.className=state==='gate'?'go':'';
