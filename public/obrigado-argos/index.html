@@ -97,7 +97,7 @@ const ST=[
  {s:'Extração',f:3,n:'Extração dos 1.010',t:'1.010 artigos lidos de ponta a ponta, cada valor com o trecho e a página que o sustentam. No fim, uma planilha só: uma linha por artigo, uma coluna por campo.',q:'Os dados extraídos estão condizentes com o protocolo?'},
  {s:'Melhorias',f:3,n:'Melhorias',t:'A devolutiva de vocês, mais a comparação com o GenBank em 26 artigos, virou um loop: ajustar definições e campos, rodar, conferir, repetir.',q:'Os ajustes resolvem o que a devolutiva apontou?'},
  {s:'Nova extração',f:3,n:'Nova extração',t:'Com as melhorias aplicadas, a esteira rodou de novo: 60 artigos sorteados, às cegas, sem cola. Cada um de vocês pega os que quiser.',q:'Os resultados sustentam um artigo?'},
- {s:'O artigo',n:'O artigo',t:'Ainda em construção. Tem andaime, tem cone e tem um manuscrito que insiste em ganhar mais uma versão. Essa parte a gente escreve junto.',q:'Podemos fazer uma pausa para comemorar?'},
+ {s:'O artigo',n:'O artigo',t:'Ainda em construção. Tem andaime, tem cone e tem um manuscrito que insiste em ganhar mais uma versão. Essa parte a gente escreve junto.',q:'O Artigão virou rascunho. Podemos fazer uma pausa para comemorar?'},
  {s:'Paulista',n:'Um bar na Paulista',t:'Oito pessoas, oito unidades. Obrigado por cada GO, e por cada NO-GO que nos poupou de processar 1.010 artigos do jeito errado. Quando der, a gente toma uma UNIDADE de verdade. E um brinde especial à filha da Ingra, que nasceu no meio do caminho: a entrega mais importante do projeto.'},
 ];
 // prints reais das três ferramentas de anotação (planilha, parse, extração)
@@ -108,9 +108,10 @@ const W=320,H=180,G=150,L=460,GAP=18,SPEED=62,BARX=(ST.length-1)*L+400;
 const $=id=>document.getElementById(id);
 const cv=$('stage'),g=cv.getContext('2d'),btn=$('btn');
 // [etapa em que aparece (em trechos), largura da barra, rótulo]; contagens do funil da documentação (docs/extract/assets/argos-etapa1-triagem.png)
-const PRISMA=[[2,46,'7.969 registros'],[2.55,30,'1.198 pós-modelos'],[3.55,27,'1.034 incluídos'],[4.2,25,'1.010 com PDF'],[8.3,9,'60 às cegas']];
+const PRISMA=[[2,46,'7.969 registros'],[2.55,30,'1.198 pós-modelos'],[3.55,27,'1.034 incluídos'],[4.2,25,'1.010 com PDF',1]];
 const WOES=[['agenda cheia','"tá me ouvindo?"','escopo crescendo','fuso horário'],['funciona na minha máquina','mais um prompt','README desatualizado'],['falso negativo','artigo sem abstract','falta tempo','ler tudo de novo'],['deploy de novo','perdi a linha','olho cansado','falta tempo','revisar muitos artigos'],['problemas de OCR','PDF de 403 páginas','flag nossa apagava notas','"classified" virou "classied"','linhas alucinadas em chinês','tabela quebrada'],['revisar muitos artigos','falta tempo','campo ambíguo','país: "não dá pra ter certeza"','prompt sem o artigo'],['Austrália virou "United States"','custo de API','planilha gigante','rodar de novo'],['definição ambígua','campo difícil demais','mudar o catálogo','refazer o prompt','falta tempo'],['sem gabarito','prazo','falta tempo','só mais um lote'],['revisor 2','limite de palavras','formatar referências','mais uma versão','falta tempo']];
 const CALM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let boss,shots=[],fx=null;const BOSS=ST.length-2;
 let drops=[],nextDrop=1,state,x,order,hold=false,seg=-1,gates,T=0,barT=0,downState=null,stamp=null;
 
 // ---------- desenho de personagem (x = esquerda do corpo de 8px, y = pés) ----------
@@ -244,6 +245,18 @@ function draw(){
     R(gx,G-24,4,24,'#30364d');g.save();g.translate(gx+2,G-20);g.rotate(gt.open*Math.PI/2);
     for(let k=0;k<6;k++)R(-28+k*4.7,-1.5,4.7,3,k%2?'#fff':'#d0392b');g.restore();
     R(gx-12,G-42,28,10,gt.go?'#2f9e57':'#1b2440');Tx(gt.go?'GO':'GO/NO-GO',gx+2,G-34.5,'#fff',gt.go?7:5)}
+  { // chefão simbólico: o Artigão, parado na última cancela
+    const gt=gates[BOSS],bx=gt.x-cam-22,bw=44;
+    if(bx>-60&&bx<W+10){
+      if(boss.dead>=1){R(bx+16,G-16,12,16,'#fbfaf5');R(bx+16,G-16,12,1,'#c9c2ad');Tx('v1',bx+22,G-6,'#1b2440',6)}
+      else{const h=Math.round(58*(1-boss.dead)),X=bx+(boss.shake>0?Math.round(Math.sin(T*70)*2):0),top=G-h;
+        R(X,top,bw,h,'#fbfaf5');R(X,top,bw,2,'#c9c2ad');R(X,top,2,h,'#c9c2ad');R(X+bw-2,top,2,h,'#c9c2ad');R(X+bw-9,top,9,9,'#d8d0b8');
+        if(h>44){R(X-5,top+24,5,3,'#fbfaf5');R(X+bw,top+24,5,3,'#fbfaf5');R(X+6,top+5,22,3,'#1b2440');
+          R(X+8,top+15,9,6,'#1b2440');R(X+27,top+15,9,6,'#1b2440');R(X+11,top+17,3,3,'#ff4d4d');R(X+30,top+17,3,3,'#ff4d4d');
+          R(X+7,top+11,5,2,'#1b2440');R(X+11,top+12,6,2,'#1b2440');R(X+27,top+12,6,2,'#1b2440');R(X+32,top+11,5,2,'#1b2440');
+          for(let j=0;j<6;j++)R(X+9+j*4.5,top+27+(j%2)*3,4,3,'#1b2440');for(let r=0;r<4;r++)R(X+6,top+39+r*4,32-(r%2)*9,2,'#9aa6c4')}
+        R(X,top-9,bw,4,'#30364d');R(X,top-9,Math.round(bw*boss.hp/boss.max),4,'#d0392b');Tx('ARTIGÃO',X+bw/2,top-12,'#f0b429',6)}}
+  }
   for(const d of drops){const dx=d.x-cam+Math.sin(T*2+d.ph)*(d.land?0:3);g.font='600 5px "Pixelify Sans",monospace';const w=g.measureText(d.s).width;
     g.globalAlpha=d.land?Math.max(0,1-d.land/2):1;R(dx-w/2-3,d.y-6,w+6,8,'#7a2e1f');R(dx-w/2-3,d.y-6,w+6,1,'#a84a35');Tx(d.s,dx,d.y,'#f4ead0',5);g.globalAlpha=1}
   const moving=state==='walk'&&hold;
@@ -254,15 +267,18 @@ function draw(){
     g.font='600 5px "Pixelify Sans",monospace';const nw=Math.ceil(g.measureText(c.n).width)+6,nx=Math.round(cx+5-nw/2);
     if(row)R(cx+5,ny+2,1,row*9,'rgba(27,36,64,.45)');
     R(nx,ny-6,nw,9,'#1b2440');R(nx+1,ny-5,nw-2,7,lead?'#f0b429':'#efe6d0');R(cx+4,ny+3,2,1,'#1b2440');Tx(c.n,cx+5,ny,'#1b2440',5)}
+  for(const s of shots){if(s.t<0)continue;const px=s.x0+(gates[BOSS].x-s.x0)*s.t-cam,py=G-14-21*s.t-Math.sin(s.t*3.14)*14;
+    if(s.kind){R(px,py,6,1,'#d0392b');R(px+6,py,1,1,'#1b2440')}else{R(px,py,3,3,'#f0b429');R(px-3,py+1,3,1,'#fff3c4')}}
+  if(fx){g.globalAlpha=Math.max(0,1-fx.t);Tx(fx.s,gates[BOSS].x-cam,G-78-fx.t*12,fx.c,9);g.globalAlpha=1}
   if(stamp){const a=1-stamp.t;g.globalAlpha=Math.max(0,a);Tx('GO!',stamp.x-cam,G-52-stamp.t*18,'#2f9e57',16);g.globalAlpha=1}
   // PRISMA no canto: funil que ganha um degrau por marco; a caixa é medida pelo texto, então nada estoura
   const pr=PRISMA.filter(r=>x>=r[0]*L);
   if(pr.length&&state!=='bar'){g.font='600 5px "Pixelify Sans",monospace';
     const tw=Math.max(...pr.map(r=>g.measureText(r[2]).width)),cx=33,bw=6+46+5+Math.ceil(tw)+7;
     g.globalAlpha=.9;R(4,4,bw,15+pr.length*9,'#141a36');g.globalAlpha=1;Tx('PRISMA',10,12,'#f0b429',6,'left');
-    pr.forEach((r,i)=>{const w0=r[1],w1=PRISMA[i+1]?PRISMA[i+1][1]:r[1]*.6,y0=16+i*9;g.fillStyle=i===pr.length-1?'#f0b429':'#56627a';
+    pr.forEach((r,i)=>{const w0=r[1],w1=PRISMA[i+1]?PRISMA[i+1][1]:r[1]*.6,y0=16+i*9;g.fillStyle=r[3]?'#2f9e57':i===pr.length-1?'#f0b429':'#56627a';
       g.beginPath();g.moveTo(cx-w0/2,y0);g.lineTo(cx+w0/2,y0);g.lineTo(cx+w1/2,y0+8);g.lineTo(cx-w1/2,y0+8);g.fill();
-      Tx(r[2],61,y0+6,'#efe6d0',5,'left')})}
+      Tx(r[2],61,y0+6,r[3]?'#7be0a0':'#efe6d0',5,'left')})}
   if(state==='bar')for(let i=0;i<36;i++)R((i*53+barT*14*(1+i%3))%W,(i*29+barT*34*(1+i%2))%G,2,2,['#f0b429','#ff5fa2','#6fdc8c','#fff'][i%4]);
 }
 
@@ -273,15 +289,23 @@ function panel(){
   $('pick').hidden=!sel;btn.hidden=sel;$('q').hidden=state!=='gate';
   if(sel){$('eyebrow').textContent='Antes de começar';$('ttl').textContent='Quem é você?';$('txt').textContent='Escolha o seu personagem. Os outros sete vão junto, do começo ao fim.';return}
   $('eyebrow').textContent=(s.f?`Fase ${s.f} · ${FASES[s.f]} · `:'')+`Etapa ${seg+1} de ${ST.length}`;$('ttl').textContent=s.n;$('txt').textContent=s.t;
+  if(state==='boss'){$('eyebrow').textContent='Chefão final';$('ttl').textContent='O Artigão';$('txt').textContent='Revisor 2, limite de palavras, mais uma versão. Sozinho ninguém derrota: alternem o poder das LLMs com o conhecimento de vocês.'}
   if(state==='gate')$('q').textContent='GO / NO-GO: '+s.q;
-  btn.className=state==='gate'?'go':'';
-  btn.textContent=state==='gate'?'GO':state==='bar'?'Caminhar de novo':'Segure para andar ▶';
+  btn.className=state==='gate'||(state==='boss'&&boss.n%2)?'go':'';
+  btn.textContent=state==='gate'?'GO':state==='bar'?'Caminhar de novo':state==='boss'?(boss.hp<=0?'Derrotado!':boss.n%2?'Conhecimento dos especialistas':'Poder das LLMs'):'Segure para andar ▶';
 }
-function reset(){state='select';x=130;seg=-1;barT=0;stamp=null;drops=[];hold=false;order=CAST.map((_,i)=>i);
+function reset(){state='select';x=130;seg=-1;barT=0;stamp=null;drops=[];shots=[];fx=null;boss={hp:6,max:6,shake:0,dead:0,n:0};hold=false;order=CAST.map((_,i)=>i);
   gates=ST.slice(0,-1).map((_,i)=>({x:(i+1)*L-22,open:0,go:false}));panel()}
 function pick(i){audio();order=[i,...CAST.map((_,k)=>k).filter(k=>k!==i)];state='walk';seg=0;panel();btn.focus({preventScroll:true})}
 function go(){const gt=gates[seg];gt.go=true;stamp={x:gt.x,t:0};state='walk';hold=false;panel()}
+// cada golpe alterna o poder das LLMs com o conhecimento dos especialistas; não dá para perder
+function hit(){if(boss.hp<=0)return;const esp=boss.n%2;
+  CAST.forEach((_,i)=>shots.push({x0:x-i*GAP+8,t:-i*.05,kind:esp}));
+  fx={s:(esp?['corrige!','valida!','define!']:['lê tudo!','extrai!','resume!'])[(boss.n>>1)%3],t:0,c:esp?'#d0392b':'#f0b429'};
+  boss.n++;boss.hp--;boss.shake=.45;if(boss.hp<=0)boss.dead=.01;panel()}
 function update(dt){
+  boss.shake=Math.max(0,boss.shake-dt);if(boss.dead&&boss.dead<1.4){boss.dead+=dt;if(boss.dead>=1.4&&state==='boss'){state='gate';panel()}}
+  for(const s of shots)s.t+=dt*2.6;shots=shots.filter(s=>s.t<1);if(fx&&(fx.t+=dt)>1)fx=null;
   T+=dt;for(const gt of gates)if(gt.go)gt.open=Math.min(1,gt.open+dt*2.5);
   if(stamp&&(stamp.t+=dt)>1)stamp=null;
   if(state==='bar')barT+=dt;
@@ -292,7 +316,7 @@ function update(dt){
   if(state!=='walk'||!hold)return;
   x+=SPEED*dt;
   const gt=gates[seg];
-  if(gt&&!gt.go&&x>=gt.x-42){x=gt.x-42;state='gate';hold=false;panel();return}
+  if(gt&&!gt.go&&x>=gt.x-42){x=gt.x-42;state=seg===BOSS&&boss.hp>0?'boss':'gate';hold=false;panel();return}
   if(x>=BARX){x=BARX;state='bar';hold=false;panel();return}
   const ns=Math.min(ST.length-1,Math.floor(x/L));if(ns!==seg){seg=ns;panel()}
 }
@@ -303,10 +327,10 @@ btn.addEventListener('pointerdown',press);
 cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
 addEventListener('pointerup',()=>hold=false);addEventListener('pointercancel',()=>hold=false);addEventListener('blur',()=>hold=false);
 btn.addEventListener('click',e=>{const s=e.detail===0?state:downState; // soltar o botão de andar em cima da cancela não conta como GO
-  if(s==='gate'&&state==='gate')go();else if(s==='bar'&&state==='bar')reset()});
+  if(s==='gate'&&state==='gate')go();else if(s==='boss'&&state==='boss')hit();else if(s==='bar'&&state==='bar')reset()});
 btn.addEventListener('contextmenu',e=>e.preventDefault());cv.addEventListener('contextmenu',e=>e.preventDefault());
 addEventListener('keydown',e=>{if(e.code==='ArrowRight'||e.code==='KeyD'){e.preventDefault();if(state==='walk')hold=true}
-  if(e.code==='Enter'&&state==='gate'&&document.activeElement!==btn)go()});
+  if(e.code==='Enter'&&document.activeElement!==btn){if(state==='gate')go();else if(state==='boss')hit()}});
 addEventListener('keyup',e=>{if(e.code==='ArrowRight'||e.code==='KeyD')hold=false});
 
 // ---------- música: composição própria, rock de riff na caminhada e disco no bar ----------
